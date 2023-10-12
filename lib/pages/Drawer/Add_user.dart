@@ -1,4 +1,3 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, no_leading_underscores_for_local_identifiers, deprecated_member_use
 
 
 import 'dart:convert';
@@ -12,11 +11,11 @@ import 'package:iot_mobile_app/pages/Home_page.dart';
 class Adduser extends StatefulWidget {
   const Adduser({super.key});
 
- 
+
 
   @override
   State<Adduser> createState() => _dataState();
-  
+
 
 }
 
@@ -93,23 +92,23 @@ class _dataState extends State<Adduser> {
   @override
   Widget build(BuildContext context) {
 
-     return Scaffold(
+    return Scaffold(
       bottomNavigationBar:Container(
-  width: double.infinity,
-  // padding: EdgeInsets.all(16.0),
-  child: ElevatedButton(
-    onPressed: addUser,
-    style: ElevatedButton.styleFrom(
-      primary: Colors.green,
-      padding: EdgeInsets.symmetric(vertical: 20),
-    ),
-    child: Text('Add User', style: TextStyle(fontSize: 20)),
-  ),
-),
+        width: double.infinity,
+        // padding: EdgeInsets.all(16.0),
+        child: ElevatedButton(
+          onPressed: addUser,
+          style: ElevatedButton.styleFrom(
+            primary: Colors.green,
+            padding: EdgeInsets.symmetric(vertical: 20),
+          ),
+          child: Text('Add User', style: TextStyle(fontSize: 20)),
+        ),
+      ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Colors.white,      
-         title: const Text("Add User", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 25),),
+        backgroundColor: Colors.white,
+        title: const Text("Add User", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 25),),
       ),
       body:SingleChildScrollView(
         child: Padding(
@@ -123,14 +122,14 @@ class _dataState extends State<Adduser> {
                 'Mobile Number',
                 style: Theme.of(context).textTheme.headline6,
               ),
-               TextField(
+              TextField(
                 controller: _mobileNocontroller,
                 decoration: InputDecoration(
                   hintText: 'Enter Mobile Number',
                 ),
               ),
-            
-             SizedBox(height: 20,),
+
+              SizedBox(height: 20,),
               Text(
                 'First Name',
                 style: Theme.of(context).textTheme.headline6,
@@ -141,7 +140,7 @@ class _dataState extends State<Adduser> {
                   hintText: 'Enter first name',
                 ),
               ),
-             SizedBox(height: 20,),
+              SizedBox(height: 20,),
 
               Text(
                 'last Name',
@@ -153,8 +152,8 @@ class _dataState extends State<Adduser> {
                   hintText: 'Enter last Name',
                 ),
               ),
-             SizedBox(height: 20,),
-             Text(
+              SizedBox(height: 20,),
+              Text(
                 'Email Id',
                 style: Theme.of(context).textTheme.headline6,
               ),
@@ -164,8 +163,8 @@ class _dataState extends State<Adduser> {
                   hintText: 'Enter email id',
                 ),
               ),
-             SizedBox(height: 20,),
-             Text(
+              SizedBox(height: 20,),
+              Text(
                 'Subscription validity Till',
                 style: Theme.of(context).textTheme.headline6,
               ),
@@ -175,7 +174,7 @@ class _dataState extends State<Adduser> {
                   hintText: 'select validity',
                 ),
               ),
-             SizedBox(height: 20,),
+              SizedBox(height: 20,),
 
               Text(
                 'PIN',
@@ -187,7 +186,7 @@ class _dataState extends State<Adduser> {
                   hintText: 'Enter Device Pin',
                 ),
               ),
-             SizedBox(height: 20,),
+              SizedBox(height: 20,),
 
 
 
@@ -296,7 +295,7 @@ class _dataState extends State<Adduser> {
                 ),
               ),
               SizedBox(height: 20,),
-              
+
 
               Text(
                 'Land mark',
@@ -314,8 +313,8 @@ class _dataState extends State<Adduser> {
       ),
     );
 
-  
-}
+
+  }
 
 
 }

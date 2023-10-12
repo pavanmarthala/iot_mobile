@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'Auth/splash.dart';
 import 'utils/dep.dart' as dep;
 import 'package:iot_mobile_app/Controller/lang_controller.dart';
 import 'package:iot_mobile_app/pages/tabs/dash.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
     return GetBuilder<LangController>(builder: (LangController) {
       return GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SingIN(),
+        home: SplashScreen(),
         theme: ThemeData(
           primarySwatch: Colors.green,
         ),
