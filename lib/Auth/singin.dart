@@ -36,7 +36,7 @@ class _SingINState extends State<SingIN> {
 
       final response = await http.post(
 
-        Uri.parse('http://console-api.theja.in/login'),
+        Uri.parse('https://console-api.theja.in/login'),
 
         body: jsonEncode(requestData),
 

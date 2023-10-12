@@ -39,11 +39,11 @@ class _dataState extends State<Adduser> {
   final _landmarkcontroller = TextEditingController();
 
 
-  Future<void> addUser() async {
-    final url = Uri.parse('http://console-api.theja.in/admin/addUser');
+  void addUser() async {
+
 
     // Create a data model to represent the data you want to send
-    final userData = {
+    var userData = {
       "active": true,
       "email": _emailController.text,
       "mobile": _mobileNocontroller.text,
@@ -68,25 +68,39 @@ class _dataState extends State<Adduser> {
       },
       "zone": _zonecontroller.text,
     };
+    final jsonString = json.encode(userData);
+    final url = Uri.parse('https://console-api.theja.in/admin/addUser');
+    final headers = {
+    "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJLVGVjaF9Jb1QiLCJzdWIiOiI4NTAwOTMwMDg4IiwiYXV0aG9yaXRpZXMiOlsidXNlciJdLCJ1aWQiOjk2ODYsImlhdCI6MTY5NzExODQyMiwiZXhwIjoxNzI4NjU0NDIyfQ.8XCTMjvBY65rKT_xqRTymRlD5K5IdgN5dwjz0hUPEP5oC2AJQw_N22y4PGV538NsiegYjZNIIKVddZ84X1zmyg"
+    };
 
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(userData),
-    );
+try {
+  final response = await http.post(url, headers: headers, body: jsonString);
+ print(response);
+  Navigator.of(context).push(
+    MaterialPageRoute(builder: (context) => Homepage(),),);
+}
+catch(e){
 
-    if (response.statusCode == 201) {
-      // Data was successfully posted to the API
-      print('User added successfully');
-      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Homepage(),),);
-    } else {
-      // Handle the error
-      print('Failed to add user. Status code: ${response.statusCode}');
+  print(e.toString());
+  print("error");
 
-    }
+}
   }
+
+
+  // var params = {
+  //   "doctor_id": "DOC000506",
+  //   "date_range": "25/03/2019-25/03/2019" ,
+  //   "clinic_id":"LAD000404"      };
+  //
+  // var response = await http.post("http://theapiiamcalling:8000",
+  // body: json.encode(params)
+  // ,headers: {
+  // "Authorization": Constants.APPOINTMENT_TEST_AUTHORIZATION_KEY,
+  // HttpHeaders.contentTypeHeader: "application/json",
+  // "callMethod" : "DOCTOR_AVAILABILITY"
+  // });
 
 
   @override
