@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:iot_mobile_app/pages/Home_page.dart';
-
+import 'package:http/http.dart' as http;
 import 'forgotpassword.dart';
 
 class SingIN extends StatefulWidget {
@@ -17,6 +20,58 @@ class _SingINState extends State<SingIN> {
   final _usernameController = TextEditingController();
 
   final _passwordController = TextEditingController();
+
+
+  void login(String user , password) async {
+
+    final Map<String, dynamic> requestData = {
+
+      "pin": password,
+
+      "userId": user,
+
+    };
+
+    try{
+
+      final response = await http.post(
+
+        Uri.parse('http://console-api.theja.in/login'),
+
+        body: jsonEncode(requestData),
+
+        headers: {'Content-Type': 'application/json'},
+
+      );
+
+
+
+      if(response.statusCode==200){
+
+        var data = jsonDecode(response.body.toString());
+
+
+
+        print(data);
+
+        print('account login sucessfully');
+
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Homepage(),),); // Add your button's functionality here
+
+
+
+      }
+
+
+    }catch(e){
+
+      print(e.toString());
+
+    }
+
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,24 +123,26 @@ class _SingINState extends State<SingIN> {
                           SizedBox(
                             height: 20,
                           ),
-                          ElevatedButton(
-                            onPressed: () {
-                             Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) =>Homepage(),
-                                  ),
-                                ); // Add your onPressed callback here
+                          GestureDetector(
+                            onTap: () {
+                              login(_usernameController.text.toString(),_passwordController.text.toString());
                             },
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors
-                                  .green, // Change the button's background color
-                              fixedSize:
-                                  Size(650, 50), // Increase the button's size
-                            ),
-                            child: Text(
-                              'sign_in'.tr,
-                              style: TextStyle(
-                                  fontSize: 20), // Customize the text size
+                            child: Container(
+                              height: 50,
+                              width: 650,
+                              decoration: BoxDecoration(
+                                color: Colors.green,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'sign_in'.tr,
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                           SizedBox(

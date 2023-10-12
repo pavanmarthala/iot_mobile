@@ -17,7 +17,7 @@ class Adduser extends StatefulWidget {
   @override
   State<Adduser> createState() => _dataState();
   
-  // void onDeviceAdded(String deviceName) {}
+
 }
 
 class _dataState extends State<Adduser> {
