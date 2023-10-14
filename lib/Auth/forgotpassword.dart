@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import 'package:iot_mobile_app/Auth/singin.dart';
+import 'package:iot_mobile_app/pages/lang_page.dart';
 
 import 'newpassword.dart';
 
@@ -50,6 +52,35 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 165, 227, 106),
+
+        iconTheme: IconThemeData(color: Colors.black),
+         title:  Text('forgot-pass'.tr, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.black),),
+         actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 30),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Langscreen(),),);
+              },
+              child: CircleAvatar(
+                radius: 18,
+                        backgroundColor: Color.fromARGB(255, 165, 227, 106),
+
+                // backgroundImage: AssetImage('assets/language-icon.png'), 
+                child: SvgPicture.asset(
+  'assets/language-icon.svg',
+  // width: 100.0, // Adjust the width as needed
+  // height: 100.0, // Adjust the height as needed
+),
+
+              ),
+            ),
+          ),
+           
+         ],
+       ),
       body: Stack(
         fit: StackFit.expand,
 

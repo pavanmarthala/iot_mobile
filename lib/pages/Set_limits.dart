@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:iot_mobile_app/pages/settings.dart';
 
 class Limits extends StatefulWidget {
@@ -38,6 +40,28 @@ class _LimitsState extends State<Limits> {
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,      
          title:  Text("set_limits".tr, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 25),),
+         actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 30),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Langscreen(),),);
+              },
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.white,
+                // backgroundImage: AssetImage('assets/language-icon.png'), 
+                child: SvgPicture.asset(
+  'assets/language-icon.svg',
+  // width: 100.0, // Adjust the width as needed
+  // height: 100.0, // Adjust the height as needed
+),
+
+              ),
+            ),
+          ),
+           
+         ],
       ),
       body:SingleChildScrollView(
         child: Padding(

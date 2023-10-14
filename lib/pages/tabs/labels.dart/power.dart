@@ -82,7 +82,7 @@ late Future<List<Photo>> futurePhotos;
           child: Row(
             children: [
     
-                    SizedBox(width: 100,),
+                    SizedBox(width: 80,),
                    Text('refresh_logs'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
                    SizedBox(width:5),
                     isRefreshing

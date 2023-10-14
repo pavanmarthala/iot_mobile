@@ -93,7 +93,7 @@ void _showDatePicker() {
                   'log_date'.tr,
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 150),
+                SizedBox(width: 100),
                
                 Padding(
                   padding: const EdgeInsets.only(top: 10),

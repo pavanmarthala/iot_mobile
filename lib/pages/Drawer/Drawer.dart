@@ -1,142 +1,170 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last, no_leading_underscores_for_local_identifiers, avoid_unnecessary_containers
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers
+
+import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:http/http.dart'  as http;
 
 import 'package:flutter/material.dart';
-
 import '../Home_page.dart';
 import 'Add_user.dart';
 import 'map_device.dart';
 
 class MyDrawer extends StatefulWidget {
-  // const MyDrawer({super.key});
-const MyDrawer({Key? key, required this.onDeviceAdded, required this.deviceList})
-      : super(key: key);
-  // const MyDrawer({super.key});
- final Function(String) onDeviceAdded;
- final List<String> deviceList;
+  const MyDrawer({
+    Key? key,
+    required this.onDeviceAdded,
+    required this.deviceList,
+  }) : super(key: key);
+
+  final Function(String) onDeviceAdded;
+  final List<String> deviceList;
+
   @override
   State<MyDrawer> createState() => _MyDrawerState();
 }
 
 class _MyDrawerState extends State<MyDrawer> {
-  // List<String> deviceList = [];
   List<Widget> buttons = [];
-   
 
   @override
   Widget build(BuildContext context) {
-    
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Drawer(
-         backgroundColor: Colors.white,
-         
-    
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Container(
-                        
-                  height: 180,
-                  width: 60,
-                   decoration: BoxDecoration(color: Colors.white,),
-                    child: Image.asset("assets/logo.png")
-                    //  Image.network('https://i.imgur.com/GzZgRzZ.png',),
-            
+    return Drawer(
+      backgroundColor: Colors.white,
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 60, bottom: 30, left: 30, right: 30),
+            child: Container(
+              child: Image.asset("assets/logo.png"),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Adduser(),),);
+              },
+              child: Row(
+                children: [
+                  SizedBox(width: 60),
+                  Icon(Icons.person_add, color: Colors.green),
+                  SizedBox(width: 8),
+                  Text('add_user'.tr, style: TextStyle(color: Colors.green)),
+                ],
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white.withOpacity(0.9),
+                onPrimary: Colors.black,
+                fixedSize: Size(250, 60),
+                side: BorderSide(
+                  color: Colors.green,
+                  width: 2,
+                  style: BorderStyle.solid,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ),
-            // SizedBox(height: 15,),
+          ),
+          SizedBox(height: 15,),
+          Padding(
+            padding: const EdgeInsets.only(left: 15, right: 15),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => Mapdevice(),),);
+              },
+              child: Row(
+                children: [
+                  SizedBox(width: 60),
+                  SizedBox(width: 8),
+                  Text('map_device'.tr, style: TextStyle(color: Colors.green)),
+                ],
+              ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white,
+                fixedSize: Size(250, 60),
+                side: BorderSide(
+                  color: Colors.green,
+                  width: 2,
+                  style: BorderStyle.solid,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+            height: 400,
+            width: 250,
+            // color: Colors.blue,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  for (var deviceName in widget.deviceList)
             Padding(
-              padding: const EdgeInsets.only(left: 15,right: 15),
+              padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
               child: ElevatedButton(
                 onPressed: () {
-                  // Navigator.pop(context);
-                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Adduser(),),);
-
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => Homepage()),);
                 },
-                
                 child: Row(
                   children: [
-                     SizedBox(width: 60),
-    
-                     Icon(Icons.person_add,color: Colors.green),
-                     SizedBox(width: 8),
-                    Text('Add User',style: TextStyle(color: Colors.green),),
+                    Text(
+                      deviceName,
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 195, 51, 41),
+                        fontSize: 15,
+                      ),
+                    ),
                   ],
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white.withOpacity(0.9),
-                  onPrimary: Colors.black,
-                  fixedSize: Size(150, 60),
-                side: BorderSide(
-                 color: Colors.green,
-                 width:2,
-                 style: BorderStyle.solid,
-               ),
-               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                 ),
-              ),
-              ),
-            ),
-    
-            SizedBox(height: 15,),
-    
-            Padding(
-              padding: const EdgeInsets.only(left: 15,right: 15),
-              child: ElevatedButton(
-                onPressed: () {
-                                     Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Mapdevice(),),);
-
-                },
-                child: Row(
-                  children: [
-                     SizedBox(width: 60),
-    
-                    //  Icon(Icons.person_add,color: Colors.green),
-                     SizedBox(width: 8),
-                    Text('Map Device',style: TextStyle(color: Colors.green),),
-                  ],
+                  primary: Color.fromARGB(223, 240, 200, 200),
+                  fixedSize: Size(770, 60),
+                  side: BorderSide(
+                    color: Color.fromARGB(255, 218, 117, 110),
+                    width: 2,
+                    style: BorderStyle.solid,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                 ),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
-                  fixedSize: Size(150, 60),
-                side: BorderSide(
-                 color: Colors.green,
-                 width:2,
-                 style: BorderStyle.solid,
-               ),
-               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                 ),
-              ),
               ),
             ),
-    
-            
-    
+                ],
+              ),
+            ),
+          ),
+          ),
 
-            
-   
-                for (var deviceName in widget.deviceList)
-              Padding(
-                padding: const EdgeInsets.only(left: 25, right: 25,top: 10),
+          Spacer(),
+          Column(
+            children: [
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(16.0),
                 child: ElevatedButton(
                   onPressed: () {
-                   Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Homepage(),),);
-
-                    // Handle button click for a specific device
+                    _showAddDeviceDialog(context);
                   },
                   child: Row(
                     children: [
-                      Text(deviceName, style: TextStyle(color: const Color.fromARGB(255, 195, 51, 41), fontSize: 15),),
+                      SizedBox(width: 60),
+                      Icon(Icons.add, color: Colors.white),
+                      SizedBox(width: 8),
+                      Text('add_device'.tr),
                     ],
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Color.fromARGB(223, 240, 200, 200),
-                    fixedSize: Size(770, 60),
+                    primary: Colors.green,
+                    fixedSize: Size(100, 60),
                     side: BorderSide(
-                      color: Color.fromARGB(255, 218, 117, 110),
+                      color: Colors.green,
                       width: 2,
                       style: BorderStyle.solid,
                     ),
@@ -146,36 +174,9 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                 ),
               ),
-
-
-          // Add Button
-          Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // When the Add Button is pressed, add a new button to the list
-                _showAddDeviceDialog(context);
-              },
-              child: Text('Add Device'),
-              style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
-                  fixedSize: Size(150, 60),
-                side: BorderSide(
-                 color: Colors.green,
-                 width:2,
-                 style: BorderStyle.solid,
-               ),
-               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                 ),
-              ),
-            ),
+            ],
           ),
-            // Dynamically generate device buttons
-
-          ],
-        ),
+        ],
       ),
     );
   }
@@ -190,39 +191,72 @@ class _MyDrawerState extends State<MyDrawer> {
     final _serialNocontroller = TextEditingController();
     final _mobileNocontroller = TextEditingController();
 
+   
+
+
     showDialog(
       context: context,
       builder: (context) {
         return Builder(
           builder: (context) {
             return Scaffold(
-              bottomNavigationBar:Container(
-  width: double.infinity,
-  // padding: EdgeInsets.all(16.0),
-  child: ElevatedButton(
-    onPressed: () {
-      String deviceName = _devicenameController.text;
-      // Add the new device name to the deviceList
-      setState(() {
-        widget.deviceList.add(deviceName);
-      });
-      Navigator.of(context).pop();
-    },
-    style: ElevatedButton.styleFrom(
-      primary: Colors.green,
-      padding: EdgeInsets.symmetric(vertical: 20),
-    ),
-    child: Text('Add Device', style: TextStyle(fontSize: 20)),
-  ),
-),
+              bottomNavigationBar: Container(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed:()async{
+                    String deviceName = _devicenameController.text;
+                    setState(() {
+                      widget.deviceList.add(deviceName);
+                    });
+                     final url = Uri.parse('https://console-api.theja.in/admin/addDevice');
+              final jsonData = {
+                "active": true,
+                "deviceId": _deviceController.text,
+                "deviceSerialNumber": _serialNocontroller.text,
+                "name": _devicenameController.text,
+                "simId": _simController.text,
+                "topic": _topiccontroller.text,
+                "zone": _zonecontroller.text,
+              };
 
+              final jsonString = json.encode(jsonData);
 
+              final headers = {
+                "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJLVGVjaF9Jb1QiLCJzdWIiOiI4NTAWOTMwMDg4IiwiYXV0aG9yaXRpZXMiOlsidXNlciJdLCJ1aWQiOjk2ODYsImlhdCI6MTY5NzExODQyMiwiZXhwIjoxNzI4NjU0NDIyfQ.8XCTMjvBY65rKT_xqRTymRlD5K5IdgN5dwjz0hUPEP5oC2AJQw_N22y4PGV538NsiegYjZNIIKVddZ84X1zmyg"
+              };
+
+              final response = await http.post(url, headers: headers, body: jsonString);
+
+              if (response.statusCode == 200) {
+                // Successful response, you can handle it as per your requirement.
+                print("Device added successfully");
+
+              } else {
+                // Error response, display an error message or handle it as needed.
+                print("Failed to add device. Status Code: ${response.statusCode}");
+                print("Response Body: ${response.body}");
+              }
+                    Navigator.of(context).pop();
+
+              // Close the dialog after handling the response.
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.green,
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                  ),
+                  child: Text('add_device'.tr, style: TextStyle(fontSize: 20)),
+                ),
+              ),
               appBar: AppBar(
                 iconTheme: IconThemeData(color: Colors.black),
                 backgroundColor: Colors.white,
-                title: const Text(
-                  "Add Device",
-                  style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25),
+                title:  Text(
+                  'add_device'.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontSize: 25,
+                  ),
                 ),
               ),
               body: SingleChildScrollView(
@@ -233,35 +267,35 @@ class _MyDrawerState extends State<MyDrawer> {
                     children: [
                       SizedBox(height: 20,),
                       Text(
-                        'Device Id',
+                        'device_id'.tr,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       TextField(
                         controller: _deviceController,
                         decoration: InputDecoration(
-                          hintText: 'Enter device id',
+                          hintText: 'enter_device_id'.tr,
                         ),
                       ),
                       SizedBox(height: 20,),
                       Text(
-                        'Device Name',
+                        'device_name'.tr,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       TextField(
                         controller: _devicenameController,
                         decoration: InputDecoration(
-                          hintText: 'Enter Device Name',
+                          hintText: 'enter_device_name'.tr,
                         ),
                       ),
                       SizedBox(height: 20,),
                       Text(
-                        'PIN',
+                        'pin'.tr,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       TextField(
                         controller: _pinController,
                         decoration: InputDecoration(
-                          hintText: 'Enter Device Pin',
+                          hintText: 'enter_device_pin'.tr,
                         ),
                       ),
                       SizedBox(height: 20,),
@@ -272,69 +306,63 @@ class _MyDrawerState extends State<MyDrawer> {
                       TextField(
                         controller: _simController,
                         decoration: InputDecoration(
-                          hintText: 'Enter device sim',
+                          hintText: 'enter_device_sim'.tr,
                         ),
                       ),
                       SizedBox(height: 20,),
                       Text(
-                        'topic',
+                        'topic'.tr,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       TextField(
                         controller: _topiccontroller,
                         decoration: InputDecoration(
-                          hintText: 'Enter topic',
+                          hintText: 'enter_topic'.tr,
                         ),
                       ),
                       SizedBox(height: 20,),
                       Text(
-                        'zone',
+                        'zone'.tr,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       TextField(
                         controller: _zonecontroller,
                         decoration: InputDecoration(
-                          hintText: 'Enter zone',
+                          hintText: 'enter_zone'.tr,
                         ),
                       ),
                       SizedBox(height: 20,),
                       Text(
-                        'Device  serial Number',
+                        'device_serial-no'.tr,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       TextField(
                         controller: _serialNocontroller,
                         decoration: InputDecoration(
-                          hintText: 'Enter mobile serial number',
+                          hintText: 'enter_serial_no'.tr,
                         ),
                       ),
                       SizedBox(height: 20,),
                       Text(
-                        'Mobile Number',
+                        'mobile_number'.tr,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       TextField(
                         controller: _mobileNocontroller,
                         decoration: InputDecoration(
-                          hintText: 'Enter Mobile Number',
+                          hintText: 'enter_mobile_number'.tr,
                         ),
                       ),
                       SizedBox(height: 90,),
-                     
                     ],
                   ),
                 ),
               ),
             );
-          }
+          },
         );
       },
     );
   }
 }
-
-
-
-
-
 

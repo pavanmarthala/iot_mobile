@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Mapdevice extends StatefulWidget {
   const Mapdevice({super.key});
@@ -28,13 +29,13 @@ class _LimitsState extends State<Mapdevice> {
       primary: Colors.green,
       padding: EdgeInsets.symmetric(vertical: 20),
     ),
-    child: Text('Map user to Device', style: TextStyle(fontSize: 20)),
+    child: Text('map_user_to_device'.tr, style: TextStyle(fontSize: 20)),
   ),
 ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,      
-         title: const Text("Map user to Device", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 25),),
+         title:  Text("map_user_to_device".tr, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 25),),
       ),
       body:SingleChildScrollView(
         child: Padding(
@@ -47,25 +48,25 @@ class _LimitsState extends State<Mapdevice> {
              
              SizedBox(height: 20,),
               Text(
-                'User Id',
+                'user_id'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _userController,
                 decoration: InputDecoration(
-                  hintText: 'Enter user id',
+                  hintText: 'enter_user_id'.tr,
                 ),
               ),
              SizedBox(height: 20,),
 
               Text(
-                'Device Id',
+                'device_id'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _deviceController,
                 decoration: InputDecoration(
-                  hintText: 'Enter device id',
+                  hintText: 'enter_device_id'.tr,
                 ),
               ),
              

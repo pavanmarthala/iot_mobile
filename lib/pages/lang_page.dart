@@ -50,7 +50,7 @@ class Langscreen extends StatelessWidget {
                                 crossAxisCount: 2,
                                 childAspectRatio: 2.5,
                               ),
-                              itemCount: 2,
+                              itemCount: 4,
                               physics: NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) =>

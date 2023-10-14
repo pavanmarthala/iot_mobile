@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:iot_mobile_app/pages/settings.dart';
 import 'package:iot_mobile_app/pages/tabs/Logs.dart';
 import 'package:iot_mobile_app/pages/tabs/dash.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'Drawer/Drawer.dart';
 import 'lang_page.dart';
@@ -38,11 +39,21 @@ class _HomepageState extends State<Homepage> {
          actions: [
           Padding(
             padding: EdgeInsets.symmetric(vertical: 1.0,),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.green,
-              child: IconButton(onPressed: () { Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) =>Langscreen(),),); }, icon: Icon(Icons.language, size: 30,color: Colors.black,)),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Langscreen(),),);
+              },
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.green,
+                // backgroundImage: AssetImage('assets/language-icon.png'), 
+                child: SvgPicture.asset(
+  'assets/language-icon.svg',
+  // width: 100.0, // Adjust the width as needed
+  // height: 100.0, // Adjust the height as needed
+),
+
+              ),
             ),
           ),
            Padding(

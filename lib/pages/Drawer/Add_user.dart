@@ -1,10 +1,14 @@
 
 
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, deprecated_member_use, sized_box_for_whitespace, camel_case_types
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:http/http.dart'  as http;
+import 'package:iot_mobile_app/models/add_user_model.dart';
 import 'package:iot_mobile_app/pages/Home_page.dart';
 
 
@@ -17,6 +21,68 @@ class Adduser extends StatefulWidget {
   State<Adduser> createState() => _dataState();
 
 
+}
+Future<AdduserModel?> add (
+  
+  String email,
+  String mobile,
+  String pin,
+  String preferredLanguage,
+  String role,
+  String subscriptionValidity,
+  String addressLine1,
+  String addressLine2,
+  String addressLine3,
+  String city,
+  String district,
+  String landMark,
+  // String pinCode,
+  String state,
+  String firstName,
+  String lastName,
+  String zone,
+  
+  )async{
+  var response = await http.post(Uri.https('console-api.theja.in','admin/addUser'),
+  body:jsonEncode({
+       "active": "true",
+      "email": email,
+      "mobile": mobile,
+      "pin": pin,
+      "preferredLanguage": preferredLanguage,
+      "role": role,
+      "subscriptionValidity": subscriptionValidity,
+      "userDetails": {
+        "address": {
+          "addressLine1": addressLine1,
+          "addressLine2": addressLine2,
+          "addressLine3": addressLine3,
+          "city": city,
+          "district": district,
+          "landMark": landMark,
+          // "pinCode": pinCode,
+          "state": state,
+        },
+        "firstName": firstName,
+        "lastName": lastName,
+        
+      },
+      "zone":zone,
+  }),
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJLVGVjaF9Jb1QiLCJzdWIiOiI4NTAwOTMwMDg4IiwiYXV0aG9yaXRpZXMiOlsidXNlciJdLCJ1aWQiOjk2ODYsImlhdCI6MTY5NzExODQyMiwiZXhwIjoxNzI4NjU0NDIyfQ.8XCTMjvBY65rKT_xqRTymRlD5K5IdgN5dwjz0hUPEP5oC2AJQw_N22y4PGV538NsiegYjZNIIKVddZ84X1zmyg'
+    }, 
+  );
+  var data =response.body;
+  print(data);
+  if(response.statusCode == 200){
+    String responseString = response.body;
+    adduserModelFromJson(responseString);
+  }
+  else {
+    return null;
+  }
 }
 
 class _dataState extends State<Adduser> {
@@ -39,90 +105,60 @@ class _dataState extends State<Adduser> {
   final _landmarkcontroller = TextEditingController();
 
 
-  void addUser() async {
 
 
-    // Create a data model to represent the data you want to send
-    var userData = {
-      "active": true,
-      "email": _emailController.text,
-      "mobile": _mobileNocontroller.text,
-      "pin": _pinController.text,
-      "preferredLanguage": _languagecontroller.text,
-      "role": _rolecontroller.text,
-      "subscriptionValidity": _subscriptioncontroller.text,
-      "userDetails": {
-        "address": {
-          "addressLine1": _address1controller.text,
-          "addressLine2": _address2controller.text,
-          "addressLine3": _address3controller.text,
-          "city": _citycontroller.text,
-          "district": _districtcontroller.text,
-          "landMark": _landmarkcontroller.text,
-          "pinCode": _pinController.text,
-          "state": _statecontroller.text,
-        },
-        "firstName": _firstnameController.text,
-        "lastName": _lastnameController.text,
-        "name": "${_firstnameController.text} ${_lastnameController.text}",
-      },
-      "zone": _zonecontroller.text,
-    };
-    final jsonString = json.encode(userData);
-    final url = Uri.parse('https://console-api.theja.in/admin/addUser');
-    final headers = {
-    "Authorization": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJLVGVjaF9Jb1QiLCJzdWIiOiI4NTAwOTMwMDg4IiwiYXV0aG9yaXRpZXMiOlsidXNlciJdLCJ1aWQiOjk2ODYsImlhdCI6MTY5NzExODQyMiwiZXhwIjoxNzI4NjU0NDIyfQ.8XCTMjvBY65rKT_xqRTymRlD5K5IdgN5dwjz0hUPEP5oC2AJQw_N22y4PGV538NsiegYjZNIIKVddZ84X1zmyg"
-    };
-
-try {
-  final response = await http.post(url, headers: headers, body: jsonString);
- print(response);
-  Navigator.of(context).push(
-    MaterialPageRoute(builder: (context) => Homepage(),),);
-}
-catch(e){
-
-  print(e.toString());
-  print("error");
-
-}
-  }
-
-
-  // var params = {
-  //   "doctor_id": "DOC000506",
-  //   "date_range": "25/03/2019-25/03/2019" ,
-  //   "clinic_id":"LAD000404"      };
-  //
-  // var response = await http.post("http://theapiiamcalling:8000",
-  // body: json.encode(params)
-  // ,headers: {
-  // "Authorization": Constants.APPOINTMENT_TEST_AUTHORIZATION_KEY,
-  // HttpHeaders.contentTypeHeader: "application/json",
-  // "callMethod" : "DOCTOR_AVAILABILITY"
-  // });
 
 
   @override
   Widget build(BuildContext context) {
 
+   AdduserModel? _addusermodel;
     return Scaffold(
       bottomNavigationBar:Container(
         width: double.infinity,
         // padding: EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: addUser,
+          onPressed: ()async{
+              String email = _emailController.text;
+             String mobile =_mobileNocontroller.text;
+              String pin = _pinController.text;
+             String preferredLanguage = _languagecontroller.text;
+             String role = _rolecontroller.text;
+  String subscriptionValidity = _subscriptioncontroller.text;
+  String addressLine1 = _address1controller.text;
+  String addressLine2 = _address2controller.text;
+  String addressLine3 = _address3controller.text;
+  String city = _citycontroller.text;
+  String district = _districtcontroller.text;
+  String landMark = _landmarkcontroller.text;
+  // String pinCode,
+  String state = _statecontroller.text;
+  String firstName = _firstnameController.text;
+  String lastName = _lastnameController.text;
+  String zone = _zonecontroller.text;
+
+               AdduserModel? data = await add(
+                email, mobile, pin, preferredLanguage,
+                 role, subscriptionValidity, addressLine1, 
+                 addressLine2, addressLine3, city, district, landMark, state, firstName, lastName, zone);
+             if (data != null) {
+              setState(() {
+                _addusermodel = data;
+              });
+            }
+
+          },
           style: ElevatedButton.styleFrom(
             primary: Colors.green,
             padding: EdgeInsets.symmetric(vertical: 20),
           ),
-          child: Text('Add User', style: TextStyle(fontSize: 20)),
+          child: Text('add_user'.tr, style: TextStyle(fontSize: 20)),
         ),
       ),
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
-        title: const Text("Add User", style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 25),),
+        title:  Text("add_user".tr, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 25),),
       ),
       body:SingleChildScrollView(
         child: Padding(
@@ -133,71 +169,71 @@ catch(e){
               SizedBox(height: 20,),
 
               Text(
-                'Mobile Number',
+                'mobile_number'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _mobileNocontroller,
                 decoration: InputDecoration(
-                  hintText: 'Enter Mobile Number',
+                  hintText: 'enter_mobile_number'.tr,
                 ),
               ),
 
               SizedBox(height: 20,),
               Text(
-                'First Name',
+                'first_number'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _firstnameController,
                 decoration: InputDecoration(
-                  hintText: 'Enter first name',
+                  hintText: 'Enter_first_name'.tr,
                 ),
               ),
               SizedBox(height: 20,),
 
               Text(
-                'last Name',
+                'last_name'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _lastnameController,
                 decoration: InputDecoration(
-                  hintText: 'Enter last Name',
+                  hintText: 'enter_last_name'.tr,
                 ),
               ),
               SizedBox(height: 20,),
               Text(
-                'Email Id',
+                'email_id'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
-                  hintText: 'Enter email id',
+                  hintText: 'enter_email'.tr,
                 ),
               ),
               SizedBox(height: 20,),
               Text(
-                'Subscription validity Till',
+                'Subscription_validity'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _subscriptioncontroller,
                 decoration: InputDecoration(
-                  hintText: 'select validity',
+                  hintText: 'select_validity'.tr,
                 ),
               ),
               SizedBox(height: 20,),
 
               Text(
-                'PIN',
+                'pin'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _pinController,
                 decoration: InputDecoration(
-                  hintText: 'Enter Device Pin',
+                  hintText: 'enter_device_pin'.tr,
                 ),
               ),
               SizedBox(height: 20,),
@@ -205,120 +241,120 @@ catch(e){
 
 
               Text(
-                'Preferd language',
+                'language'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _languagecontroller,
                 decoration: InputDecoration(
-                  hintText: 'Enter Preferd language',
+                  hintText: 'enter_preferd_language'.tr,
                 ),
               ),
               SizedBox(height: 20,),
 
               Text(
-                'Role',
+                'role'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _rolecontroller,
                 decoration: InputDecoration(
-                  hintText: 'Enter prefered role',
+                  hintText: 'enter_role'.tr,
                 ),
               ),
               SizedBox(height: 20,),
 
               Text(
-                'Address Line 1',
+                'address1'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _address1controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter address line 1',
+                  hintText: 'enter_address1'.tr,
                 ),
               ),
               SizedBox(height: 20,),
 
               Text(
-                'Address Line 2',
+                'address2'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _address2controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter address line 2',
+                  hintText: 'enter_address2'.tr,
                 ),
               ),
               SizedBox(height: 20,),
               Text(
-                'Address Line 3',
+                'address3'.tr,
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               TextField(
                 controller: _address3controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter address line 3',
+                  hintText: 'enter_address3'.tr,
                 ),
               ),
               SizedBox(height: 20,),
 
               Text(
-                'State',
+                'state'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _statecontroller,
                 decoration: InputDecoration(
-                  hintText: 'Enter state',
+                  hintText: 'enter_state'.tr,
                 ),
               ),
               SizedBox(height: 20,),
 
               Text(
-                'District',
+                'district'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _districtcontroller,
                 decoration: InputDecoration(
-                  hintText: 'Enter district',
+                  hintText: 'enter_district'.tr,
                 ),
               ),
 
               Text(
-                'zone',
+                'zone'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _zonecontroller,
                 decoration: InputDecoration(
-                  hintText: 'Enter zone',
+                  hintText: 'enter_zone'.tr,
                 ),
               ),
               SizedBox(height: 20,),
 
               Text(
-                'City',
+                'city'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _citycontroller,
                 decoration: InputDecoration(
-                  hintText: 'Enter city',
+                  hintText: 'enter_city'.tr,
                 ),
               ),
               SizedBox(height: 20,),
 
 
               Text(
-                'Land mark',
+                'land_mark'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
                 controller: _landmarkcontroller,
                 decoration: InputDecoration(
-                  hintText: 'Enter landmark',
+                  hintText: 'enter_land_mark'.tr,
                 ),
               ),
             ],

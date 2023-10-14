@@ -38,7 +38,7 @@ class _LoadState extends State<Load> {
         child: Row(
           children: [
 
-                  SizedBox(width: 100,),
+                  SizedBox(width: 80,),
                  Text('refresh_logs'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
                  SizedBox(width: 5),
                   isRefreshing
@@ -135,7 +135,7 @@ class _LoadState extends State<Load> {
         padding: const EdgeInsets.only(left: 40,right: 40),
         child: Row(
           children: [
-                  SizedBox(width: 170,),
+                  SizedBox(width: 160,),
                  Text('total_records'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
             Text(': 0',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
 

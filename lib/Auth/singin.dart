@@ -3,10 +3,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'forgotpassword.dart';
 
 class SingIN extends StatefulWidget {
@@ -76,6 +78,34 @@ class _SingINState extends State<SingIN> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 165, 227, 106),
+        iconTheme: IconThemeData(color: Colors.black),
+         title:  Text('sign_in'.tr, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.black),),
+         actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 30),
+            child: GestureDetector(
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Langscreen(),),);
+              },
+              child: CircleAvatar(
+                radius: 18,
+        backgroundColor: Color.fromARGB(255, 165, 227, 106),
+
+                // backgroundImage: AssetImage('assets/language-icon.png'), 
+                child: SvgPicture.asset(
+  'assets/language-icon.svg',
+  // width: 100.0, // Adjust the width as needed
+  // height: 100.0, // Adjust the height as needed
+),
+
+              ),
+            ),
+          ),
+           
+         ],
+       ),
       body: Stack(
         fit: StackFit.expand,
         children: [
