@@ -1,9 +1,13 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, non_constant_identifier_names, unused_local_variable
 
 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'labels.dart/load.dart';
 import 'labels.dart/motor.dart';
@@ -30,6 +34,8 @@ class _LogsState extends State<Logs>
   @override
  void initState() {
    tabController = TabController(length: 3, vsync: this);
+    deviceIds = fetchDeviceIds();
+
    super.initState();
    
  }
@@ -59,18 +65,69 @@ void _showDatePicker() {
     }
   });
 }
+Future<List<String>>? deviceIds;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
+
+ Future<List<String>> fetchDeviceIds() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? jwtToken = prefs.getString('jwt_token'); // Retrieve the JWT token from local storage
+
+  if (jwtToken == null) {
+    // Handle the case where the token is not found
+    // return null;
+  }
+  final response = await http.get(
+    Uri.https('console-api.theja.in', '/user/getInfo'), // Use the correct endpoint
+    headers: {
+      "Authorization": "Bearer $jwtToken",
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final List<dynamic> deviceIdsJson = jsonResponse["deviceIds"];
+
+
+    if (deviceIdsJson is List) {
+      final deviceIds = deviceIdsJson.map((deviceIdJson) => deviceIdJson.toString()).toList();
+      return deviceIds;
+    } else {
+      return <String>[];
+    }
+  } else {
+    print('API Response (Error): ${response.body}');
+    throw Exception('Failed to load device IDs');
+  }
+}
 
 
 
   @override
   Widget build(BuildContext context) {
     // final statusData = statusProvider.statusData;
+     return FutureBuilder<List<String>>(
+      future: deviceIds,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final deviceIdsList = snapshot.data;
+
+          if (deviceIdsList == null || deviceIdsList.isEmpty) {
+            return Center(child: Text('No device IDs found.'));
+          }
     return Container(
       color:Color.fromARGB(255, 247, 242, 242),
       child: Column(
         children: [
           Padding(
-              padding: const EdgeInsets.only(left: 30,top: 55),
+              padding: const EdgeInsets.only(left: 30,top: 45),
     
               child: Row(
                 children: [
@@ -78,6 +135,23 @@ void _showDatePicker() {
                     'device_no:1'.tr,
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(
+                
+                  height: 50,
+                  width: 70,
+                  // color: Colors.red,
+                   child: ListView.builder(
+                                 itemCount: deviceIdsList.length,
+                             itemBuilder: (context, index) {
+                               return ListTile(
+                                 title: Text(deviceIdsList[index],
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                                 
+                                 ),
+                               );
+                             },
+                   ),
+                 ),
                  
                   
                 ],
@@ -85,7 +159,7 @@ void _showDatePicker() {
             ),
 
                       Padding(
-            padding: const EdgeInsets.only(left: 30,top: 40),
+            padding: const EdgeInsets.only(left: 30,top: 0),
 
             child: Row(
               children: [
@@ -160,3 +234,6 @@ void _showDatePicker() {
     );
   }
 }
+     );
+  }
+   }

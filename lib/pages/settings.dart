@@ -1,9 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../Auth/singin.dart';
 import 'Set_limits.dart';
@@ -28,10 +32,63 @@ class _SettingsState extends State<Settings> {
       ),
     );
   }
+void logout() async {
+    // Clear user login details from shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('username');
+    prefs.remove('password');
+
+    // Navigate back to the login page
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => SingIN()),
+    );
+  }
+
+  Future<Map<String, dynamic>>? userInfo;
+
+  @override
+  void initState() {
+    super.initState();
+    userInfo = fetchUserInfo();
+  }
+
+  Future<Map<String, dynamic>> fetchUserInfo() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token'); // Retrieve the JWT token from local storage
+
+    if (jwtToken == null) {
+      // Handle the case where the token is not found
+      // return null;
+    }
+    final response = await http.get(
+      Uri.https('console-api.theja.in', '/user/getInfo'),
+      headers: {
+        "Authorization":
+            "Bearer $jwtToken"
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      return jsonResponse;
+    } else {
+      print('API Response (Error): ${response.body}');
+      throw Exception('Failed to load user information');
+    }
+  }
 
 
   @override
   Widget build(BuildContext context) {
+        return FutureBuilder<Map<String, dynamic>>(
+      future: userInfo,
+      builder: (context, userSnapshot) {
+        if (userSnapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (userSnapshot.hasError) {
+          return Center(child: Text('Error: ${userSnapshot.error}'));
+        } else {
+          final userInfoData = userSnapshot.data;
     return Scaffold(
       backgroundColor: Colors.white,
       //  drawer: Drawer(),
@@ -62,7 +119,10 @@ class _SettingsState extends State<Settings> {
            
          ],
        ),
-
+// children: [
+//               Text('User Name: ${userInfoData?["name"] ?? "Unknown"}'),
+//               Text('Subscription Validity: ${userInfoData?["subscriptionValidity"] ?? "Unknown"}'),
+//             ],
        body: ListView(
         children: [
           Row(  
@@ -86,7 +146,7 @@ class _SettingsState extends State<Settings> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 50),
-                child: Text(" Teja Karimireddy",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
+                child: Text("${userInfoData?["name"] ?? "Unknown"}",style: TextStyle(fontWeight: FontWeight.w500,fontSize: 20),),
               )
             ],
           ),
@@ -108,7 +168,7 @@ class _SettingsState extends State<Settings> {
                       children: [
                         Text('sub'.tr,style: TextStyle(fontSize: 17),),
                         SizedBox(width: 65,),
-                        Text('2023/09/31',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15))
+                        Text('${userInfoData?["subscriptionValidity"] ?? "Unknown"}',style: TextStyle(fontWeight: FontWeight.w500,fontSize: 15))
                   
                   
                       ],
@@ -189,9 +249,8 @@ class _SettingsState extends State<Settings> {
               trailing: const Icon(Icons.exit_to_app_outlined,color: Colors.black),
 
 
-              onTap: () {
-                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>SingIN(),),);
-                                                        
+              onTap: () async {
+                               logout();                    
               },
             ),
           SizedBox(height: 10,),
@@ -208,5 +267,8 @@ class _SettingsState extends State<Settings> {
         ],
        ),
     );
+  }
+}
+        );
   }
 }

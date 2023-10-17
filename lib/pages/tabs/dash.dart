@@ -1,9 +1,13 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Dash extends StatefulWidget {
   const Dash({super.key});
@@ -19,9 +23,97 @@ class _DashState extends State<Dash> {
   DateTime motorStatus = DateTime.now(); 
   DateTime powerStatus = DateTime.now(); 
 
+  Future<List<String>>? deviceIds;
+
+  @override
+  void initState() {
+    super.initState();
+    deviceIds = fetchDeviceIds();
+  }
+
+ Future<List<String>> fetchDeviceIds() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? jwtToken = prefs.getString('jwt_token'); // Retrieve the JWT token from local storage
+
+  if (jwtToken == null) {
+    // Handle the case where the token is not found
+    // return null;
+  }
+  final response = await http.get(
+    Uri.https('console-api.theja.in', '/user/getInfo'), // Use the correct endpoint
+    headers: {
+      "Authorization": "Bearer $jwtToken",
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final List<dynamic> deviceIdsJson = jsonResponse["deviceIds"];
+
+
+    if (deviceIdsJson is List) {
+      final deviceIds = deviceIdsJson.map((deviceIdJson) => deviceIdJson.toString()).toList();
+      print(deviceIds[2]+'first index of device');
+      return deviceIds;
+    } else {
+      return <String>[];
+    }
+  } else {
+    print('API Response (Error): ${response.body}');
+    throw Exception('Failed to load device IDs');
+  }
+}
+Future<List<String>> getdevice(deviceId) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? jwtToken = prefs.getString('jwt_token'); // Retrieve the JWT token from local storage
+
+  if (jwtToken == null) {
+    // Handle the case where the token is not found
+    // return null;
+  }
+  final response = await http.get(
+    Uri.https('console-api.theja.in', '/motor/get/${deviceId}'), // Use the correct endpoint
+    headers: {
+      "Authorization": "Bearer $jwtToken",
+    },
+  );
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      final List<dynamic> deviceIdsJson = jsonResponse["deviceIds"];
+
+
+    if (deviceIdsJson is List) {
+      final deviceIds = deviceIdsJson.map((deviceIdJson) => deviceIdJson.toString()).toList();
+      return deviceIds;
+    } else {
+      return <String>[];
+    }
+  } else {
+    print('API Response (Error): ${response.body}');
+    throw Exception('Failed to load device IDs');
+  }
+}
+
   @override
   Widget build(BuildContext context) {
+    return FutureBuilder<List<String>>(
+      future: deviceIds,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        } else {
+          final deviceIdsList = snapshot.data;
+
+          if (deviceIdsList == null || deviceIdsList.isEmpty) {
+            return Center(child: Text('No device IDs found.'));
+          }
+    
         final switchState = Provider.of<SwitchState>(context);
+        
+        
 
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
@@ -36,7 +128,24 @@ class _DashState extends State<Dash> {
                   'device_no:1'.tr,
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
-                SizedBox(width: 160),
+                 SizedBox(
+                
+                  height: 50,
+                  width: 70,
+                  // color: Colors.red,
+                   child: ListView.builder(
+                                 itemCount: deviceIdsList.length,
+                             itemBuilder: (context, index) {
+                               return ListTile(
+                                 title: Text(deviceIdsList[index],
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                                 
+                                 ),
+                               );
+                             },
+                   ),
+                 ),
+                SizedBox(width: 140),
                      Container(
                       height: 30,
                       width: 30,
@@ -77,7 +186,7 @@ class _DashState extends State<Dash> {
                               padding: const EdgeInsets.all(20),
                               child: Row(
                                 children: [
-                                  Text('motor_status'.tr,
+                                  Text('motor_switch'.tr,
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontWeight: FontWeight.bold,
@@ -324,6 +433,9 @@ class _DashState extends State<Dash> {
           SizedBox(height: 25,),
         ],
       ),
+    );
+        }
+        }
     );
   }
 }

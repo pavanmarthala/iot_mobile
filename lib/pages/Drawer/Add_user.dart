@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart'  as http;
 import 'package:iot_mobile_app/models/add_user_model.dart';
 import 'package:iot_mobile_app/pages/Home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Adduser extends StatefulWidget {
@@ -43,6 +44,13 @@ Future<AdduserModel?> add (
   String zone,
   
   )async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token'); // Retrieve the JWT token from local storage
+
+    if (jwtToken == null) {
+      // Handle the case where the token is not found
+      return null;
+    }
   var response = await http.post(Uri.https('console-api.theja.in','admin/addUser'),
   body:jsonEncode({
        "active": "true",
@@ -71,7 +79,7 @@ Future<AdduserModel?> add (
   }),
   headers: {
     'Content-Type': 'application/json',
-    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJLVGVjaF9Jb1QiLCJzdWIiOiI4NTAwOTMwMDg4IiwiYXV0aG9yaXRpZXMiOlsidXNlciJdLCJ1aWQiOjk2ODYsImlhdCI6MTY5NzExODQyMiwiZXhwIjoxNzI4NjU0NDIyfQ.8XCTMjvBY65rKT_xqRTymRlD5K5IdgN5dwjz0hUPEP5oC2AJQw_N22y4PGV538NsiegYjZNIIKVddZ84X1zmyg'
+    'Authorization': 'Bearer $jwtToken'
     }, 
   );
   var data =response.body;

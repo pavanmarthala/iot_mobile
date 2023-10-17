@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, library_private_types_in_public_api, use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -25,6 +27,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     // For this example, we'll just simulate that OTP is sent.
     setState(() {
       isOtpSent = true;
+      userInputController.text = '';
     });
   }
 
@@ -40,7 +43,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           TextButton(
             onPressed: () {
                               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NewPasswordPage(),),); // Add your button's functionality here
-;
+
             },
             child: Text('ok'.tr),
           ),
@@ -49,6 +52,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     );
   }
 
+
+  void _resendOtp() {
+    // Implement your OTP resend logic here.
+    // You can reset the timer or send a new OTP.
+    // For this example, we'll just simulate resending OTP.
+    _sendOtp();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -126,6 +136,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           SizedBox(height:10),
                          TextFormField(
                             controller: userInputController,
+                            enabled: !isOtpSent,
                             keyboardType: TextInputType.text,
                             decoration: InputDecoration(
                                 hintText: "enter_mobile/email".tr,
@@ -148,7 +159,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             onPressed: isOtpSent ? _verifyOtp : _sendOtp,
                             child: Text(isOtpSent ? "verify_otp".tr : "send_otp".tr),
                             style: ElevatedButton.styleFrom(
-                              primary: Colors
+                              backgroundColor: Colors
                                   .green, // Change the button's background color
                               fixedSize:
                                   Size(650, 50), // Increase the button's size
@@ -174,6 +185,23 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                 },
                                 child: Text(
                                   "click".tr,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    // Change the text color as needed
+                                    fontSize:
+                                        16, // Adjust the text size as needed
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 6,),
+                              if (isOtpSent)
+                               TextButton(
+                                onPressed: 
+                                 _resendOtp,
+                                
+                                child: Text(
+                                  "Resend OTP".tr,
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,

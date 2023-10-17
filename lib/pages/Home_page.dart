@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/settings.dart';
 import 'package:iot_mobile_app/pages/tabs/Logs.dart';
 import 'package:iot_mobile_app/pages/tabs/dash.dart';
@@ -32,7 +33,7 @@ class _HomepageState extends State<Homepage> {
 
     return  Scaffold(
        backgroundColor: const Color(0xffcbcbcb),
-       drawer: MyDrawer(onDeviceAdded: (String ) {  }, deviceList: [],),
+       drawer: MyDrawer(),
        appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
          title:  Text("dashboard".tr, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.black),),

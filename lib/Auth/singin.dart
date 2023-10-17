@@ -5,10 +5,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
 import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:http/http.dart' as http;
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'forgotpassword.dart';
 
 class SingIN extends StatefulWidget {
@@ -22,6 +22,25 @@ class _SingINState extends State<SingIN> {
   final _usernameController = TextEditingController();
 
   final _passwordController = TextEditingController();
+
+
+@override
+  void initState() {
+    super.initState();
+    checkLoggedInStatus(); // Check the login status when the screen initializes
+  }
+
+  // Function to check the login status
+  void checkLoggedInStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? username = prefs.getString('username');
+    String? password = prefs.getString('password');
+
+    if (username != null && password != null) {
+      login(username, password);
+    }
+  }
+
 
 
   void login(String user , password) async {
@@ -57,6 +76,10 @@ class _SingINState extends State<SingIN> {
         print(data);
 
         print('account login sucessfully');
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString('username', user);
+        prefs.setString('password', password);
+        prefs.setString('jwt_token', data['token']);
 
         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Homepage(),),); // Add your button's functionality here
 
@@ -153,26 +176,14 @@ class _SingINState extends State<SingIN> {
                           SizedBox(
                             height: 20,
                           ),
-                          GestureDetector(
-                            onTap: () {
+                          ElevatedButton(
+                            onPressed: () {
                               login(_usernameController.text.toString(),_passwordController.text.toString());
                             },
-                            child: Container(
-                              height: 50,
-                              width: 650,
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'sign_in'.tr,
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
+                            child: Text("sign_in".tr),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              fixedSize: Size(650, 50),
                             ),
                           ),
                           SizedBox(
