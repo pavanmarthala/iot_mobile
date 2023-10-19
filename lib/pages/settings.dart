@@ -93,6 +93,7 @@ void logout() async {
       backgroundColor: Colors.white,
       //  drawer: Drawer(),
        appBar: AppBar(
+
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.white,
          title:  Text("settings".tr, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 25),),

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:iot_mobile_app/pages/landing_page.dart';
+// import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/settings.dart';
 import 'package:iot_mobile_app/pages/tabs/Logs.dart';
 import 'package:iot_mobile_app/pages/tabs/dash.dart';
@@ -14,19 +14,29 @@ import 'lang_page.dart';
 // import 'package:iot_console/pages/tabs/status.dart';
 
 class Homepage extends StatefulWidget {
-  const Homepage({super.key});
+   final String deviceId;
+
+  Homepage(this.deviceId);
 
   @override
   State<Homepage> createState() => _HomepageState();
 }
 
 class _HomepageState extends State<Homepage> {
-  int index =0;
-   final screens = [
-   Dash(),
-   Logs(),
-   ];
+   int index = 0;
+  List<Widget> screens = []; // Initialize the screens list
 
+  @override
+  void initState() {
+    super.initState();
+    screens = [
+      Dash(widget.deviceId), // You can pass widget.deviceId here
+      Logs(widget.deviceId),
+    ];
+  }
+
+ int currentIndex = 0;
+  PageController pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -69,6 +79,18 @@ class _HomepageState extends State<Homepage> {
          ],
        ),
        body: screens[index],
+      //  Stack(
+      //   children: [
+      //     Offstage(
+      //       offstage: currentIndex != 0,
+      //       child: Dash(widget.deviceId),
+      //     ),
+      //     Offstage(
+      //       offstage: currentIndex != 1,
+      //       child: Logs(),
+      //     ),
+      //   ],
+      // ),
        bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
           indicatorColor: Colors.blue.shade100,

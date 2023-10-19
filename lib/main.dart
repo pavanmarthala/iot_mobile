@@ -8,7 +8,7 @@ import 'package:iot_mobile_app/pages/tabs/dash.dart';
 import 'package:iot_mobile_app/utils/app_constants.dart';
 import 'package:iot_mobile_app/utils/messages.dart';
 import 'package:provider/provider.dart';
-import 'Auth/singin.dart';
+// import 'Auth/singin.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

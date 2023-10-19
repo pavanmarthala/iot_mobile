@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, unnecessary_type_check
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -10,8 +10,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Dash extends StatefulWidget {
-  const Dash({super.key});
+  final String deviceId;
 
+  Dash(this.deviceId, {super.key});
   @override
   State<Dash> createState() => _DashState();
 }
@@ -53,7 +54,7 @@ class _DashState extends State<Dash> {
 
     if (deviceIdsJson is List) {
       final deviceIds = deviceIdsJson.map((deviceIdJson) => deviceIdJson.toString()).toList();
-      print(deviceIds[2]+'first index of device');
+      // print(deviceIds[2]+'first index of device');
       return deviceIds;
     } else {
       return <String>[];
@@ -128,23 +129,10 @@ Future<List<String>> getdevice(deviceId) async {
                   'device_no:1'.tr,
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
-                 SizedBox(
-                
-                  height: 50,
-                  width: 70,
-                  // color: Colors.red,
-                   child: ListView.builder(
-                                 itemCount: deviceIdsList.length,
-                             itemBuilder: (context, index) {
-                               return ListTile(
-                                 title: Text(deviceIdsList[index],
+                 Text(
+                  '${widget.deviceId}',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                                 
-                                 ),
-                               );
-                             },
-                   ),
-                 ),
+                ),
                 SizedBox(width: 140),
                      Container(
                       height: 30,

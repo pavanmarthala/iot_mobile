@@ -1,6 +1,6 @@
 
 
-// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, deprecated_member_use, sized_box_for_whitespace, camel_case_types
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors, deprecated_member_use, sized_box_for_whitespace, camel_case_types, body_might_complete_normally_nullable, no_leading_underscores_for_local_identifiers, unused_local_variable
 
 import 'dart:convert';
 
@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 
 import 'package:http/http.dart'  as http;
 import 'package:iot_mobile_app/models/add_user_model.dart';
-import 'package:iot_mobile_app/pages/Home_page.dart';
+// import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 

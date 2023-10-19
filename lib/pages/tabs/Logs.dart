@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, non_constant_identifier_names, unused_local_variable
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, non_constant_identifier_names, unused_local_variable, unnecessary_type_check
 
 
 import 'dart:convert';
@@ -14,7 +14,9 @@ import 'labels.dart/motor.dart';
 import 'labels.dart/power.dart';
 
 class Logs extends StatefulWidget {
-  const Logs({super.key});
+   final String deviceId;
+
+  Logs(this.deviceId, {super.key});
   
 
   @override
@@ -135,23 +137,10 @@ Future<List<String>>? deviceIds;
                     'device_no:1'.tr,
                     style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(
-                
-                  height: 50,
-                  width: 70,
-                  // color: Colors.red,
-                   child: ListView.builder(
-                                 itemCount: deviceIdsList.length,
-                             itemBuilder: (context, index) {
-                               return ListTile(
-                                 title: Text(deviceIdsList[index],
+                   Text(
+                  '${widget.deviceId}',
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
-                                 
-                                 ),
-                               );
-                             },
-                   ),
-                 ),
+                ),
                  
                   
                 ],

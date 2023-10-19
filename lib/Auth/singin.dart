@@ -5,8 +5,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:iot_mobile_app/pages/Home_page.dart';
+// import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:http/http.dart' as http;
+import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
+// import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'forgotpassword.dart';
@@ -81,7 +83,7 @@ class _SingINState extends State<SingIN> {
         prefs.setString('password', password);
         prefs.setString('jwt_token', data['token']);
 
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Homepage(),),); // Add your button's functionality here
+        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Adminlandingpage(),),); // Add your button's functionality here
 
 
 

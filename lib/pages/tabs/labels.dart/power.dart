@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+// import 'package:http/http.dart' as http;
+// import 'dart:convert';
 
 
-import '../../../models/json.dart';
+// import '../../../models/json.dart';
 
 class Power extends StatefulWidget {
   
@@ -15,27 +15,27 @@ class Power extends StatefulWidget {
 }
 
 class _PowerState extends State<Power> {
-late Future<List<Photo>> futurePhotos;
-  List<Photo> photos = [];
+// late Future<List<Photo>> futurePhotos;
+//   List<Photo> photos = [];
     bool isRefreshing = false;
 
- @override
-  void initState() {
-    super.initState();
-    futurePhotos = fetchData();
-  }
+//  @override
+//   void initState() {
+//     super.initState();
+//     futurePhotos = fetchData();
+//   }
 
-  Future<List<Photo>> fetchData() async {
-    final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/photos'));
+//   Future<List<Photo>> fetchData() async {
+//     final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/photos'));
 
-    if (response.statusCode == 200) {
-      final List<dynamic> jsonList = json.decode(response.body);
-      return jsonList.map((json) => Photo.fromJson(json)).toList();
+//     if (response.statusCode == 200) {
+//       final List<dynamic> jsonList = json.decode(response.body);
+//       return jsonList.map((json) => Photo.fromJson(json)).toList();
       
-    } else {
-      throw Exception('Failed to load data');
-    }
-  }
+//     } else {
+//       throw Exception('Failed to load data');
+//     }
+//   }
 
  
 
@@ -56,20 +56,20 @@ late Future<List<Photo>> futurePhotos;
 
   @override
   Widget build(BuildContext context) {
-    // var list = [
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-    //      {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+    var list = [
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
+         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
 
-    // ];
+    ];
        return SingleChildScrollView(
                    scrollDirection: Axis.vertical, 
 
@@ -131,45 +131,39 @@ late Future<List<Photo>> futurePhotos;
                      ),
                  ),
                  SizedBox(height: 10,),
-                 
-              FutureBuilder<List<Photo>>(
-            future: futurePhotos,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                List<Photo> photos = snapshot.data ?? [];
-                return Table(
-                  border: TableBorder(
-                    horizontalInside: BorderSide(color: Colors.grey),
-                    bottom: BorderSide(color: Colors.grey),
-                  ),
+             
+              Table(
+                   border: TableBorder(
+                horizontalInside: BorderSide(color: Colors.grey), // Border for horizontal lines inside cells
+                // verticalInside: BorderSide(color: Colors.black),   // Border for vertical lines inside cells
+                bottom: BorderSide(color: Colors.grey),           // Border for the bottom of the table
+              ),
                   columnWidths: {
                     0: FixedColumnWidth(120),
                     1: FixedColumnWidth(120),
                     2: FixedColumnWidth(120),
+                    
                   },
                   children: [
-                    for (var photo in photos)
-                      TableRow(children: [
-                        SizedBox(
-                            height: 30,
-                            child: Center(child: Text(photo.id.toString()))),
-                        SizedBox(
-                            height: 30,
-                            child: Center(
-                                child: Text(photo.albumId.toString()))),
-                        SizedBox(
-                            height: 30,
-                            child: Center(child: Text(photo.id.toString()))),
-                      ]),
+                    for (var item in list)
+                
+                TableRow(children: [
+                  SizedBox(
+                     height: 30,
+                    child: Center(child: Text(item['on']!))
+                    ),
+                  SizedBox(
+                     height: 30,
+                          
+                    child: Center(child: Text(item['off']!))),
+                  SizedBox(
+                    
+                     height: 30,
+                    child: Center(child: Text(item['duration']!))),
+                ]),
+                
                   ],
-                );
-              }
-            },
-          ),
+                ),
     
                     SizedBox(height: 20,),
                     Padding(
@@ -178,14 +172,15 @@ late Future<List<Photo>> futurePhotos;
                   children: [
                     SizedBox(width: 100,),
                    Text('total_duration'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                    Text(': 00:00:00',style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
+                    Text(': 00:00:00'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
 
                  ],
                ),
              ),
-               
-        ],
-      ),
+
+      ],
+      )
     );
+       
   }
 }

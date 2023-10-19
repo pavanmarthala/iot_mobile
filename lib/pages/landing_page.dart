@@ -1,450 +1,171 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: unnecessary_type_check
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:iot_mobile_app/pages/Drawer/Drawer.dart';
+import 'package:iot_mobile_app/pages/Home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Landingpage extends StatefulWidget {
-  const Landingpage({super.key});
+ const Landingpage({Key? key}) : super(key: key);
+
 
   @override
   State<Landingpage> createState() => _LandingpageState();
 }
 
 class _LandingpageState extends State<Landingpage> {
+  Future<List<Map<String, String>>>? devices;
+
+  @override
+  void initState() {
+    super.initState();
+    devices = fetchDevices();
+  }
+
+  Future<List<Map<String, String>>> fetchDevices() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken == null) {
+      // Handle the case where the token is not found
+      // return null;
+    }
+    final response = await http.get(
+      Uri.https('console-api.theja.in', 'device/getAll'),
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonResponse = json.decode(response.body);
+
+      if (jsonResponse is List) {
+        final devices = jsonResponse.map((device) {
+          return {
+            "deviceId": device["deviceId"].toString(),
+            "name": device["name"].toString(),
+          };
+        }).toList();
+        return devices;
+      } else {
+        return <Map<String, String>>[];
+      }
+    } else {
+      print('API Response (Error): ${response.body}');
+      throw Exception('Failed to load devices');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(iconTheme: IconThemeData(color: Colors.black),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+automaticallyImplyLeading: false, 
         backgroundColor: Colors.white,
-        title:  Text("map_device".tr, style: TextStyle(fontWeight: FontWeight.bold,color: Colors.black,fontSize: 25),),
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-           
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20,left: 10,),
-              child: Container(
-                width: 390,
-                height: 150,
-                decoration: BoxDecoration(color:Color.fromARGB(234, 203, 203, 203),borderRadius: BorderRadius.circular(20)),
-               child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50,top: 5),
-                    child: Text('Device ID:',style: TextStyle(fontSize: 25),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50),
-                    child: Text('Device Name:',style: TextStyle(fontSize: 25),),
-                  ),
-                    Row(children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10,top: 5),
-                  child: Container(
-                    height: 55,
-                    width: 120,
-                    decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                     child: Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: Image.asset("assets/power.png"),
-                     )
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5,top: 5),
-                  child: Container(
-                    height: 55,
-                    width: 120,
-                    decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                   child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset("assets/motor.jpeg")
-                              ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5,top: 5),
-                  child: Container(
-                    height: 55,
-                    width: 120,
-                    decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                    child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset("assets/on off.jpg")
-                              ),
-                  ),
-                ),
-              ],)
-                ],
-               ),
-                     
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20,left: 10,),
-              child: Container(
-                width: 390,
-                height: 150,
-                decoration: BoxDecoration(color:Color.fromARGB(234, 203, 203, 203),borderRadius: BorderRadius.circular(20)),
-               child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50,top: 5),
-                    child: Text('Device ID:',style: TextStyle(fontSize: 25),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50),
-                    child: Text('Device Name:',style: TextStyle(fontSize: 25),),
-                  ),
-                    Row(children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10,top: 5),
-                  child: Container(
-                    height: 55,
-                    width: 120,
-                    decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                     child: Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: Image.asset("assets/power.png"),
-                     )
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5,top: 5),
-                  child: Container(
-                    height: 55,
-                    width: 120,
-                    decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                   child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset("assets/motor.jpeg")
-                              ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5,top: 5),
-                  child: Container(
-                    height: 55,
-                    width: 120,
-                    decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                    child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset("assets/on off.jpg")
-                              ),
-                  ),
-                ),
-              ],)
-                ],
-               ),
-                     
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20,left: 10,),
-              child: Container(
-                width: 390,
-                height: 150,
-                decoration: BoxDecoration(color:Color.fromARGB(234, 203, 203, 203),borderRadius: BorderRadius.circular(20)),
-               child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50,top: 5),
-                    child: Text('Device ID:',style: TextStyle(fontSize: 25),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 50),
-                    child: Text('Device Name:',style: TextStyle(fontSize: 25),),
-                  ),
-                    Row(children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 10,top: 5),
-                  child: Container(
-                    height: 55,
-                    width: 120,
-                    decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                     child: Padding(
-                       padding: const EdgeInsets.all(8.0),
-                       child: Image.asset("assets/power.png"),
-                     )
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5,top: 5),
-                  child: Container(
-                    height: 55,
-                    width: 120,
-                    decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                   child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset("assets/motor.jpeg")
-                              ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 5,top: 5),
-                  child: Container(
-                    height: 55,
-                    width: 120,
-                    decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                    child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset("assets/on off.jpg")
-                              ),
-                  ),
-                ),
-              ],)
-                ],
-               ),
-                     
-              ),
-            ),
-            Padding(
-            padding: const EdgeInsets.only(top: 20,left: 10,),
-            child: Container(
-              width: 390,
-              height: 150,
-              decoration: BoxDecoration(color:Color.fromARGB(234, 203, 203, 203),borderRadius: BorderRadius.circular(20)),
-             child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 50,top: 5),
-                  child: Text('Device ID:',style: TextStyle(fontSize: 25),),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 50),
-                  child: Text('Device Name:',style: TextStyle(fontSize: 25),),
-                ),
-                  Row(children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                   child: Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Image.asset("assets/power.png"),
-                   )
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                 child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset("assets/motor.jpeg")
-                            ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                  child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset("assets/on off.jpg")
-                            ),
-                ),
-              ),
-            ],)
-              ],
-             ),
-                   
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20,left: 10,),
-            child: Container(
-              width: 390,
-              height: 150,
-              decoration: BoxDecoration(color:Color.fromARGB(234, 203, 203, 203),borderRadius: BorderRadius.circular(20)),
-             child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 50,top: 5),
-                  child: Text('Device ID:',style: TextStyle(fontSize: 25),),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 50),
-                  child: Text('Device Name:',style: TextStyle(fontSize: 25),),
-                ),
-                  Row(children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                   child: Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Image.asset("assets/power.png"),
-                   )
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                 child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset("assets/motor.jpeg")
-                            ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                  child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset("assets/on off.jpg")
-                            ),
-                ),
-              ),
-            ],)
-              ],
-             ),
-                   
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20,left: 10,),
-            child: Container(
-              width: 390,
-              height: 150,
-              decoration: BoxDecoration(color:Color.fromARGB(234, 203, 203, 203),borderRadius: BorderRadius.circular(20)),
-             child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 50,top: 5),
-                  child: Text('Device ID:',style: TextStyle(fontSize: 25),),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 50),
-                  child: Text('Device Name:',style: TextStyle(fontSize: 25),),
-                ),
-                  Row(children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                   child: Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Image.asset("assets/power.png"),
-                   )
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                 child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset("assets/motor.jpeg")
-                            ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                  child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset("assets/on off.jpg")
-                            ),
-                ),
-              ),
-            ],)
-              ],
-             ),
-                   
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20,left: 10,),
-            child: Container(
-              width: 390,
-              height: 150,
-              decoration: BoxDecoration(color:Color.fromARGB(234, 203, 203, 203),borderRadius: BorderRadius.circular(20)),
-             child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 50,top: 5),
-                  child: Text('Device ID:',style: TextStyle(fontSize: 25),),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 50),
-                  child: Text('Device Name:',style: TextStyle(fontSize: 25),),
-                ),
-                  Row(children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 10,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                   child: Padding(
-                     padding: const EdgeInsets.all(8.0),
-                     child: Image.asset("assets/power.png"),
-                   )
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                 child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset("assets/motor.jpeg")
-                            ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 5,top: 5),
-                child: Container(
-                  height: 55,
-                  width: 120,
-                  decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(30) ),
-                  child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset("assets/on off.jpg")
-                            ),
-                ),
-              ),
-            ],)
-              ],
-             ),
-                   
-            ),
-          ),
-          ],
+        title: Text(
+          "map_device".tr,
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25),
         ),
+      ),
+      body: FutureBuilder<List<Map<String, String>>>(
+        future: devices,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final deviceList = snapshot.data;
+
+            if (deviceList == null || deviceList.isEmpty) {
+              return Center(child: Text('No devices found.'));
+            }
+
+            return Column(
+              children: deviceList.map((device) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 4),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: 
+                      (context) => Homepage(
+                        device["deviceId"]?? ""
+                        )));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: (Color.fromARGB(234, 203, 203, 203)),
+                      onPrimary: Colors.black,
+                      fixedSize: Size(402, 130),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text('Device ID:', style: TextStyle(fontSize: 25),),
+                            Text(device["deviceId"]?? "", style: TextStyle(fontSize: 25),),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text('Name:', style: TextStyle(fontSize: 25),),
+                            Text(device["name"]?? "", style: TextStyle(fontSize: 25),),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Container(
+                              height: 55,
+                              width: 120,
+                              decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(30)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset("assets/power.png"),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5, top: 5),
+                              child: Container(
+                                height: 55,
+                                width: 120,
+                                decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(30)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset("assets/motor.jpeg"),
+                                ),
+                            ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5, top: 5),
+                              child: Container(
+                                height: 55,
+                                width: 120,
+                                decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(30)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset("assets/on off.jpg"),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            );
+          }
+        },
       ),
     );
   }

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/Auth/singin.dart';
+import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
+// import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 
-import '../pages/Home_page.dart';
+// import '../pages/Home_page.dart';
 
 // Existing ForgotPasswordPage code...
 
@@ -30,7 +32,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
             onPressed: () {
               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => Homepage(),
+                                  builder: (context) => Adminlandingpage(),
                                 ),
                               );
               // Navigate back to the sign-in page or any other page as needed.

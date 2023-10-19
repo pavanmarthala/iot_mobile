@@ -48,6 +48,7 @@ dependencies:
   jwt_decode: ^0.3.1
   csc_picker: ^0.2.7
   flutter_svg: ^2.0.7
+  rive: ^0.11.17
 
 dev_dependencies:
   flutter_test:
