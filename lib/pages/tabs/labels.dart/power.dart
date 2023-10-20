@@ -5,19 +5,25 @@ import 'package:get/get.dart';
 // import 'package:http/http.dart' as http;
 // import 'dart:convert';
 
-
 // import '../../../models/json.dart';
 
 class Power extends StatefulWidget {
-  
+  final Map<String, dynamic>? powerLogs;
+
+  Power(this.powerLogs);
+
   @override
-  State<Power> createState() => _PowerState();
+  State<Power> createState() => _PowerState(powerLogs);
 }
 
 class _PowerState extends State<Power> {
+  final Map<String, dynamic>? powerLogs;
+
+  _PowerState(this.powerLogs);
+
 // late Future<List<Photo>> futurePhotos;
 //   List<Photo> photos = [];
-    bool isRefreshing = false;
+  bool isRefreshing = false;
 
 //  @override
 //   void initState() {
@@ -31,15 +37,13 @@ class _PowerState extends State<Power> {
 //     if (response.statusCode == 200) {
 //       final List<dynamic> jsonList = json.decode(response.body);
 //       return jsonList.map((json) => Photo.fromJson(json)).toList();
-      
+
 //     } else {
 //       throw Exception('Failed to load data');
 //     }
 //   }
 
- 
-
-   void handleRefresh() {
+  void handleRefresh() {
     setState(() {
       isRefreshing = true;
       Future.delayed(Duration(seconds: 2), () {
@@ -57,130 +61,171 @@ class _PowerState extends State<Power> {
   @override
   Widget build(BuildContext context) {
     var list = [
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-         {'on':"01:02:13",'off':'04:48:54','duration':'03:43:04'},
-
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
+      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
     ];
-       return SingleChildScrollView(
-                   scrollDirection: Axis.vertical, 
+    final List<Map<String, dynamic>> logList =
+        (powerLogs?['onOffLogDtos'] as List<dynamic>?)
+                ?.map((dynamic item) =>
+                    (item as Map<String, dynamic>) ?? <String, dynamic>{})
+                .toList() ??
+            [];
+    final String powerValueForRollup = logList.isNotEmpty
+        ? (logList[0]['difference']['valueForRollup'] as String? ?? "")
+        : "";
 
-
-      child: Column(
-        children: [
-          SizedBox(height: 30,),
-        Padding(
-          padding: const EdgeInsets.only(left: 40,right: 40),
-          child: Row(
-            children: [
-    
-                    SizedBox(width: 80,),
-                   Text('refresh_logs'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                   SizedBox(width:5),
-                    isRefreshing
-                     ? CircularProgressIndicator()
-                    : Container(
-                      height: 25,
-                      width: 25,
-                      child: GestureDetector(
-                        onTap: handleRefresh,
-                        child: Image.asset("assets/refresh.png",)
-                      ),
-                    ),
-                 ],
-               ),
-             ),
-             SizedBox(height: 10,),
-                 Padding(
-                   padding: const EdgeInsets.only(left: 26),
-                   child: Row(
-                       children: [
-                         Container(
-                           height: 50,
-                           width: 90, // Adjust the height as needed for the first row
-                           color: Color.fromARGB(181, 51, 42, 55), // Background color for the first row
-                           child: Center(child: Text("on".tr, style: TextStyle(color: Colors.white,fontSize: 20,))),
-                         ),
-                         Container(
-                           height: 50,
-                           width: 135, // Adjust the height as needed for the first row
-                            // Adjust the height as needed for the first row
-                           color: Color.fromARGB(181, 51, 42, 55),
-                           child: Center(child: Padding(
-                             padding: const EdgeInsets.only(left: 30),
-                             child: Text("off".tr, style: TextStyle(color: Colors.white,fontSize: 20,)),
-                           )),
-                         ),
-                        //  SizedBox(width: 10,),
-                         Container(
-                           height: 50,
-                           width: 135, // Adjust the height as needed for the first row
-                            // Adjust the height as needed for the first row
-                           color: Color.fromARGB(181, 51, 42, 55),
-                           child: Center(child: Text("duration".tr, style: TextStyle(color: Colors.white,fontSize: 20,))),
-                         ),
-                       ],
-                     ),
-                 ),
-                 SizedBox(height: 10,),
-             
-              Table(
-                   border: TableBorder(
-                horizontalInside: BorderSide(color: Colors.grey), // Border for horizontal lines inside cells
-                // verticalInside: BorderSide(color: Colors.black),   // Border for vertical lines inside cells
-                bottom: BorderSide(color: Colors.grey),           // Border for the bottom of the table
+    return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, right: 40),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 80,
+                  ),
+                  Text(
+                    'refresh_logs'.tr,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
+                  SizedBox(width: 5),
+                  isRefreshing
+                      ? CircularProgressIndicator()
+                      : Container(
+                          height: 25,
+                          width: 25,
+                          child: GestureDetector(
+                              onTap: handleRefresh,
+                              child: Image.asset(
+                                "assets/refresh.png",
+                              )),
+                        ),
+                ],
               ),
-                  columnWidths: {
-                    0: FixedColumnWidth(120),
-                    1: FixedColumnWidth(120),
-                    2: FixedColumnWidth(120),
-                    
-                  },
-                  children: [
-                    for (var item in list)
-                
-                TableRow(children: [
-                  SizedBox(
-                     height: 30,
-                    child: Center(child: Text(item['on']!))
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
+              child: Row(
+                children: [
+                  Container(
+                    height: 50,
+                    width: 90, // Adjust the height as needed for the first row
+                    color: Color.fromARGB(
+                        181, 51, 42, 55), // Background color for the first row
+                    child: Center(
+                        child: Text("on".tr,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ))),
+                  ),
+                  Container(
+                    height: 50,
+                    width: 135, // Adjust the height as needed for the first row
+                    // Adjust the height as needed for the first row
+                    color: Color.fromARGB(181, 51, 42, 55),
+                    child: Center(
+                        child: Padding(
+                      padding: const EdgeInsets.only(left: 30),
+                      child: Text("off".tr,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                          )),
+                    )),
+                  ),
+                  //  SizedBox(width: 10,),
+                  Container(
+                    height: 50,
+                    width: 135, // Adjust the height as needed for the first row
+                    // Adjust the height as needed for the first row
+                    color: Color.fromARGB(181, 51, 42, 55),
+                    child: Center(
+                        child: Text("duration".tr,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ))),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            // if (logList.isEmpty)
+            //   Center(
+            //     child: Text('No logs found for the selected date.'),
+            //   )
+            // else
+            Table(
+              border: TableBorder(
+                horizontalInside: BorderSide(color: Colors.grey),
+                bottom: BorderSide(color: Colors.grey),
+              ),
+              columnWidths: {
+                0: FixedColumnWidth(120),
+                1: FixedColumnWidth(120),
+                2: FixedColumnWidth(120),
+              },
+              children: [
+                for (var item in logList)
+                  TableRow(children: [
+                    SizedBox(
+                      height: 30,
+                      child: Center(child: Text(item['onTime'])),
                     ),
+                    SizedBox(
+                      height: 30,
+                      child: Center(child: Text(item['offTime'])),
+                    ),
+                    SizedBox(
+                      height: 30,
+                      child: Center(
+                          child:
+                              Text(item['difference']['valueForRollup'] ?? "")),
+                    ),
+                  ]),
+              ],
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, right: 40),
+              child: Row(
+                children: [
                   SizedBox(
-                     height: 30,
-                          
-                    child: Center(child: Text(item['off']!))),
-                  SizedBox(
-                    
-                     height: 30,
-                    child: Center(child: Text(item['duration']!))),
-                ]),
-                
-                  ],
-                ),
-    
-                    SizedBox(height: 20,),
-                    Padding(
-                  padding: const EdgeInsets.only(left: 40,right: 40),
-                  child: Row(
-                  children: [
-                    SizedBox(width: 100,),
-                   Text('total_duration'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-                    Text(': 00:00:00'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w500),),
-
-                 ],
-               ),
-             ),
-
-      ],
-      )
-    );
-       
+                    width: 100,
+                  ),
+                  Text(
+                    'total_duration'.tr,
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
+                  Text(
+                    ': ${powerLogs?['totalTime']}',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ));
   }
 }
