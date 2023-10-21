@@ -1,17 +1,18 @@
 // ignore_for_file: unnecessary_type_check
 
 import 'dart:convert';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:iot_mobile_app/pages/Drawer/Drawer.dart';
 import 'package:iot_mobile_app/pages/Home_page.dart';
+import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Landingpage extends StatefulWidget {
- const Landingpage({Key? key}) : super(key: key);
-
+  const Landingpage({Key? key}) : super(key: key);
 
   @override
   State<Landingpage> createState() => _LandingpageState();
@@ -66,12 +67,38 @@ class _LandingpageState extends State<Landingpage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-automaticallyImplyLeading: false, 
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         title: Text(
           "map_device".tr,
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 30),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Langscreen(),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.white,
+
+                // backgroundImage: AssetImage('assets/language-icon.png'),
+                child: SvgPicture.asset(
+                  'assets/language-icon.svg',
+                  // width: 100.0, // Adjust the width as needed
+                  // height: 100.0, // Adjust the height as needed
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder<List<Map<String, String>>>(
         future: devices,
@@ -93,10 +120,11 @@ automaticallyImplyLeading: false,
                   padding: const EdgeInsets.only(top: 20, left: 4),
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: 
-                      (context) => Homepage(
-                        device["deviceId"]?? ""
-                        )));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  Homepage(device["deviceId"] ?? "")));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: (Color.fromARGB(234, 203, 203, 203)),
@@ -111,14 +139,26 @@ automaticallyImplyLeading: false,
                       children: [
                         Row(
                           children: [
-                            Text('Device ID:', style: TextStyle(fontSize: 25),),
-                            Text(device["deviceId"]?? "", style: TextStyle(fontSize: 25),),
+                            Text(
+                              'Device ID:',
+                              style: TextStyle(fontSize: 25),
+                            ),
+                            Text(
+                              device["deviceId"] ?? "",
+                              style: TextStyle(fontSize: 25),
+                            ),
                           ],
                         ),
                         Row(
                           children: [
-                            Text('Name:', style: TextStyle(fontSize: 25),),
-                            Text(device["name"]?? "", style: TextStyle(fontSize: 25),),
+                            Text(
+                              'Name:',
+                              style: TextStyle(fontSize: 25),
+                            ),
+                            Text(
+                              device["name"] ?? "",
+                              style: TextStyle(fontSize: 25),
+                            ),
                           ],
                         ),
                         Row(
@@ -126,7 +166,9 @@ automaticallyImplyLeading: false,
                             Container(
                               height: 55,
                               width: 120,
-                              decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(30)),
+                              decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(30)),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Image.asset("assets/power.png"),
@@ -137,19 +179,23 @@ automaticallyImplyLeading: false,
                               child: Container(
                                 height: 55,
                                 width: 120,
-                                decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(30)),
+                                decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(30)),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Image.asset("assets/motor.jpeg"),
                                 ),
-                            ),
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 5, top: 5),
                               child: Container(
                                 height: 55,
                                 width: 120,
-                                decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(30)),
+                                decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(30)),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Image.asset("assets/on off.jpg"),

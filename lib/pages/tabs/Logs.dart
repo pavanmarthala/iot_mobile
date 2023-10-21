@@ -81,6 +81,7 @@ class _LogsState extends State<Logs> with SingleTickerProviderStateMixin {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      print(jsonResponse);
       final List<dynamic> deviceIdsJson = jsonResponse["deviceIds"];
 
       if (deviceIdsJson is List) {
@@ -117,11 +118,8 @@ class _LogsState extends State<Logs> with SingleTickerProviderStateMixin {
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
       return data;
-    } else if (response.statusCode == 40) {
-      // Handle the case where the resource is not found
-      print('Logs not found for the selected date.');
-      return {"error": "Logs not found for the selected date"};
-    } else {
+    }
+    {
       print('API Response (Error): ${response.body}');
       // Return an empty map or a specific error message to indicate an error
       return {"error": "Failed to load logs"};

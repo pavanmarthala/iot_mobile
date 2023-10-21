@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Dash extends StatefulWidget {
   final String deviceId;
 
-  Dash(this.deviceId, {super.key});
+  const Dash(this.deviceId, {super.key});
   @override
   State<Dash> createState() => _DashState();
 }
@@ -51,6 +51,8 @@ class _DashState extends State<Dash> {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+
       final List<dynamic> deviceIdsJson = jsonResponse["deviceIds"];
 
       if (deviceIdsJson is List) {
@@ -68,40 +70,37 @@ class _DashState extends State<Dash> {
     }
   }
 
-  Future<List<String>> getdevice(deviceId) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? jwtToken = prefs
-        .getString('jwt_token'); // Retrieve the JWT token from local storage
+  // Future<List<String>> getdevice(deviceId) async {
+  //   print('getdevice function called'); // Ensure that the function is called
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? jwtToken = prefs.getString('jwt_token');
 
-    if (jwtToken == null) {
-      // Handle the case where the token is not found
-      // return null;
-    }
-    final response = await http.get(
-      Uri.https('console-api.theja.in',
-          '/motor/get/${deviceId}'), // Use the correct endpoint
-      headers: {
-        "Authorization": "Bearer $jwtToken",
-      },
-    );
+  //   try {
+  //     final response = await http
+  //         .get(Uri.https('console-api.theja.in', 'device/getAll'), headers: {
+  //       "Authorization": "Bearer $jwtToken",
+  //     });
+  //     print(
+  //         'Response status code: ${response.statusCode}'); // Print the response status code
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> jsonResponse = json.decode(response.body);
-      final List<dynamic> deviceIdsJson = jsonResponse["deviceIds"];
-
-      if (deviceIdsJson is List) {
-        final deviceIds = deviceIdsJson
-            .map((deviceIdJson) => deviceIdJson.toString())
-            .toList();
-        return deviceIds;
-      } else {
-        return <String>[];
-      }
-    } else {
-      print('API Response (Error): ${response.body}');
-      throw Exception('Failed to load device IDs');
-    }
-  }
+  //     if (response.statusCode == 200) {
+  //       final Map<String, dynamic> jsonResponse = json.decode(response.body);
+  //       print(jsonResponse); // Print the JSON response
+  //       // Rest of the code
+  //       return <String>[]; // Add a return statement here with the appropriate value
+  //     } else {
+  //       print('API Response (Error): ${response.body}');
+  //       // Handle the error as needed
+  //       throw Exception(
+  //           'Failed to load device IDs'); // Throw an exception to indicate failure
+  //     }
+  //   } catch (e) {
+  //     print('Error during the request: $e');
+  //     // Handle the error as needed
+  //     throw Exception(
+  //         'Failed to load device IDs'); // Throw an exception to indicate failure
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

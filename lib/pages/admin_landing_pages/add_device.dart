@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:iot_mobile_app/pages/lang_page.dart';
 
 class AddDevice extends StatefulWidget {
   @override
@@ -25,7 +27,8 @@ class _AddDeviceState extends State<AddDevice> {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () async {
-            final url = Uri.parse('https://console-api.theja.in/admin/addDevice');
+            final url =
+                Uri.parse('https://console-api.theja.in/admin/addDevice');
             final jsonData = {
               "active": true,
               "deviceId": _deviceController.text,
@@ -38,18 +41,18 @@ class _AddDeviceState extends State<AddDevice> {
 
             final jsonString = json.encode(jsonData);
 
-            final headers = {
-              "Authorization": "Bearer "
-            };
+            final headers = {"Authorization": "Bearer "};
 
-            final response = await http.post(url, headers: headers, body: jsonString);
+            final response =
+                await http.post(url, headers: headers, body: jsonString);
 
             if (response.statusCode == 200) {
               // Successful response, you can handle it as per your requirement.
               print("Device added successfully");
             } else {
               // Error response, display an error message or handle it as needed.
-              print("Failed to add device. Status Code: ${response.statusCode}");
+              print(
+                  "Failed to add device. Status Code: ${response.statusCode}");
               print("Response Body: ${response.body}");
             }
             Navigator.of(context).pop();
@@ -74,6 +77,31 @@ class _AddDeviceState extends State<AddDevice> {
             fontSize: 25,
           ),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 30),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Langscreen(),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.white,
+
+                // backgroundImage: AssetImage('assets/language-icon.png'),
+                child: SvgPicture.asset(
+                  'assets/language-icon.svg',
+                  // width: 100.0, // Adjust the width as needed
+                  // height: 100.0, // Adjust the height as needed
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Padding(
