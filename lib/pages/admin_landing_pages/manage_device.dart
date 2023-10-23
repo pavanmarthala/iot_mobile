@@ -22,6 +22,10 @@ class Managedevice extends StatefulWidget {
 }
 
 class _ManagedeviceState extends State<Managedevice> {
+  TextEditingController searchController = TextEditingController();
+  List<Map<String, String>> filteredDeviceList = [];
+  List<Map<String, String>> deviceList = [];
+
   Future<List<Map<String, String>>>? devices;
 
   @override
@@ -39,7 +43,7 @@ class _ManagedeviceState extends State<Managedevice> {
       // return null;
     }
     final response = await http.get(
-      Uri.https('console-api.theja.in', '/admin/getAllDeviceIds'),
+      Uri.https('console-api.theja.in', '/admin/getAllDevices'),
       headers: {
         "Authorization": "Bearer $jwtToken",
       },
@@ -49,13 +53,16 @@ class _ManagedeviceState extends State<Managedevice> {
       final List<dynamic> jsonResponse = json.decode(response.body);
 
       if (jsonResponse is List) {
-        final devices = jsonResponse.map((device) {
+        deviceList = jsonResponse.map((device) {
           return {
             "deviceId": device["deviceId"].toString(),
-            "name": device["name"].toString(),
+            "name": device['name'].toString(),
+            "active": device["active"].toString(),
           };
         }).toList();
-        return devices;
+
+        filterDevices(''); // Initialize with an empty query
+        return deviceList;
       } else {
         return <Map<String, String>>[];
       }
@@ -65,32 +72,41 @@ class _ManagedeviceState extends State<Managedevice> {
     }
   }
 
+  void filterDevices(String query) {
+    setState(() {
+      filteredDeviceList = deviceList
+          .where((device) =>
+              // (device["name"] ?? "")
+              //     .toLowerCase()
+              //     .contains(query.toLowerCase()) ||
+              (device["deviceId"] ?? "")
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))
+          .toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: const Color(0xffcbcbcb),
         appBar: AppBar(
-          title: const Text("Mapping Device"),
+          title: const Text("Manage Users"),
           actions: [
             Padding(
-              padding: EdgeInsets.only(right: 30),
+              padding: const EdgeInsets.only(right: 30),
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context) => Langscreen(),
+                      builder: (context) => const Langscreen(),
                     ),
                   );
                 },
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: Colors.green,
-
-                  // backgroundImage: AssetImage('assets/language-icon.png'),
-                  child: SvgPicture.asset(
-                    'assets/language-icon.svg',
-                    // width: 100.0, // Adjust the width as needed
-                    // height: 100.0, // Adjust the height as needed
-                  ),
+                  child: SvgPicture.asset('assets/language-icon.svg'),
                 ),
               ),
             ),
@@ -100,16 +116,10 @@ class _ManagedeviceState extends State<Managedevice> {
           future: devices,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              final deviceList = snapshot.data;
-
-              if (deviceList == null || deviceList.isEmpty) {
-                return Center(child: Text('No devices found.'));
-              }
-
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -122,132 +132,170 @@ class _ManagedeviceState extends State<Managedevice> {
                             const Text("Device",
                                 style: TextStyle(
                                     fontSize: 25, fontWeight: FontWeight.bold)),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Container(
-                                height: 40,
-                                width: 260,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors
-                                          .grey, // Set the border color here
-                                      width: 2.0, // Set the border width
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey),
-                                // decoration: BoxDecoration(borderRadius: BorderRadius.circular(20), color: Colors.grey),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          borderSide: BorderSide.none),
-                                      fillColor:
-                                          Color.fromARGB(255, 251, 250, 250),
-                                      filled: true,
-                                      // hintText: 'search for devices',
-                                      suffixIcon: Icon(Icons.search)),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextField(
+                                // controller: searchController,
+                                onChanged: (value) {
+                                  filterDevices(value);
+                                },
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 0),
+                                  // hintText: 'Search for users',
+                                  hintText: 'search for Devices',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: BorderSide(),
+                                  ),
+                                  fillColor:
+                                      const Color.fromARGB(255, 248, 245, 245),
+                                  filled: true,
+                                  suffixIcon: const Icon(Icons.search),
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
                     ),
                     Container(
                       child: Column(
-                        children: deviceList.map((device) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.only(top: 10, left: 20),
-                                child: Text(device["name"] ?? "",
-                                    style: TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
+                        children: filteredDeviceList.map((device) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10, left: 5, right: 5),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(13),
+                                color: Colors.white,
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 5, left: 20),
-                                child: Text(device["deviceId"] ?? "",
-                                    style: TextStyle(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, left: 20),
+                                    child: Text(
+                                      device["name"] ?? "",
+                                      style: const TextStyle(
                                         fontSize: 25,
-                                        fontWeight: FontWeight.bold)),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 25),
-                                child: Row(
-                                  children: [
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        // Navigator.of(context).push(
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) =>
-                                        //         UserDetailsScreen(),
-                                        //   ),
-                                        // );
-                                      },
-                                      child: const Text('View',
-                                          style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 5, left: 20),
+                                    child: Text(
+                                      device["deviceId"] ?? "",
+                                      style: const TextStyle(
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, bottom: 10),
+                                    child: Row(
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            // Navigator.of(context).push(
+                                            //   MaterialPageRoute(
+                                            //     builder: (context) =>
+                                            //         UserDetailsScreen(
+                                            //       mobileId:
+                                            //           device["deviceId"] ?? "",
+                                            //       deviceIdId: '',
+                                            //     ),
+                                            //   ),
+                                            // );
+                                          },
+                                          child: const Text(
+                                            'View',
+                                            style: TextStyle(
                                               fontSize: 20,
-                                              fontWeight: FontWeight.bold)),
-                                      style: ElevatedButton.styleFrom(
-                                        foregroundColor: Colors.black,
-                                        backgroundColor: const Color.fromARGB(
-                                            234, 42, 228, 138),
-                                        fixedSize: const Size(120, 50),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(17),
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 5),
-                                      child: ElevatedButton(
-                                        onPressed: () {},
-                                        child: const Text('Delete',
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(
-                                              234, 239, 9, 9),
-                                          onPrimary: Colors.black,
-                                          fixedSize: const Size(120, 50),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(17),
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            foregroundColor: Colors.black,
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    234, 42, 228, 138),
+                                            fixedSize: const Size(120, 50),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(17),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 5),
-                                      child: ElevatedButton(
-                                        onPressed: () {},
-                                        child: const Text('Activate/Deactivate',
-                                            style: TextStyle(
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5),
+                                          child: ElevatedButton(
+                                            onPressed: () {},
+                                            child: const Text(
+                                              'Delete',
+                                              style: TextStyle(
                                                 fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: const Color.fromARGB(
-                                              234, 239, 9, 9),
-                                          onPrimary: Colors.black,
-                                          fixedSize: const Size(120, 50),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(17),
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color.fromARGB(
+                                                      234, 239, 9, 9),
+                                              onPrimary: Colors.black,
+                                              fixedSize: const Size(120, 50),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(17),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
+                                        Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 5),
+                                            child: ElevatedButton(
+                                              onPressed: () {},
+                                              child: Text(
+                                                device["active"] == "true"
+                                                    ? 'Deactivate'
+                                                    : 'Activate',
+                                                style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    device["active"] == "true"
+                                                        ? const Color.fromARGB(
+                                                            234, 42, 228, 138)
+                                                        : const Color.fromARGB(
+                                                            234, 239, 9, 9),
+
+                                                // Green
+                                                onPrimary: Colors.black,
+                                                fixedSize: const Size(120, 50),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(17),
+                                                ),
+                                              ),
+                                            )),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            ],
+                            ),
                           );
                         }).toList(),
                       ),
@@ -260,8 +308,9 @@ class _ManagedeviceState extends State<Managedevice> {
         ),
         bottomNavigationBar: SafeArea(
           child: Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.only(left: 15, top: 5, bottom: 5),
             decoration: const BoxDecoration(
+                // color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(24))),
             child: SizedBox(
               child: SingleChildScrollView(
@@ -281,7 +330,7 @@ class _ManagedeviceState extends State<Managedevice> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => Adminlandingpage(),
+                              builder: (context) => const Adminlandingpage(),
                             ),
                           );
 
@@ -307,7 +356,7 @@ class _ManagedeviceState extends State<Managedevice> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => Adduser(),
+                                builder: (context) => const Adduser(),
                               ),
                             );
 
@@ -361,7 +410,7 @@ class _ManagedeviceState extends State<Managedevice> {
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
-                                builder: (context) => Mapdevice(),
+                                builder: (context) => const Mapdevice(),
                               ),
                             );
 

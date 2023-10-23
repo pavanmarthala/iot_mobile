@@ -9,7 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserDetailsScreen extends StatefulWidget {
   final String mobileId;
 
-  UserDetailsScreen({required this.mobileId, Key? key}) : super(key: key);
+  UserDetailsScreen(
+      {required this.mobileId, Key? key, required String deviceIdId})
+      : super(key: key);
   @override
   _UserDetailsScreenState createState() => _UserDetailsScreenState();
 }

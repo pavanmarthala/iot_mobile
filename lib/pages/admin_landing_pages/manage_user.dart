@@ -1,17 +1,12 @@
-// ignore_for_file: unnecessary_type_check, sort_child_properties_last
-
 import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
-
 import 'package:flutter/material.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/Add_user.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/add_device.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/edit.dart';
-import 'package:iot_mobile_app/pages/admin_landing_pages/edit_user.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/map_device.dart';
-import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -23,6 +18,10 @@ class Users extends StatefulWidget {
 }
 
 class _UsersState extends State<Users> {
+  TextEditingController searchController = TextEditingController();
+  List<Map<String, String>> filteredDeviceList = [];
+  List<Map<String, String>> deviceList = [];
+
   Future<List<Map<String, String>>>? devices;
 
   @override
@@ -50,14 +49,16 @@ class _UsersState extends State<Users> {
       final List<dynamic> jsonResponse = json.decode(response.body);
 
       if (jsonResponse is List) {
-        final devices = jsonResponse.map((device) {
+        deviceList = jsonResponse.map((device) {
           return {
             "mobile": device["mobile"].toString(),
             "name": device['userDetails']['name'].toString(),
             "active": device["active"].toString(),
           };
         }).toList();
-        return devices;
+
+        filterDevices(''); // Initialize with an empty query
+        return deviceList;
       } else {
         return <Map<String, String>>[];
       }
@@ -65,6 +66,20 @@ class _UsersState extends State<Users> {
       print('API Response (Error): ${response.body}');
       throw Exception('Failed to load devices');
     }
+  }
+
+  void filterDevices(String query) {
+    setState(() {
+      filteredDeviceList = deviceList
+          .where((device) =>
+              (device["name"] ?? "")
+                  .toLowerCase()
+                  .contains(query.toLowerCase()) ||
+              (device["mobile"] ?? "")
+                  .toLowerCase()
+                  .contains(query.toLowerCase()))
+          .toList();
+    });
   }
 
   @override
@@ -87,13 +102,7 @@ class _UsersState extends State<Users> {
                 child: CircleAvatar(
                   radius: 18,
                   backgroundColor: Colors.green,
-
-                  // backgroundImage: AssetImage('assets/language-icon.png'),
-                  child: SvgPicture.asset(
-                    'assets/language-icon.svg',
-                    // width: 100.0, // Adjust the width as needed
-                    // height: 100.0, // Adjust the height as needed
-                  ),
+                  child: SvgPicture.asset('assets/language-icon.svg'),
                 ),
               ),
             ),
@@ -107,12 +116,6 @@ class _UsersState extends State<Users> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else {
-              final deviceList = snapshot.data;
-
-              if (deviceList == null || deviceList.isEmpty) {
-                return const Center(child: Text('No devices found.'));
-              }
-
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Column(
@@ -125,116 +128,103 @@ class _UsersState extends State<Users> {
                             const Text("Users",
                                 style: TextStyle(
                                     fontSize: 25, fontWeight: FontWeight.bold)),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: Container(
-                                height: 40,
-                                width: 260,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 20),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors
-                                          .white, // Set the border color here
-                                      width: 2.0, // Set the border width
-                                    ),
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white),
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      hintText: 'search for users',
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30),
-                                          borderSide: BorderSide.none),
-                                      fillColor: const Color.fromARGB(
-                                          255, 248, 245, 245),
-                                      filled: true,
-                                      suffixIcon: const Icon(Icons.search)),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              child: TextField(
+                                // controller: searchController,
+                                onChanged: (value) {
+                                  filterDevices(value);
+                                },
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 0),
+                                  // hintText: 'Search for users',
+                                  hintText: 'search for users',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    borderSide: BorderSide(),
+                                  ),
+                                  fillColor:
+                                      const Color.fromARGB(255, 248, 245, 245),
+                                  filled: true,
+                                  suffixIcon: const Icon(Icons.search),
                                 ),
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ),
                     ),
                     Container(
-                      child: Column(
-                        children: deviceList.map((device) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10, left: 5, right: 5),
-                            child: Container(
-                              decoration: BoxDecoration(
+                      height: 650,
+                      child: Expanded(
+                        child: ListView(
+                          children: filteredDeviceList.map((device) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 5, right: 5),
+                              child: Container(
+                                decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(13),
-                                  color: Colors.white),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, left: 20),
-                                    child: Text(device["name"] ?? "",
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10, left: 20),
+                                      child: Text(
+                                        device["name"] ?? "",
                                         style: const TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: 5, left: 20),
-                                    child: Text(device["mobile"] ?? "",
-                                        style: const TextStyle(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.bold)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 15, bottom: 10),
-                                    child: Row(
-                                      children: [
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    UserDetailsScreen(
-                                                  mobileId:
-                                                      device["mobile"] ?? "",
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: const Text('View',
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold)),
-                                          style: ElevatedButton.styleFrom(
-                                            foregroundColor: Colors.black,
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    234, 42, 228, 138),
-                                            fixedSize: const Size(120, 50),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(17),
-                                            ),
-                                          ),
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 5),
-                                          child: ElevatedButton(
-                                            onPressed: () {},
-                                            child: const Text('Delete',
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.bold)),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 5, left: 20),
+                                      child: Text(
+                                        device["mobile"] ?? "",
+                                        style: const TextStyle(
+                                          fontSize: 25,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, bottom: 10),
+                                      child: Row(
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      UserDetailsScreen(
+                                                    mobileId:
+                                                        device["mobile"] ?? "",
+                                                    deviceIdId: '',
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: const Text(
+                                              'View',
+                                              style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
                                             style: ElevatedButton.styleFrom(
+                                              foregroundColor: Colors.black,
                                               backgroundColor:
                                                   const Color.fromARGB(
-                                                      234, 239, 9, 9),
-                                              onPrimary: Colors.black,
+                                                      234, 42, 228, 138),
                                               fixedSize: const Size(120, 50),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -242,34 +232,22 @@ class _UsersState extends State<Users> {
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Padding(
+                                          Padding(
                                             padding:
                                                 const EdgeInsets.only(left: 5),
                                             child: ElevatedButton(
                                               onPressed: () {},
-                                              child: Text(
-                                                device["active"] == true
-                                                    ? 'Activate'
-                                                    : 'Deactivate',
+                                              child: const Text(
+                                                'Delete',
                                                 style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
-                                                    device["active"] == true
-                                                        ? const Color.fromARGB(
-                                                            234,
-                                                            42,
-                                                            228,
-                                                            138) // Red
-                                                        : const Color.fromARGB(
-                                                            234,
-                                                            239,
-                                                            9,
-                                                            9), // Green
+                                                    const Color.fromARGB(
+                                                        234, 239, 9, 9),
                                                 onPrimary: Colors.black,
                                                 fixedSize: const Size(120, 50),
                                                 shape: RoundedRectangleBorder(
@@ -277,15 +255,51 @@ class _UsersState extends State<Users> {
                                                       BorderRadius.circular(17),
                                                 ),
                                               ),
-                                            )),
-                                      ],
+                                            ),
+                                          ),
+                                          Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 5),
+                                              child: ElevatedButton(
+                                                onPressed: () {},
+                                                child: Text(
+                                                  device["active"] == "true"
+                                                      ? 'Deactivate'
+                                                      : 'Activate',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: device[
+                                                              "active"] ==
+                                                          "true"
+                                                      ? const Color.fromARGB(
+                                                          234, 42, 228, 138)
+                                                      : const Color.fromARGB(
+                                                          234, 239, 9, 9),
+
+                                                  // Green
+                                                  onPrimary: Colors.black,
+                                                  fixedSize:
+                                                      const Size(120, 50),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            17),
+                                                  ),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }).toList(),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                   ],
