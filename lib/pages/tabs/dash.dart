@@ -21,15 +21,17 @@ class _DashState extends State<Dash> {
   bool isSwitched = false;
   var time = DateTime.now();
   DateTime motorSwitch = DateTime.now();
-  DateTime motorStatus = DateTime.now();
-  DateTime powerStatus = DateTime.now();
-
+  // DateTime motorStatus = DateTime.now();
+  // DateTime powerStatus = DateTime.now();
+  bool powerStatus = false;
+  bool motorStatus = false;
   Future<List<String>>? deviceIds;
 
   @override
   void initState() {
     super.initState();
     deviceIds = fetchDeviceIds();
+    fetchDeviceStatus();
   }
 
   Future<List<String>> fetchDeviceIds() async {
@@ -70,37 +72,35 @@ class _DashState extends State<Dash> {
     }
   }
 
-  // Future<List<String>> getdevice(deviceId) async {
-  //   print('getdevice function called'); // Ensure that the function is called
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String? jwtToken = prefs.getString('jwt_token');
+  Future<void> fetchDeviceStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
 
-  //   try {
-  //     final response = await http
-  //         .get(Uri.https('console-api.theja.in', 'device/getAll'), headers: {
-  //       "Authorization": "Bearer $jwtToken",
-  //     });
-  //     print(
-  //         'Response status code: ${response.statusCode}'); // Print the response status code
+    if (jwtToken == null) {
+      // Handle the case where the token is not found
+      return;
+    }
 
-  //     if (response.statusCode == 200) {
-  //       final Map<String, dynamic> jsonResponse = json.decode(response.body);
-  //       print(jsonResponse); // Print the JSON response
-  //       // Rest of the code
-  //       return <String>[]; // Add a return statement here with the appropriate value
-  //     } else {
-  //       print('API Response (Error): ${response.body}');
-  //       // Handle the error as needed
-  //       throw Exception(
-  //           'Failed to load device IDs'); // Throw an exception to indicate failure
-  //     }
-  //   } catch (e) {
-  //     print('Error during the request: $e');
-  //     // Handle the error as needed
-  //     throw Exception(
-  //         'Failed to load device IDs'); // Throw an exception to indicate failure
-  //   }
-  // }
+    final response = await http.get(
+      Uri.https('console-api.theja.in', '/motor/get/${widget.deviceId}'),
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      powerStatus = jsonResponse["powerAvailable"];
+      motorStatus = jsonResponse["deviceState"];
+      isSwitched = jsonResponse["givenState"];
+      motorSwitch = DateTime.now(); // Update motor switch time
+
+      setState(() {}); // Update the UI to reflect the new state values
+    } else {
+      print('API Response (Error): ${response.body}');
+      throw Exception('Failed to load device status');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -177,7 +177,7 @@ class _DashState extends State<Dash> {
                                   decoration: BoxDecoration(
                                     color: switchState.isSwitched
                                         ? Colors.green
-                                        : Color.fromARGB(255, 192, 27, 16),
+                                        : Colors.red,
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(30),
                                         topLeft: Radius.circular(30)),
@@ -291,7 +291,8 @@ class _DashState extends State<Dash> {
                                   height: 70,
                                   width: 380,
                                   decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 192, 27, 16),
+                                    color:
+                                        powerStatus ? Colors.green : Colors.red,
                                     borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(30),
                                       topLeft: Radius.circular(30),
@@ -313,7 +314,7 @@ class _DashState extends State<Dash> {
                                           width: 120,
                                         ),
                                         Text(
-                                          'on'.tr,
+                                          powerStatus ? 'on'.tr : 'off'.tr,
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
@@ -380,7 +381,8 @@ class _DashState extends State<Dash> {
                                   height: 70,
                                   width: 380,
                                   decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 192, 27, 16),
+                                    color:
+                                        motorStatus ? Colors.green : Colors.red,
                                     borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(30),
                                       topLeft: Radius.circular(30),
@@ -402,7 +404,7 @@ class _DashState extends State<Dash> {
                                           width: 120,
                                         ),
                                         Text(
-                                          'on'.tr,
+                                          motorStatus ? 'on'.tr : 'off'.tr,
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,

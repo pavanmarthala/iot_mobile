@@ -60,19 +60,6 @@ class _PowerState extends State<Power> {
 
   @override
   Widget build(BuildContext context) {
-    var list = [
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-      {'on': "01:02:13", 'off': '04:48:54', 'duration': '03:43:04'},
-    ];
     final List<Map<String, dynamic>> logList =
         (powerLogs?['onOffLogDtos'] as List<dynamic>?)
                 ?.map((dynamic item) =>

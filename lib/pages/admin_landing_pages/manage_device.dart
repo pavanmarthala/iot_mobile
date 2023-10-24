@@ -7,10 +7,9 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/Add_user.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/add_device.dart';
-import 'package:iot_mobile_app/pages/admin_landing_pages/edit.dart';
+import 'package:iot_mobile_app/pages/admin_landing_pages/edit_device.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/map_device.dart';
-import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -91,7 +90,7 @@ class _ManagedeviceState extends State<Managedevice> {
     return Scaffold(
         backgroundColor: const Color(0xffcbcbcb),
         appBar: AppBar(
-          title: const Text("Manage Users"),
+          title: const Text("Manage Devices"),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 30),
@@ -204,16 +203,16 @@ class _ManagedeviceState extends State<Managedevice> {
                                       children: [
                                         ElevatedButton(
                                           onPressed: () {
-                                            // Navigator.of(context).push(
-                                            //   MaterialPageRoute(
-                                            //     builder: (context) =>
-                                            //         UserDetailsScreen(
-                                            //       mobileId:
-                                            //           device["deviceId"] ?? "",
-                                            //       deviceIdId: '',
-                                            //     ),
-                                            //   ),
-                                            // );
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    EditDevice(
+                                                  deviceId:
+                                                      device["deviceId"] ?? "",
+                                                  // deviceId: '',
+                                                ),
+                                              ),
+                                            );
                                           },
                                           child: const Text(
                                             'View',
