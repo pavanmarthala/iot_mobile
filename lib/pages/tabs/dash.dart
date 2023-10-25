@@ -90,6 +90,7 @@ class _DashState extends State<Dash> {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      print(response.body);
       powerStatus = jsonResponse["powerAvailable"];
       motorStatus = jsonResponse["deviceState"];
       isSwitched = jsonResponse["givenState"];
@@ -177,7 +178,7 @@ class _DashState extends State<Dash> {
                                   decoration: BoxDecoration(
                                     color: switchState.isSwitched
                                         ? Colors.green
-                                        : Colors.red,
+                                        : Color.fromARGB(255, 255, 17, 0),
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(30),
                                         topLeft: Radius.circular(30)),
@@ -291,8 +292,9 @@ class _DashState extends State<Dash> {
                                   height: 70,
                                   width: 380,
                                   decoration: BoxDecoration(
-                                    color:
-                                        powerStatus ? Colors.green : Colors.red,
+                                    color: powerStatus
+                                        ? Colors.green
+                                        : const Color.fromARGB(255, 253, 18, 1),
                                     borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(30),
                                       topLeft: Radius.circular(30),
@@ -381,8 +383,9 @@ class _DashState extends State<Dash> {
                                   height: 70,
                                   width: 380,
                                   decoration: BoxDecoration(
-                                    color:
-                                        motorStatus ? Colors.green : Colors.red,
+                                    color: motorStatus
+                                        ? Colors.green
+                                        : Color.fromARGB(255, 255, 17, 0),
                                     borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(30),
                                       topLeft: Radius.circular(30),

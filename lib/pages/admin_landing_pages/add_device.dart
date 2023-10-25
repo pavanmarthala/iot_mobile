@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddDevice extends StatefulWidget {
   @override
@@ -27,8 +28,8 @@ class _AddDeviceState extends State<AddDevice> {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () async {
-            final url =
-                Uri.parse('https://console-api.theja.in/admin/addDevice');
+            // final url =
+            //     Uri.parse('https://console-api.theja.in/admin/addDevice');
             final jsonData = {
               "active": true,
               "deviceId": _deviceController.text,
@@ -41,14 +42,30 @@ class _AddDeviceState extends State<AddDevice> {
 
             final jsonString = json.encode(jsonData);
 
-            final headers = {"Authorization": "Bearer "};
+            // final headers = {"Authorization": "Bearer "};
 
-            final response =
-                await http.post(url, headers: headers, body: jsonString);
+            // final response =
+            //     await http.post(url, headers: headers, );
+
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            String? jwtToken = prefs.getString('jwt_token');
+
+            if (jwtToken == null) {
+              // Handle the case where the token is not found
+              // return null;
+            }
+            final response = await http.post(
+                Uri.https('console-api.theja.in', '/admin/addDevice'),
+                headers: {
+                  "Authorization": "Bearer $jwtToken",
+                  "Content-Type": "application/json",
+                },
+                body: jsonString);
 
             if (response.statusCode == 200) {
               // Successful response, you can handle it as per your requirement.
               print("Device added successfully");
+              print("Response Body: ${response.body}");
             } else {
               // Error response, display an error message or handle it as needed.
               print(

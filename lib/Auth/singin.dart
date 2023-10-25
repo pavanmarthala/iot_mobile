@@ -25,8 +25,7 @@ class _SingINState extends State<SingIN> {
 
   final _passwordController = TextEditingController();
 
-
-@override
+  @override
   void initState() {
     super.initState();
     checkLoggedInStatus(); // Check the login status when the screen initializes
@@ -43,61 +42,39 @@ class _SingINState extends State<SingIN> {
     }
   }
 
-
-
-  void login(String user , password) async {
-
+  void login(String user, password) async {
     final Map<String, dynamic> requestData = {
-
       "pin": password,
-
       "userId": user,
-
     };
 
-    try{
-
+    try {
       final response = await http.post(
-
         Uri.parse('https://console-api.theja.in/login'),
-
         body: jsonEncode(requestData),
-
         headers: {'Content-Type': 'application/json'},
-
       );
 
-
-
-      if(response.statusCode==200){
-
+      if (response.statusCode == 200) {
         var data = jsonDecode(response.body.toString());
-
-
 
         print(data);
 
         print('account login sucessfully');
-          SharedPreferences prefs = await SharedPreferences.getInstance();
+        SharedPreferences prefs = await SharedPreferences.getInstance();
         prefs.setString('username', user);
         prefs.setString('password', password);
         prefs.setString('jwt_token', data['token']);
 
-        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Adminlandingpage(),),); // Add your button's functionality here
-
-
-
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => Adminlandingpage(),
+          ),
+        ); // Add your button's functionality here
       }
-
-
-    }catch(e){
-
+    } catch (e) {
       print(e.toString());
-
     }
-
-
-
   }
 
   @override
@@ -106,31 +83,37 @@ class _SingINState extends State<SingIN> {
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 165, 227, 106),
         iconTheme: IconThemeData(color: Colors.black),
-         title:  Text('sign_in'.tr, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.black),),
-         actions: [
+        title: Text(
+          'sign_in'.tr,
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black),
+        ),
+        actions: [
           Padding(
             padding: EdgeInsets.only(right: 30),
             child: GestureDetector(
-              onTap: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Langscreen(),),);
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Langscreen(),
+                  ),
+                );
               },
               child: CircleAvatar(
                 radius: 18,
-        backgroundColor: Color.fromARGB(255, 165, 227, 106),
+                backgroundColor: Color.fromARGB(255, 165, 227, 106),
 
-                // backgroundImage: AssetImage('assets/language-icon.png'), 
+                // backgroundImage: AssetImage('assets/language-icon.png'),
                 child: SvgPicture.asset(
-  'assets/language-icon.svg',
-  // width: 100.0, // Adjust the width as needed
-  // height: 100.0, // Adjust the height as needed
-),
-
+                  'assets/language-icon.svg',
+                  // width: 100.0, // Adjust the width as needed
+                  // height: 100.0, // Adjust the height as needed
+                ),
               ),
             ),
           ),
-           
-         ],
-       ),
+        ],
+      ),
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -138,96 +121,130 @@ class _SingINState extends State<SingIN> {
             "assets/loginbg.jpg",
             fit: BoxFit.cover,
           ),
-         Center(
-           child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SingleChildScrollView(
-              child: Form(
-                key: formkey,
-                child: Center(
-                  child: Card(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'log_in_to_console'.tr,
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                          TextFormField(
-                            controller: _usernameController,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                                hintText: "mobile/email".tr,
-                                labelText: "enter_mobile/email".tr),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          TextFormField(
-                            controller: _passwordController,
-                            keyboardType: TextInputType.text,
-                            obscureText: true,
-                            decoration: InputDecoration(
-                                hintText: "enter_pin".tr, labelText: "pin".tr),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          ElevatedButton(
-                            onPressed: () {
-                              login(_usernameController.text.toString(),_passwordController.text.toString());
-                            },
-                            child: Text("sign_in".tr),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.green,
-                              fixedSize: Size(650, 50),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: formkey,
+                  child: Center(
+                    child: Card(
+                      color: const Color.fromARGB(255, 255, 255, 255),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'log_in_to_console'.tr,
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
                             ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'forgot_password'.tr,
-                                style: TextStyle(color: Colors.grey),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              "mobile/email".tr,
+                              style: TextStyle(
+                                fontSize: 20,
                               ),
-                              SizedBox(
-                                width: 5,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextField(
+                              controller: _usernameController,
+                              keyboardType: TextInputType.text,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 0),
+                                // hintText: "mobile/email".tr,
+                                hintText: "enter_mobile/email".tr,
                               ),
-                              TextButton(
-                                onPressed: (
-                                  
-                              ) {
-                                 Navigator.of(context).push(MaterialPageRoute(builder: (context)=>ForgotPasswordPage(),),);  // Add your button's functionality here
-                                },
-                                child: Text(
-                                  "click".tr,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    // Change the text color as needed
-                                    fontSize:
-                                        16, // Adjust the text size as needed
+                            ),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            Text(
+                              "pin".tr,
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextFormField(
+                              controller: _passwordController,
+                              keyboardType: TextInputType.text,
+                              obscureText: true,
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 0),
+                                hintText: "enter_pin".tr,
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                login(_usernameController.text.toString(),
+                                    _passwordController.text.toString());
+                              },
+                              child: Text(
+                                "sign_in".tr,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                primary: Color.fromARGB(255, 26, 93, 28),
+                                fixedSize: Size(650, 60),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'forgot_password'.tr,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            ForgotPasswordPage(),
+                                      ),
+                                    ); // Add your button's functionality here
+                                  },
+                                  child: Text(
+                                    "click".tr,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      // Change the text color as needed
+                                      fontSize:
+                                          16, // Adjust the text size as needed
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-                 ),
-         ),
+          ),
         ],
       ),
     );

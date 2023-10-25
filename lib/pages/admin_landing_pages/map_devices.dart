@@ -27,8 +27,12 @@ class _MapdevicesState extends State<Mapdevices> {
 
     return Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: Colors.green,
-          title: const Text('User and Device Selection'),
+          title: const Text(
+            'Map User And Device ',
+            style: TextStyle(color: Colors.black, fontSize: 22),
+          ),
           actions: [
             Padding(
               padding: EdgeInsets.only(right: 30),

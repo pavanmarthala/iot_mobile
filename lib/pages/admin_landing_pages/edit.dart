@@ -112,7 +112,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         state = '${addressData['state']}';
         district = '${addressData['district']}';
         pincode = '${addressData['pinCode']}';
-        deviceIds = List<String>.from(userData['deviceIds']);
+        deviceIds =
+            (userData['deviceIds'] as List).map((id) => id.toString()).toList();
 
         // Initialize the controllers with the fetched user details
         nameController.text = name;
@@ -189,97 +190,21 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                 ),
         ],
       ),
-      body: ListView(
-        children: [
-          _UserDetail("Mobile Number", mobileNumberController, false),
-          _buildUserDetail("Email", emailController),
-          _buildUserDetail("Role", roleController),
-          _UserDetail("Status", statusController, false),
-          _buildUserDetail("PIN", pinController),
-          _buildUserDetail("Language", languageController),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Text(
-                  'Device IDs',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Wrap(
-                    children: <Widget>[
-                      for (int i = 0; i < deviceIds.length; i++)
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                              width: 170,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Colors.black, // Border color
-                                  width: 1.0, // Border width
-                                  style: BorderStyle
-                                      .solid, // Border style (you can use dotted or dashed too)
-                                ),
-                              ),
-                              child: Center(child: Text(deviceIds[i]))),
-                        ),
-
-                      // Display the editing deviceIds
-                      if (isEditing)
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: <Widget>[
-                              for (int i = 0; i < editingdeviceIds.length; i++)
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: TextField(
-                                        controller: TextEditingController(
-                                            text: editingdeviceIds[i]),
-                                        onChanged: (value) {
-                                          // Update the editingdeviceIds list
-                                          editingdeviceIds[i] = value;
-                                        },
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.delete),
-                                      onPressed: () {
-                                        setState(() {
-                                          editingdeviceIds.removeAt(i);
-                                        });
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    editingdeviceIds.add("");
-                                  });
-                                },
-                                child: Text("Add"),
-                              ),
-                            ],
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildUserDetail("Zone", zoneController),
-          _buildUserDetail("Subscription Valid", subscriptionValidController),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 20),
-            child: Container(
-                height: 400,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            _UserDetail("Mobile Number", mobileNumberController, false),
+            _buildUserDetail("Email", emailController),
+            _buildUserDetail("Role", roleController),
+            _UserDetail("Status", statusController, false),
+            _buildUserDetail("PIN", pinController),
+            _buildUserDetail("Language", languageController),
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                height: 200,
+                width: 380,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
@@ -289,69 +214,176 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                         .solid, // Border style (you can use dotted or dashed too)
                   ),
                 ),
-                // color: Colors.white,
-                child: ListView(
-                  children: [
-                    Center(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      Center(
                         child: Text(
-                      'User Deatils',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-                    )),
-                    _UserDetail("Name", nameController, false),
-                    _UserDetail("First Name", firstnameController, false),
-                    _UserDetail("Last Name", lastnameController, false),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Container(
-                          height: 300,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: Colors.black, // Border color
-                              width: 1.0, // Border width
-                              style: BorderStyle
-                                  .solid, // Border style (you can use dotted or dashed too)
+                          'Device IDs',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Wrap(
+                          children: <Widget>[
+                            for (int i = 0; i < deviceIds.length; i++)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                    width: 160,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black, // Border color
+                                        width: 1.0, // Border width
+                                        style: BorderStyle
+                                            .solid, // Border style (you can use dotted or dashed too)
+                                      ),
+                                    ),
+                                    child: Center(child: Text(deviceIds[i]))),
+                              ),
+
+                            // Display the editing deviceIds
+                            if (isEditing)
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  children: <Widget>[
+                                    for (int i = 0;
+                                        i < editingdeviceIds.length;
+                                        i++)
+                                      Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: TextField(
+                                              controller: TextEditingController(
+                                                  text: editingdeviceIds[i]),
+                                              onChanged: (value) {
+                                                // Update the editingdeviceIds list
+                                                editingdeviceIds[i] = value;
+                                              },
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () {
+                                              setState(() {
+                                                editingdeviceIds.removeAt(i);
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          editingdeviceIds.add("");
+                                        });
+                                      },
+                                      child: Text("Add"),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            _buildUserDetail("Zone", zoneController),
+            _buildUserDetail("Subscription Valid", subscriptionValidController),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 10, top: 10, right: 10, bottom: 20),
+              child: Container(
+                  height: 400,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: Colors.black, // Border color
+                      width: 1.0, // Border width
+                      style: BorderStyle
+                          .solid, // Border style (you can use dotted or dashed too)
+                    ),
+                  ),
+                  // color: Colors.white,
+                  child: ListView(
+                    children: [
+                      Center(
+                          child: Text(
+                        'User Deatils',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      )),
+                      _UserDetail("Name", nameController, false),
+                      _UserDetail("First Name", firstnameController, false),
+                      _UserDetail("Last Name", lastnameController, false),
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Container(
+                            // height: 1112,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: Colors.black, // Border color
+                                width: 1.0, // Border width
+                                style: BorderStyle
+                                    .solid, // Border style (you can use dotted or dashed too)
+                              ),
                             ),
-                          ),
-                          child: ListView(
-                            children: [
-                              Center(
-                                  child: Text(
-                                'Address',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.bold),
-                              )),
-                              _buildUserDetail(
-                                "Name",
-                                nameController,
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                children: [
+                                  Center(
+                                      child: Text(
+                                    'Address',
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  _buildUserDetail(
+                                    "Name",
+                                    nameController,
+                                  ),
+                                  _buildUserDetail(
+                                    "First Name",
+                                    firstnameController,
+                                  ),
+                                  _buildUserDetail(
+                                    "Last Name",
+                                    lastnameController,
+                                  ),
+                                  _buildUserDetail(
+                                      "Address Line 1", address1Controller),
+                                  _buildUserDetail(
+                                      "Address Line 2", address2Controller),
+                                  _buildUserDetail(
+                                      "Address Line 3", address3Controller),
+                                  _buildUserDetail(
+                                      "Land mark", landmarkController),
+                                  _buildUserDetail("City", cityController),
+                                  _buildUserDetail(
+                                      "District", districtController),
+                                  _buildUserDetail("State", stateController),
+                                  _buildUserDetail(
+                                      "Pincode", pincodeController),
+                                ],
                               ),
-                              _buildUserDetail(
-                                "First Name",
-                                firstnameController,
-                              ),
-                              _buildUserDetail(
-                                "Last Name",
-                                lastnameController,
-                              ),
-                              _buildUserDetail(
-                                  "Address Line 1", address1Controller),
-                              _buildUserDetail(
-                                  "Address Line 2", address2Controller),
-                              _buildUserDetail(
-                                  "Address Line 3", address3Controller),
-                              _buildUserDetail("Land mark", landmarkController),
-                              _buildUserDetail("City", cityController),
-                              _buildUserDetail("District", districtController),
-                              _buildUserDetail("State", stateController),
-                              _buildUserDetail("Pincode", pincodeController),
-                            ],
-                          )),
-                    )
-                  ],
-                )),
-          )
-        ],
+                            )),
+                      )
+                    ],
+                  )),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -360,6 +392,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 10, top: 15, right: 10),
       child: Container(
+        width: 380,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
@@ -398,6 +431,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     return Padding(
       padding: const EdgeInsets.only(left: 10, top: 15, right: 10),
       child: Container(
+        width: 380,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(

@@ -90,7 +90,11 @@ class _ManagedeviceState extends State<Managedevice> {
     return Scaffold(
         backgroundColor: const Color(0xffcbcbcb),
         appBar: AppBar(
-          title: const Text("Manage Devices"),
+          iconTheme: IconThemeData(color: Colors.black),
+          title: const Text(
+            "Manage Devices",
+            style: TextStyle(color: Colors.black, fontSize: 25),
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 30),
@@ -125,15 +129,9 @@ class _ManagedeviceState extends State<Managedevice> {
                   children: [
                     Container(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 20, left: 10),
+                        padding: const EdgeInsets.all(10),
                         child: Row(
                           children: [
-                            const Text("Device",
-                                style: TextStyle(
-                                    fontSize: 25, fontWeight: FontWeight.bold)),
-                            SizedBox(
-                              width: 10,
-                            ),
                             Expanded(
                               child: TextField(
                                 // controller: searchController,
@@ -161,142 +159,149 @@ class _ManagedeviceState extends State<Managedevice> {
                       ),
                     ),
                     Container(
-                      child: Column(
-                        children: filteredDeviceList.map((device) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10, left: 5, right: 5),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(13),
-                                color: Colors.white,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, left: 20),
-                                    child: Text(
-                                      device["name"] ?? "",
-                                      style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: 5, left: 20),
-                                    child: Text(
-                                      device["deviceId"] ?? "",
-                                      style: const TextStyle(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 15, bottom: 10),
-                                    child: Row(
-                                      children: [
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EditDevice(
-                                                  deviceId:
-                                                      device["deviceId"] ?? "",
-                                                  // deviceId: '',
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          child: const Text(
-                                            'View',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            foregroundColor: Colors.black,
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    234, 42, 228, 138),
-                                            fixedSize: const Size(120, 50),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(17),
-                                            ),
-                                          ),
+                      height: 650,
+                      child: Expanded(
+                        child: ListView(
+                          children: filteredDeviceList.map((device) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 5, right: 5),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(13),
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10, left: 20),
+                                      child: Text(
+                                        device["name"] ?? "",
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(left: 5),
-                                          child: ElevatedButton(
-                                            onPressed: () {},
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 5, left: 20),
+                                      child: Text(
+                                        device["deviceId"] ?? "",
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 15, bottom: 10),
+                                      child: Row(
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditDevice(
+                                                    deviceId:
+                                                        device["deviceId"] ??
+                                                            "",
+                                                    // deviceId: '',
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                             child: const Text(
-                                              'Delete',
+                                              'View',
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             style: ElevatedButton.styleFrom(
+                                              foregroundColor: Colors.black,
                                               backgroundColor:
                                                   const Color.fromARGB(
-                                                      234, 239, 9, 9),
-                                              onPrimary: Colors.black,
-                                              fixedSize: const Size(120, 50),
+                                                      234, 42, 228, 138),
+                                              fixedSize: const Size(100, 45),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(17),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                        Padding(
+                                          Padding(
                                             padding:
-                                                const EdgeInsets.only(left: 5),
+                                                const EdgeInsets.only(left: 20),
                                             child: ElevatedButton(
                                               onPressed: () {},
-                                              child: Text(
-                                                device["active"] == "true"
-                                                    ? 'Deactivate'
-                                                    : 'Activate',
+                                              child: const Text(
+                                                'Delete',
                                                 style: TextStyle(
-                                                  fontSize: 18,
+                                                  fontSize: 20,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
-                                                    device["active"] == "true"
-                                                        ? const Color.fromARGB(
-                                                            234, 42, 228, 138)
-                                                        : const Color.fromARGB(
-                                                            234, 239, 9, 9),
-
-                                                // Green
+                                                    const Color.fromARGB(
+                                                        234, 239, 9, 9),
                                                 onPrimary: Colors.black,
-                                                fixedSize: const Size(120, 50),
+                                                fixedSize: const Size(100, 45),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(17),
                                                 ),
                                               ),
-                                            )),
-                                      ],
+                                            ),
+                                          ),
+                                          Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 20),
+                                              child: ElevatedButton(
+                                                onPressed: () {},
+                                                child: Text(
+                                                  device["active"] == "true"
+                                                      ? 'Deactivate'
+                                                      : 'Activate',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: device[
+                                                              "active"] ==
+                                                          "true"
+                                                      ? const Color.fromARGB(
+                                                          234, 42, 228, 138)
+                                                      : const Color.fromARGB(
+                                                          234, 239, 9, 9),
+
+                                                  // Green
+                                                  onPrimary: Colors.black,
+                                                  fixedSize:
+                                                      const Size(120, 45),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            17),
+                                                  ),
+                                                ),
+                                              )),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        }).toList(),
+                            );
+                          }).toList(),
+                        ),
                       ),
                     ),
                   ],
@@ -362,7 +367,7 @@ class _ManagedeviceState extends State<Managedevice> {
                             // Go back to Home Screen
                           },
                           child: const Text(
-                            'ADD User',
+                            'Add User',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),

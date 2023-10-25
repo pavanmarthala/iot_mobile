@@ -19,7 +19,10 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Users'),
+        title: Text(
+          'Manage Users',
+          style: TextStyle(color: Colors.black, fontSize: 25),
+        ),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
         actions: [
@@ -48,127 +51,130 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
           ),
         ],
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 30),
-          child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.center,
 
-            children: [
-              Container(
-                width: 350,
-                height: 120,
-                padding: EdgeInsets.all(10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => Users(),
+              children: [
+                Container(
+                  width: 350,
+                  height: 120,
+                  padding: EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Users(),
+                        ),
+                      );
+
+                      // Provide a valid function for the button
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                    );
-
-                    // Provide a valid function for the button
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Text(
+                      'Manage Users',
+                      style: TextStyle(fontSize: 25, color: Colors.black),
                     ),
                   ),
-                  child: Text(
-                    'Manage Users',
-                    style: TextStyle(fontSize: 25, color: Colors.black),
-                  ),
                 ),
-              ),
 
-              // SizedBox(height: 10),
+                // SizedBox(height: 10),
 
-              Container(
-                width: 350,
-                height: 120,
-                padding: EdgeInsets.all(10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => Managedevice(),
+                Container(
+                  width: 350,
+                  height: 120,
+                  padding: EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Managedevice(),
+                        ),
+                      );
+
+                      // Provide a valid function for the button
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                    );
-
-                    // Provide a valid function for the button
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Text(
+                      'Manage Devices',
+                      style: TextStyle(fontSize: 25, color: Colors.black),
                     ),
                   ),
-                  child: Text(
-                    'Manage Devices',
-                    style: TextStyle(fontSize: 25, color: Colors.black),
-                  ),
                 ),
-              ),
 
-              // SizedBox(height: 10),
+                // SizedBox(height: 10),
 
-              Container(
-                width: 350,
-                height: 120,
-                padding: EdgeInsets.all(10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => Mapdevices(),
+                Container(
+                  width: 350,
+                  height: 120,
+                  padding: EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Mapdevices(),
+                        ),
+                      );
+
+                      // Provide a valid function for the button
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                    );
-
-                    // Provide a valid function for the button
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Text(
+                      'Map a Device',
+                      style: TextStyle(color: Colors.black, fontSize: 25),
                     ),
                   ),
-                  child: Text(
-                    'Map a Device',
-                    style: TextStyle(color: Colors.black, fontSize: 25),
-                  ),
                 ),
-              ),
 
-              // SizedBox(height: 10),
+                // SizedBox(height: 10),
 
-              Container(
-                width: 350,
-                height: 120,
-                padding: EdgeInsets.all(10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => Landingpage(),
+                Container(
+                  width: 350,
+                  height: 120,
+                  padding: EdgeInsets.all(10),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Landingpage(),
+                        ),
+                      );
+
+                      // Provide a valid function for the button
+                    },
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.grey,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
                       ),
-                    );
-
-                    // Provide a valid function for the button
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.grey,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: Text(
+                      'View Mapped Devices',
+                      style: TextStyle(color: Colors.black, fontSize: 25),
                     ),
                   ),
-                  child: Text(
-                    'View Mapped Devices',
-                    style: TextStyle(color: Colors.black, fontSize: 25),
-                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -339,187 +339,214 @@ class _EditDeviceState extends State<EditDevice> {
                 ),
         ],
       ),
-      body: ListView(
-        children: [
-          _UserDetail("deviceId", deviceIdController, false),
-          _buildUserDetail(
-              "device Serial Number", deviceSerialNumberController, true),
-          _buildUserDetail("Name", nameController, true),
-          _buildUserDetail("Zone", zoneController, true),
-          _UserDetail("deviceState", deviceStateController, false),
-          _UserDetail("lastDeviceState", lastDeviceStateController, false),
-          _UserDetail("givenState", givenStateController, false),
-          _UserDetail("lastGivenState", lastGivenStateController, false),
-          _UserDetail("power Available", powerAvailableController, false),
-          _UserDetail("topic", topicController, false),
-          // Display the accountIds as a list of text fields
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                Text(
-                  'Account IDs',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            _UserDetail("deviceId", deviceIdController, false),
+            _buildUserDetail(
+                "device Serial Number", deviceSerialNumberController, true),
+            _buildUserDetail("Name", nameController, true),
+            _buildUserDetail("Zone", zoneController, true),
+            _UserDetail("deviceState", deviceStateController, false),
+            _UserDetail("lastDeviceState", lastDeviceStateController, false),
+            _UserDetail("givenState", givenStateController, false),
+            _UserDetail("lastGivenState", lastGivenStateController, false),
+            _UserDetail("power Available", powerAvailableController, false),
+            _UserDetail("topic", topicController, false),
+            // Display the accountIds as a list of text fields
+            Padding(
+              padding: const EdgeInsets.all(10),
+              child: Container(
+                height: 150,
+                width: 380,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.black, // Border color
+                    width: 1.0, // Border width
+                    style: BorderStyle
+                        .solid, // Border style (you can use dotted or dashed too)
+                  ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Wrap(
-                    children: <Widget>[
-                      for (int i = 0; i < accountIds.length; i++)
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                              width: 170,
-                              height: 30,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(
-                                  color: Colors.black, // Border color
-                                  width: 1.0, // Border width
-                                  style: BorderStyle
-                                      .solid, // Border style (you can use dotted or dashed too)
-                                ),
-                              ),
-                              child: Center(child: Text(accountIds[i]))),
-                        ),
-
-                      // Display the editing accountIds
-                      if (isEditing)
-                        Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: <Widget>[
-                              for (int i = 0; i < editingAccountIds.length; i++)
-                                Row(
-                                  children: <Widget>[
-                                    Expanded(
-                                      child: TextField(
-                                        controller: TextEditingController(
-                                            text: editingAccountIds[i]),
-                                        onChanged: (value) {
-                                          // Update the editingAccountIds list
-                                          editingAccountIds[i] = value;
-                                        },
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Account IDs',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Wrap(
+                          children: <Widget>[
+                            for (int i = 0; i < accountIds.length; i++)
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                    width: 160,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: Colors.black, // Border color
+                                        width: 1.0, // Border width
+                                        style: BorderStyle
+                                            .solid, // Border style (you can use dotted or dashed too)
                                       ),
                                     ),
-                                    IconButton(
-                                      icon: Icon(Icons.delete),
+                                    child: Center(child: Text(accountIds[i]))),
+                              ),
+
+                            // Display the editing accountIds
+                            if (isEditing)
+                              Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  children: <Widget>[
+                                    for (int i = 0;
+                                        i < editingAccountIds.length;
+                                        i++)
+                                      Row(
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: TextField(
+                                              controller: TextEditingController(
+                                                  text: editingAccountIds[i]),
+                                              onChanged: (value) {
+                                                // Update the editingAccountIds list
+                                                editingAccountIds[i] = value;
+                                              },
+                                            ),
+                                          ),
+                                          IconButton(
+                                            icon: Icon(Icons.delete),
+                                            onPressed: () {
+                                              setState(() {
+                                                editingAccountIds.removeAt(i);
+                                              });
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ElevatedButton(
                                       onPressed: () {
                                         setState(() {
-                                          editingAccountIds.removeAt(i);
+                                          editingAccountIds.add("");
                                         });
                                       },
+                                      child: Text("Add"),
                                     ),
                                   ],
                                 ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  setState(() {
-                                    editingAccountIds.add("");
-                                  });
-                                },
-                                child: Text("Add"),
                               ),
-                            ],
-                          ),
+                          ],
                         ),
+                      ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          _buildUserDetail(
-              "Subscription Valid", subscriptionValidController, false),
-          _UserDetail(
-              "lastPowerAvailable", lastPowerAvailableController, false),
-          _UserDetail("maxCurrent", maxCurrentController, false),
-          _UserDetail("minCurrent", minCurrentController, false),
-          _UserDetail("maxVoltage", maxVoltageController, false),
-          _UserDetail("minVoltage", minVoltageController, false),
-          _UserDetail("deviceLastPing", deviceLastPingController, false),
-          _UserDetail("loadLastPing", loadLastPingController, false),
-          _UserDetail("powerLastPing", powerLastPingController, false),
-          _UserDetail("lastPing", lastPingController, false),
-          _UserDetail("deviceSleepTime", deviceSleepTimeController, false),
-          _UserDetail("nthMessage", nthMessageController, false),
-          _UserDetail("simId", simIdController, false),
-          _UserDetail("active", activeController, false),
-          _UserDetail("metaCheckRequired", metaCheckRequiredController, false),
-          _UserDetail(
-              "meta1CheckRequired", meta1CheckRequiredController, false),
-          _UserDetail("deviceModel", deviceModelController, false),
-          _UserDetail(
-              "fcmRegistrationTokens", fcmRegistrationTokensController, false),
-          _UserDetail("modem_info", modemInfoController, false),
-          _UserDetail("CCID", CCIDController, false),
-          _UserDetail("IMEI", IMEIController, false),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 20),
-            child: Container(
-              height: 407,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.black, // Border color
-                  width: 1.0, // Border width
-                  style: BorderStyle.solid, // Border style
-                ),
               ),
-              child: ListView(
-                children: [
-                  Center(
-                    child: Text(
-                      'meta1',
-                      style:
-                          TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            _buildUserDetail(
+                "Subscription Valid", subscriptionValidController, false),
+            _UserDetail(
+                "lastPowerAvailable", lastPowerAvailableController, false),
+            _UserDetail("maxCurrent", maxCurrentController, false),
+            _UserDetail("minCurrent", minCurrentController, false),
+            _UserDetail("maxVoltage", maxVoltageController, false),
+            _UserDetail("minVoltage", minVoltageController, false),
+            _UserDetail("deviceLastPing", deviceLastPingController, false),
+            _UserDetail("loadLastPing", loadLastPingController, false),
+            _UserDetail("powerLastPing", powerLastPingController, false),
+            _UserDetail("lastPing", lastPingController, false),
+            _UserDetail("deviceSleepTime", deviceSleepTimeController, false),
+            _UserDetail("nthMessage", nthMessageController, false),
+            _UserDetail("simId", simIdController, false),
+            _UserDetail("active", activeController, false),
+            _UserDetail(
+                "metaCheckRequired", metaCheckRequiredController, false),
+            _UserDetail(
+                "meta1CheckRequired", meta1CheckRequiredController, false),
+            _UserDetail("deviceModel", deviceModelController, false),
+            _UserDetail("fcmRegistrationTokens",
+                fcmRegistrationTokensController, false),
+            _UserDetail("modem_info", modemInfoController, false),
+            _UserDetail("CCID", CCIDController, false),
+            _UserDetail("IMEI", IMEIController, false),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 10, top: 10, right: 10, bottom: 20),
+              child: Container(
+                height: 407,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.black, // Border color
+                    width: 1.0, // Border width
+                    style: BorderStyle.solid, // Border style
+                  ),
+                ),
+                child: ListView(
+                  children: [
+                    Center(
+                      child: Text(
+                        'meta1',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
                     ),
-                  ),
-                  _UserDetail("device Id", device_idController, false),
-                  _UserDetail("IMSI", IMSIController, false),
-                  _UserDetail("Operator", OperatorController, false),
-                  _UserDetail("IP", IpController, false),
-                  _UserDetail(
-                      "signal quality", signal_qualityController, false),
-                  _UserDetail("location", locationController, false),
-                  _UserDetail("Mobile Number", mob_numController, false),
-                  _UserDetail("minVol ", minVolController, false),
-                  _UserDetail("maxVol", maxVolController, false),
-                  _UserDetail("minCur", minCurController, false),
-                  _UserDetail("maxCur", maxCurController, false),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 10, top: 10, right: 10, bottom: 20),
-            child: Container(
-              height: 300,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.black, // Border color
-                  width: 1.0, // Border width
-                  style: BorderStyle.solid, // Border style
+                    _UserDetail("device Id", device_idController, false),
+                    _UserDetail("IMSI", IMSIController, false),
+                    _UserDetail("Operator", OperatorController, false),
+                    _UserDetail("IP", IpController, false),
+                    _UserDetail(
+                        "signal quality", signal_qualityController, false),
+                    _UserDetail("location", locationController, false),
+                    _UserDetail("Mobile Number", mob_numController, false),
+                    _UserDetail("minVol ", minVolController, false),
+                    _UserDetail("maxVol", maxVolController, false),
+                    _UserDetail("minCur", minCurController, false),
+                    _UserDetail("maxCur", maxCurController, false),
+                  ],
                 ),
               ),
-              child: ListView(children: [
-                Center(
-                  child: Text(
-                    'meta',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                  left: 10, top: 10, right: 10, bottom: 20),
+              child: Container(
+                height: 300,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.black, // Border color
+                    width: 1.0, // Border width
+                    style: BorderStyle.solid, // Border style
                   ),
                 ),
-                _UserDetail("device Id", device_idController, false),
-                _UserDetail("modem_info", modemInfoController, false),
-                _UserDetail("CCID", CCIDController, false),
-                _UserDetail("IMEI", IMEIController, false),
-              ]),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(children: [
+                    Center(
+                      child: Text(
+                        'meta',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    _UserDetail("device Id", device_idController, false),
+                    _UserDetail("modem_info", modemInfoController, false),
+                    _UserDetail("CCID", CCIDController, false),
+                    _UserDetail("IMEI", IMEIController, false),
+                  ]),
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -529,6 +556,7 @@ class _EditDeviceState extends State<EditDevice> {
     return Padding(
       padding: const EdgeInsets.only(left: 10, top: 15, right: 10),
       child: Container(
+        width: 380,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
@@ -566,6 +594,7 @@ class _EditDeviceState extends State<EditDevice> {
     return Padding(
       padding: const EdgeInsets.only(left: 10, top: 15, right: 10),
       child: Container(
+        width: 380,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           border: Border.all(

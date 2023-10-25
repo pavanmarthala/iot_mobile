@@ -87,7 +87,11 @@ class _UsersState extends State<Users> {
     return Scaffold(
         backgroundColor: const Color(0xffcbcbcb),
         appBar: AppBar(
-          title: const Text("Manage Users"),
+          iconTheme: IconThemeData(color: Colors.black),
+          title: const Text(
+            "Manage Users",
+            style: TextStyle(color: Colors.black, fontSize: 25),
+          ),
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 30),
@@ -122,15 +126,9 @@ class _UsersState extends State<Users> {
                   children: [
                     Container(
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 20, left: 10),
+                        padding: const EdgeInsets.all(10),
                         child: Row(
                           children: [
-                            const Text("Users",
-                                style: TextStyle(
-                                    fontSize: 25, fontWeight: FontWeight.bold)),
-                            SizedBox(
-                              width: 10,
-                            ),
                             Expanded(
                               child: TextField(
                                 // controller: searchController,
@@ -177,9 +175,9 @@ class _UsersState extends State<Users> {
                                       padding: const EdgeInsets.only(
                                           top: 10, left: 20),
                                       child: Text(
-                                        device["name"] ?? "",
+                                        device["name"] ?? "user",
                                         style: const TextStyle(
-                                          fontSize: 25,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -190,14 +188,14 @@ class _UsersState extends State<Users> {
                                       child: Text(
                                         device["mobile"] ?? "",
                                         style: const TextStyle(
-                                          fontSize: 25,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.only(
-                                          left: 15, bottom: 10),
+                                          left: 15, bottom: 10, top: 5),
                                       child: Row(
                                         children: [
                                           ElevatedButton(
@@ -225,7 +223,7 @@ class _UsersState extends State<Users> {
                                               backgroundColor:
                                                   const Color.fromARGB(
                                                       234, 42, 228, 138),
-                                              fixedSize: const Size(120, 50),
+                                              fixedSize: const Size(100, 45),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.circular(17),
@@ -234,7 +232,7 @@ class _UsersState extends State<Users> {
                                           ),
                                           Padding(
                                             padding:
-                                                const EdgeInsets.only(left: 5),
+                                                const EdgeInsets.only(left: 20),
                                             child: ElevatedButton(
                                               onPressed: () {},
                                               child: const Text(
@@ -249,7 +247,7 @@ class _UsersState extends State<Users> {
                                                     const Color.fromARGB(
                                                         234, 239, 9, 9),
                                                 onPrimary: Colors.black,
-                                                fixedSize: const Size(120, 50),
+                                                fixedSize: const Size(100, 45),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(17),
@@ -259,7 +257,7 @@ class _UsersState extends State<Users> {
                                           ),
                                           Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 5),
+                                                  left: 20),
                                               child: ElevatedButton(
                                                 onPressed: () {},
                                                 child: Text(
@@ -365,7 +363,7 @@ class _UsersState extends State<Users> {
                             // Go back to Home Screen
                           },
                           child: const Text(
-                            'ADD User',
+                            'Add User',
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
