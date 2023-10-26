@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:iot_mobile_app/models/add_user_model.dart';
+import 'package:iot_mobile_app/pages/admin_landing_pages/select_state.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 // import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -353,6 +354,13 @@ class _dataState extends State<Adduser> {
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SelectState(),
+                    ),
+                  );
+                },
                 controller: _statecontroller,
                 decoration: InputDecoration(
                   hintText: 'enter_state'.tr,

@@ -1,23 +1,19 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last, unnecessary_type_check
-
 import 'dart:convert';
-import 'package:flutter_svg/svg.dart';
-// import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
-import 'package:iot_mobile_app/pages/settings/Set_limits.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class SelectDevice extends StatefulWidget {
-  const SelectDevice({Key? key}) : super(key: key);
+class SelectState extends StatefulWidget {
+  const SelectState({Key? key}) : super(key: key);
 
   @override
-  _SelectDeviceState createState() => _SelectDeviceState();
+  _SelectStateState createState() => _SelectStateState();
 }
 
-class _SelectDeviceState extends State<SelectDevice> {
+class _SelectStateState extends State<SelectState> {
   List<Widget> buttons = [];
 
   Future<List<String>>? deviceIds;
@@ -38,7 +34,7 @@ class _SelectDeviceState extends State<SelectDevice> {
       return <String>[];
     }
     final response = await http.get(
-      Uri.https('console-api.theja.in', '/device/getAll'),
+      Uri.https('console-api.theja.in', '/zone/state'),
       headers: {
         "Authorization": "Bearer $jwtToken",
       },
@@ -49,10 +45,9 @@ class _SelectDeviceState extends State<SelectDevice> {
 
       if (jsonResponse is List) {
         // API response is a list of device names
-        final deviceIds = jsonResponse.map((device) {
-          return device["deviceId"].toString();
-        }).toList();
-        ;
+        final deviceIds = jsonResponse
+            .map((deviceIdJson) => deviceIdJson.toString())
+            .toList();
         return deviceIds;
       } else {
         return <String>[];
@@ -125,15 +120,7 @@ class _SelectDeviceState extends State<SelectDevice> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         MaterialButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Limits(
-                                    selectedDevice: deviceIdsList[index]),
-                              ),
-                            );
-                          },
-
+                          onPressed: () {},
                           child: Row(
                             children: [
                               Text(

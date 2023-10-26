@@ -1,17 +1,20 @@
-// ignore_for_file: prefer_const_constructors
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:iot_mobile_app/pages/settings/select_device.dart';
 import 'package:iot_mobile_app/pages/settings/settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Limits extends StatefulWidget {
-  const Limits({super.key});
+  final String selectedDevice;
+
+  const Limits({Key? key, required this.selectedDevice}) : super(key: key);
 
   @override
-  State<Limits> createState() => _LimitsState();
+  _LimitsState createState() => _LimitsState();
 }
 
 class _LimitsState extends State<Limits> {
@@ -19,6 +22,56 @@ class _LimitsState extends State<Limits> {
   final _maximumVoltageController = TextEditingController();
   final _minimumCurrentController = TextEditingController();
   final _maximumCurrentController = TextEditingController();
+  Future<Map<String, dynamic>>? deviceLimits;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.selectedDevice.isNotEmpty) {
+      deviceLimits = fetchDeviceLimits(widget.selectedDevice);
+      deviceLimits?.then((limits) {
+        if (limits != null) {
+          _minimumVoltageController.text =
+              (limits['minVoltage'] ?? '').toString();
+          _maximumVoltageController.text =
+              (limits['maxVoltage'] ?? '').toString();
+          _minimumCurrentController.text =
+              (limits['minCurrent'] ?? '').toString();
+          _maximumCurrentController.text =
+              (limits['maxCurrent'] ?? '').toString();
+        }
+      }).catchError((error) {
+        // Handle the error here
+        print("Failed to load device limits: $error");
+      });
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchDeviceLimits(String deviceId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken == null) {
+      return {};
+    }
+
+    final response = await http.get(
+      Uri.https('console-api.theja.in', '/device/getLimits/$deviceId'),
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      print("Device Limits: $jsonResponse"); // Add this line
+      return jsonResponse;
+    } else {
+      print('API Response (Error): ${response.body}');
+      throw Exception('Failed to load device limits');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,11 +115,8 @@ class _LimitsState extends State<Limits> {
               child: CircleAvatar(
                 radius: 18,
                 backgroundColor: Colors.white,
-                // backgroundImage: AssetImage('assets/language-icon.png'),
                 child: SvgPicture.asset(
                   'assets/language-icon.svg',
-                  // width: 100.0, // Adjust the width as needed
-                  // height: 100.0, // Adjust the height as needed
                 ),
               ),
             ),
@@ -83,7 +133,6 @@ class _LimitsState extends State<Limits> {
                 'device'.tr,
                 style: Theme.of(context).textTheme.headline6,
               ),
-
               TextField(
                 onTap: () {
                   Navigator.of(context).push(
@@ -92,35 +141,11 @@ class _LimitsState extends State<Limits> {
                     ),
                   );
                 },
-                // controller: _minimumVoltageController,
                 decoration: InputDecoration(
                   hintText: 'Select Device'.tr,
                 ),
+                controller: TextEditingController(text: widget.selectedDevice),
               ),
-              // DropdownButton<String>(
-              //   value: 'Device 1',
-              //   items: const [
-              //     DropdownMenuItem(value: 'Device 1', child: Text('Device ')),
-              //     DropdownMenuItem(value: 'Device 2', child: Text('Device 2')),
-              //     DropdownMenuItem(value: 'Device 3', child: Text('Device 3')),
-              //   ],
-              //   onChanged: (value) {},
-              //   style: TextStyle(
-              //     // Customize the text style of the selected item
-              //     color: Colors.black,
-              //     fontSize: 16,
-              //   ),
-              //   elevation: 4, // Dropdown elevation
-              //   // icon: Icon(Icons.arrow_downward), // Dropdown icon
-              //   iconSize: 4, // Icon size
-              //   isDense: false, // Reduce the padding around the text
-              //   isExpanded: true, // Expand the button to fill available width
-              //   // underline: Container(
-              //   //   // Customize the underline
-              //   //   height: 2,
-              //   //   color: Colors.blue,
-              //   // ),
-              // ),
               Container(
                 height: 1,
                 color: Colors.grey,

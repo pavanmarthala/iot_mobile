@@ -233,19 +233,23 @@ class _SettingsState extends State<Settings> {
                   SizedBox(
                     height: 10,
                   ),
-                  ListTile(
-                    title: Text("set_limits".tr,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 20)),
-                    trailing: const Icon(Icons.code, color: Colors.black),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Limits(),
-                        ),
-                      );
-                    },
-                  ),
+                  if (userInfoData?["selectedDevice"] == null)
+                    ListTile(
+                      title: Text("set_limits".tr,
+                          style: TextStyle(
+                              fontWeight: FontWeight.w400, fontSize: 20)),
+                      trailing: const Icon(Icons.code, color: Colors.black),
+                      onTap: () {
+                        final selectedDevice =
+                            userInfoData?["selectedDevice"] ?? "";
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                Limits(selectedDevice: selectedDevice),
+                          ),
+                        );
+                      },
+                    ),
                   SizedBox(
                     height: 10,
                   ),
