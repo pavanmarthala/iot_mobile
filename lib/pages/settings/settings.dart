@@ -41,6 +41,7 @@ class _SettingsState extends State<Settings> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('username');
     prefs.remove('password');
+    prefs.remove('jwt_token');
 
     // Navigate back to the login page
     Navigator.of(context).push(

@@ -197,8 +197,8 @@ class _LandingpageState extends State<Landingpage> {
                                     color: Colors.green,
                                     borderRadius: BorderRadius.circular(30)),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset("assets/on off.jpg"),
+                                  padding: const EdgeInsets.all(0.0),
+                                  child: Image.asset("assets/on off.png"),
                                 ),
                               ),
                             ),

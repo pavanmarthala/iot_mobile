@@ -134,6 +134,8 @@ class _AddDeviceState extends State<AddDevice> {
               TextField(
                 controller: _deviceController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_device_id'.tr,
                 ),
               ),
@@ -145,6 +147,8 @@ class _AddDeviceState extends State<AddDevice> {
               TextField(
                 controller: _devicenameController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_device_name'.tr,
                 ),
               ),
@@ -156,6 +160,8 @@ class _AddDeviceState extends State<AddDevice> {
               TextField(
                 controller: _pinController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_device_pin'.tr,
                 ),
               ),
@@ -167,6 +173,8 @@ class _AddDeviceState extends State<AddDevice> {
               TextField(
                 controller: _simController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_device_sim'.tr,
                 ),
               ),
@@ -178,6 +186,8 @@ class _AddDeviceState extends State<AddDevice> {
               TextField(
                 controller: _topiccontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_topic'.tr,
                 ),
               ),
@@ -189,6 +199,8 @@ class _AddDeviceState extends State<AddDevice> {
               TextField(
                 controller: _zonecontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_zone'.tr,
                 ),
               ),
@@ -200,6 +212,8 @@ class _AddDeviceState extends State<AddDevice> {
               TextField(
                 controller: _serialNocontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_serial_no'.tr,
                 ),
               ),
@@ -211,6 +225,8 @@ class _AddDeviceState extends State<AddDevice> {
               TextField(
                 controller: _mobileNocontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_mobile_number'.tr,
                 ),
               ),

@@ -213,6 +213,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _mobileNocontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_mobile_number'.tr,
                 ),
               ),
@@ -226,6 +228,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _firstnameController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'Enter_first_name'.tr,
                 ),
               ),
@@ -239,6 +243,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _lastnameController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_last_name'.tr,
                 ),
               ),
@@ -252,6 +258,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_email'.tr,
                 ),
               ),
@@ -265,6 +273,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _subscriptioncontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'select_validity'.tr,
                 ),
               ),
@@ -278,6 +288,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _pinController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_device_pin'.tr,
                 ),
               ),
@@ -291,6 +303,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _languagecontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_preferd_language'.tr,
                 ),
               ),
@@ -304,6 +318,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _rolecontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_role'.tr,
                 ),
               ),
@@ -317,6 +333,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _address1controller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_address1'.tr,
                 ),
               ),
@@ -330,6 +348,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _address2controller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_address2'.tr,
                 ),
               ),
@@ -343,6 +363,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _address3controller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_address3'.tr,
                 ),
               ),
@@ -363,6 +385,8 @@ class _dataState extends State<Adduser> {
                 },
                 controller: _statecontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_state'.tr,
                 ),
               ),
@@ -376,6 +400,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _districtcontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_district'.tr,
                 ),
               ),
@@ -386,6 +412,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _zonecontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_zone'.tr,
                 ),
               ),
@@ -399,6 +427,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _citycontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_city'.tr,
                 ),
               ),
@@ -412,6 +442,8 @@ class _dataState extends State<Adduser> {
               TextField(
                 controller: _landmarkcontroller,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_land_mark'.tr,
                 ),
               ),

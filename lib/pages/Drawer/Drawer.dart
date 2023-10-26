@@ -48,7 +48,9 @@ class _MyDrawerState extends State<MyDrawer> {
       final List<dynamic> deviceIdsJson = jsonResponse["deviceIds"];
 
       if (deviceIdsJson is List) {
-        final deviceIds = deviceIdsJson.map((deviceIdJson) => deviceIdJson.toString()).toList();
+        final deviceIds = deviceIdsJson
+            .map((deviceIdJson) => deviceIdJson.toString())
+            .toList();
         return deviceIds;
       } else {
         return <String>[];
@@ -76,45 +78,50 @@ class _MyDrawerState extends State<MyDrawer> {
           }
 
           return Drawer(
-            
-            child: ListView(
-            children: [
-              DrawerHeader(
-                child: Image.asset("assets/logo.png"),
-              ),
-              
-              ListView.builder(
-                shrinkWrap: true, 
-                itemCount: deviceIdsList.length,
-                itemBuilder: (context, index) {
-                  
-              
-                 return  Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        
+            child: Center(
+              child: ListView(children: [
+                DrawerHeader(
+                  child: Image.asset("assets/logo.png"),
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: deviceIdsList.length,
+                  itemBuilder: (context, index) {
+                    return Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          SizedBox(
+                            height: 5,
+                          ),
                           Padding(
-                            padding: const EdgeInsets.only(left: 5, right: 5, top: 10),
+                            padding: const EdgeInsets.only(
+                                left: 5, right: 5, top: 10),
                             child: ElevatedButton(
                               onPressed: () {
-                                
-                                      Navigator.of(context).push(MaterialPageRoute(builder:
-                                       (context) => Homepage(deviceIdsList[index])),);
-// 
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          Homepage(deviceIdsList[index])),
+                                );
+                                //
                                 // Handle button press for each device
                                 // You can navigate to a specific page or perform other actions here
                               },
                               child: Row(
                                 children: [
                                   Text(
-                'device_no:1'.tr,
-                style: TextStyle(color: const Color.fromARGB(255, 195, 51, 41),),
-              ),
+                                    'device_no:1'.tr,
+                                    style: TextStyle(
+                                      color: const Color.fromARGB(
+                                          255, 195, 51, 41),
+                                    ),
+                                  ),
                                   Text(
                                     deviceIdsList[index],
                                     style: TextStyle(
-                                      color: const Color.fromARGB(255, 195, 51, 41),
+                                      color: const Color.fromARGB(
+                                          255, 195, 51, 41),
                                       fontSize: 15,
                                     ),
                                   ),
@@ -134,21 +141,16 @@ class _MyDrawerState extends State<MyDrawer> {
                               ),
                             ),
                           ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-             
-            ]
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ]),
             ),
-            
           );
         }
       },
     );
   }
-
-
-  
 }

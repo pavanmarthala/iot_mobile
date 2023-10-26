@@ -81,6 +81,8 @@ class _LimitsState extends State<Mapdevice> {
               TextField(
                 controller: _userController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_user_id'.tr,
                 ),
               ),
@@ -94,6 +96,8 @@ class _LimitsState extends State<Mapdevice> {
               TextField(
                 controller: _deviceController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_device_id'.tr,
                 ),
               ),

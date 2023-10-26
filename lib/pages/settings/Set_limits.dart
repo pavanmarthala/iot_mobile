@@ -22,41 +22,28 @@ class _LimitsState extends State<Limits> {
   final _maximumVoltageController = TextEditingController();
   final _minimumCurrentController = TextEditingController();
   final _maximumCurrentController = TextEditingController();
-  Future<Map<String, dynamic>>? deviceLimits;
+  // Future<Map<String, dynamic>>? deviceLimits;
 
   @override
   void initState() {
     super.initState();
     if (widget.selectedDevice.isNotEmpty) {
-      deviceLimits = fetchDeviceLimits(widget.selectedDevice);
-      deviceLimits?.then((limits) {
-        if (limits != null) {
-          _minimumVoltageController.text =
-              (limits['minVoltage'] ?? '').toString();
-          _maximumVoltageController.text =
-              (limits['maxVoltage'] ?? '').toString();
-          _minimumCurrentController.text =
-              (limits['minCurrent'] ?? '').toString();
-          _maximumCurrentController.text =
-              (limits['maxCurrent'] ?? '').toString();
-        }
-      }).catchError((error) {
-        // Handle the error here
-        print("Failed to load device limits: $error");
-      });
+      // Fetch and set device limits
+      fetchDeviceLimits();
     }
   }
 
-  Future<Map<String, dynamic>> fetchDeviceLimits(String deviceId) async {
+  Future<void> fetchDeviceLimits() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwtToken = prefs.getString('jwt_token');
 
     if (jwtToken == null) {
-      return {};
+      return;
     }
 
     final response = await http.get(
-      Uri.https('console-api.theja.in', '/device/getLimits/$deviceId'),
+      Uri.https(
+          'console-api.theja.in', '/device/getLimits/${widget.selectedDevice}'),
       headers: {
         "Authorization": "Bearer $jwtToken",
       },
@@ -64,11 +51,163 @@ class _LimitsState extends State<Limits> {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> jsonResponse = json.decode(response.body);
-      print("Device Limits: $jsonResponse"); // Add this line
-      return jsonResponse;
+      _minimumVoltageController.text =
+          (jsonResponse['minVoltage'] ?? '').toString();
+      _maximumVoltageController.text =
+          (jsonResponse['maxVoltage'] ?? '').toString();
+      _minimumCurrentController.text =
+          (jsonResponse['minCurrent'] ?? '').toString();
+      _maximumCurrentController.text =
+          (jsonResponse['maxCurrent'] ?? '').toString();
     } else {
       print('API Response (Error): ${response.body}');
-      throw Exception('Failed to load device limits');
+      // Handle the error, e.g., display an error message
+    }
+  }
+
+  Future<void> setMaximumCurrent(String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken == null) {
+      return;
+    }
+
+    final response = await http.post(
+      Uri.https('console-api.theja.in',
+          '/device/maxCur/${widget.selectedDevice}/$value'),
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Value updated successfully
+      print('Maximum current updated: $value');
+    } else {
+      print('Failed to update maximum current: ${response.body}');
+      // Handle the error, e.g., display an error message
+    }
+  }
+
+  Future<void> setMinimumCurrent(String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken == null) {
+      return;
+    }
+
+    final response = await http.post(
+      Uri.https('console-api.theja.in',
+          '/device/minCur/${widget.selectedDevice}/$value'),
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Value updated successfully
+      print('Minimum current updated: $value');
+    } else {
+      print('Failed to update minimum current: ${response.body}');
+      // Handle the error, e.g., display an error message
+    }
+  }
+
+  Future<void> setMaximumVoltage(String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken == null) {
+      return;
+    }
+
+    final response = await http.post(
+      Uri.https('console-api.theja.in',
+          '/device/maxVol/${widget.selectedDevice}/$value'),
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Value updated successfully
+      print('Maximum voltage updated: $value');
+    } else {
+      print('Failed to update maximum voltage: ${response.body}');
+      // Handle the error, e.g., display an error message
+    }
+  }
+
+  Future<void> setMinimumVoltage(String value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken == null) {
+      return;
+    }
+
+    final response = await http.post(
+      Uri.https('console-api.theja.in',
+          '/device/minVol/${widget.selectedDevice}/$value'),
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+        "Content-Type": "application/json",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Value updated successfully
+      print('Minimum voltage updated: $value');
+    } else {
+      print('Failed to update minimum voltage: ${response.body}');
+      // Handle the error, e.g., display an error message
+    }
+  }
+
+  Future<void> saveLimits() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken == null) {
+      // Handle the case where the token is not found
+      return;
+    }
+
+    final Map<String, dynamic> requestPayload = {
+      "deviceId": widget.selectedDevice,
+      "minVoltage": _minimumVoltageController.text,
+      "maxVoltage": _maximumVoltageController.text,
+      "minCurrent": _minimumCurrentController.text,
+      "maxCurrent": _maximumCurrentController.text,
+    };
+
+    final response = await http.post(
+      Uri.https('console-api.theja.in', '/device/setLimits'),
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+        "Content-Type": "application/json",
+      },
+      body: jsonEncode(requestPayload),
+    );
+
+    if (response.statusCode == 200) {
+      // Limits saved successfully
+      // You can handle the success case here
+      print('Limits saved successfully');
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) =>
+              Settings(), // Replace with the correct settings page
+        ),
+      );
+    } else {
+      print('Failed to save limits: ${response.body}');
+      // Handle the error case here
     }
   }
 
@@ -80,11 +219,12 @@ class _LimitsState extends State<Limits> {
         // padding: EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) => Settings(),
-              ),
-            );
+            // Navigator.of(context).push(
+            //   MaterialPageRoute(
+            //     builder: (context) => Settings(),
+            //   ),
+            // );
+            saveLimits();
           },
           style: ElevatedButton.styleFrom(
             primary: Colors.green,
@@ -142,13 +282,11 @@ class _LimitsState extends State<Limits> {
                   );
                 },
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'Select Device'.tr,
                 ),
                 controller: TextEditingController(text: widget.selectedDevice),
-              ),
-              Container(
-                height: 1,
-                color: Colors.grey,
               ),
               SizedBox(
                 height: 20,
@@ -160,6 +298,8 @@ class _LimitsState extends State<Limits> {
               TextField(
                 controller: _minimumVoltageController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_minimum_voltage'.tr,
                 ),
               ),
@@ -173,6 +313,8 @@ class _LimitsState extends State<Limits> {
               TextField(
                 controller: _maximumVoltageController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_maximum_voltage'.tr,
                 ),
               ),
@@ -186,6 +328,8 @@ class _LimitsState extends State<Limits> {
               TextField(
                 controller: _minimumCurrentController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_minimum_current'.tr,
                 ),
               ),
@@ -199,6 +343,8 @@ class _LimitsState extends State<Limits> {
               TextField(
                 controller: _maximumCurrentController,
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20, vertical: 0),
                   hintText: 'enter_maximum_current'.tr,
                 ),
               ),

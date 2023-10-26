@@ -31,10 +31,10 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
           TextButton(
             onPressed: () {
               Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => Adminlandingpage(),
-                                ),
-                              );
+                MaterialPageRoute(
+                  builder: (context) => Adminlandingpage(),
+                ),
+              );
               // Navigate back to the sign-in page or any other page as needed.
             },
             child: Text('ok'.tr),
@@ -49,134 +49,159 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 165, 227, 106),
-
         iconTheme: IconThemeData(color: Colors.black),
-         title:  Text('new_pass'.tr, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.black),),
-         actions: [
+        title: Text(
+          'new_pass'.tr,
+          style: TextStyle(
+              fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black),
+        ),
+        actions: [
           Padding(
             padding: EdgeInsets.only(right: 30),
             child: GestureDetector(
-              onTap: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Langscreen(),),);
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Langscreen(),
+                  ),
+                );
               },
               child: CircleAvatar(
                 radius: 18,
-        backgroundColor: Color.fromARGB(255, 165, 227, 106),
+                backgroundColor: Color.fromARGB(255, 165, 227, 106),
 
-                // backgroundImage: AssetImage('assets/language-icon.png'), 
+                // backgroundImage: AssetImage('assets/language-icon.png'),
                 child: SvgPicture.asset(
-  'assets/language-icon.svg',
-  // width: 100.0, // Adjust the width as needed
-  // height: 100.0, // Adjust the height as needed
-),
-
+                  'assets/language-icon.svg',
+                  // width: 100.0, // Adjust the width as needed
+                  // height: 100.0, // Adjust the height as needed
+                ),
               ),
             ),
           ),
-           
-         ],
-       ),
+        ],
+      ),
       backgroundColor: Colors.green,
       body: Stack(
         fit: StackFit.expand,
-
         children: [
           Image.asset(
             "assets/loginbg.jpg",
             fit: BoxFit.cover,
           ),
-         Center(
-           child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Card(
-                  elevation: 4.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Container(
-                    padding: EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Card(
+                    elevation: 4.0,
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'new_pass'.tr,
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        TextFormField(
-                          controller: newPasswordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: "enter_new_pass".tr,
-                            labelText: "enter_new_pass".tr,
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        TextFormField(
-                          controller: confirmNewPasswordController,
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            hintText: "confirm_pass".tr,
-                            labelText: "confirm_pass".tr,
-                          ),
-                        ),
-                        SizedBox(height: 10.0),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: _updatePassword,
-                            child: Text("update_pass".tr),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.green,
-                              fixedSize: Size(650, 50),
+                    child: Container(
+                      padding: EdgeInsets.all(16.0),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'new_pass'.tr,
+                            style: TextStyle(
+                              fontSize: 20,
                             ),
                           ),
-                        ),
-                        SizedBox(height: 10),
-                        Row(
-                          children: [
-                            Text(
-                              'go_to_signin'.tr,
-                              style: TextStyle(color: Colors.grey),
+                          SizedBox(height: 20),
+                          Text(
+                            "enter_new_pass".tr,
+                            style: TextStyle(
+                              fontSize: 20,
                             ),
-                            SizedBox(
-                              width: 5,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: newPasswordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 0),
+                              hintText: "enter_new_pass".tr,
                             ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => SingIN(),
-                                  ),
-                                );
-                              },
-                              child: Text(
-                                "click".tr,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                          ),
+                          SizedBox(height: 20.0),
+                          Text(
+                            "confirm_pass".tr,
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextFormField(
+                            controller: confirmNewPasswordController,
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 0),
+                              hintText: "confirm_pass".tr,
+                              labelText: "confirm_pass".tr,
+                            ),
+                          ),
+                          SizedBox(height: 20.0),
+                          Center(
+                            child: ElevatedButton(
+                              onPressed: _updatePassword,
+                              child: Text("update_pass".tr),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.green,
+                                fixedSize: Size(650, 50),
                               ),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Text(
+                                'go_to_signin'.tr,
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                      builder: (context) => SingIN(),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  "click".tr,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-                 ),
-         ),
+          ),
         ],
       ),
     );
