@@ -126,7 +126,7 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => Mapdevices(),
+                          builder: (context) => MapDevices(),
                         ),
                       );
 

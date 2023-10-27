@@ -6,6 +6,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+class StateSelection {
+  final String selectedState;
+
+  StateSelection(this.selectedState);
+}
+
 class SelectState extends StatefulWidget {
   const SelectState({Key? key}) : super(key: key);
 
@@ -56,6 +62,10 @@ class _SelectStateState extends State<SelectState> {
       print('API Response (Error): ${response.body}');
       throw Exception('Failed to load device IDs');
     }
+  }
+
+  void _selectStateAndNavigate(BuildContext context, String selectedState) {
+    Navigator.pop(context, StateSelection(selectedState));
   }
 
   @override
@@ -120,7 +130,10 @@ class _SelectStateState extends State<SelectState> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         MaterialButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            _selectStateAndNavigate(
+                                context, deviceIdsList[index]);
+                          },
                           child: Row(
                             children: [
                               Text(

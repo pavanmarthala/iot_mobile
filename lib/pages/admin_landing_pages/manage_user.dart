@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
@@ -37,6 +39,26 @@ class _UsersState extends State<Users> {
     if (jwtToken == null) {
       // Handle the case where the token is not found
       // return null;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            // ignore: prefer_const_constructors
+            title: Text('Error'),
+            // ignore: prefer_const_constructors
+            content: Text('Token was not Fount . Please try again later.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                // ignore: prefer_const_constructors
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
     final response = await http.get(
       Uri.https('console-api.theja.in', '/admin/getAllUsers'),

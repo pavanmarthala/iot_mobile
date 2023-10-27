@@ -1,6 +1,9 @@
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:iot_mobile_app/pages/admin_landing_pages/Add_user.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/add_device.dart';
@@ -23,18 +26,20 @@ class Device {
   Device(this.deviceId, this.name);
 }
 
-class Mapdevices extends StatefulWidget {
-  const Mapdevices({Key? key}) : super(key: key);
+class MapDevices extends StatefulWidget {
+  const MapDevices({Key? key}) : super(key: key);
 
   @override
-  State<Mapdevices> createState() => _MapdevicesState();
+  _MapDevicesState createState() => _MapDevicesState();
 }
 
-class _MapdevicesState extends State<Mapdevices> {
+class _MapDevicesState extends State<MapDevices> {
   List<User> users = [];
   List<Device> devices = [];
   List<User> searchedUsers = [];
   List<Device> searchedDevices = [];
+  List<String> selectedUserMobiles = [];
+  List<String> selectedDeviceIds = [];
 
   void searchUsers(String query) {
     setState(() {
@@ -66,6 +71,82 @@ class _MapdevicesState extends State<Mapdevices> {
     });
   }
 
+  void selectUser(String mobile) {
+    setState(() {
+      if (selectedUserMobiles.contains(mobile)) {
+        selectedUserMobiles.remove(mobile);
+      } else {
+        selectedUserMobiles.add(mobile);
+      }
+    });
+  }
+
+  void selectDevice(String deviceId) {
+    setState(() {
+      if (selectedDeviceIds.contains(deviceId)) {
+        selectedDeviceIds.remove(deviceId);
+      } else {
+        selectedDeviceIds.add(deviceId);
+      }
+    });
+  }
+
+  Future<void> mapDevices() async {
+    // Iterate over selected users and devices and send API requests
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken == null) {
+      // Handle the case where the token is not found
+      return;
+    }
+
+    for (String mobile in selectedUserMobiles) {
+      for (String deviceId in selectedDeviceIds) {
+        try {
+          final response = await http.post(
+            Uri.parse(
+                'https://console-api.theja.in/admin/mapDevice/$deviceId/$mobile'),
+            headers: {
+              "Authorization": "Bearer $jwtToken",
+              "Content-Type": "application/json",
+            },
+          );
+
+          if (response.statusCode == 200) {
+            // Successfully mapped the device to the user
+            // You can add further handling if needed
+            print('Mapped successfully');
+          } else {
+            throw Exception(
+                'Failed to map device. Status code: ${response.statusCode}');
+          }
+        } catch (e) {
+          throw Exception('Failed to map device. Error: $e');
+          // Handle the error gracefully, e.g., by displaying a dialog with the error message
+          // showDialog(
+          //   context: context,
+          //   builder: (context) {
+          //     return AlertDialog(
+          //       title: Text('Error'),
+          //       content:
+          //           Text('Failed to map the device. Please try again later.'),
+          //       actions: [
+          //         TextButton(
+          //           onPressed: () {
+          //             Navigator.of(context).pop();
+          //           },
+          //           child: Text('OK'),
+          //         ),
+          //       ],
+          //     );
+          //   },
+          // );
+        }
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -78,7 +159,7 @@ class _MapdevicesState extends State<Mapdevices> {
 
     if (jwtToken == null) {
       // Handle the case where the token is not found
-      // return null;
+      return;
     }
 
     try {
@@ -150,8 +231,13 @@ class _MapdevicesState extends State<Mapdevices> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.green,
-        title: const Text('User and Device Selection'),
+        title: Text(
+          "map_user_to_device".tr,
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22),
+        ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 30),
@@ -182,8 +268,8 @@ class _MapdevicesState extends State<Mapdevices> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            // User container with search box
             Container(
+              height: 150,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.grey,
@@ -193,7 +279,6 @@ class _MapdevicesState extends State<Mapdevices> {
                 children: [
                   Row(
                     children: [
-                      // User container text
                       Container(
                         padding: const EdgeInsets.all(10),
                         child: const Text(
@@ -205,21 +290,23 @@ class _MapdevicesState extends State<Mapdevices> {
                           ),
                         ),
                       ),
-                      // Search box
                       Container(
                         height: 32,
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         width: 230,
-                        child: TextField(
-                          onChanged: searchUsers,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
+                        child: Expanded(
+                          child: TextField(
+                            onChanged: searchUsers,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              fillColor:
+                                  const Color.fromARGB(255, 251, 247, 247),
+                              filled: true,
+                              suffixIcon: const Icon(Icons.search),
                             ),
-                            fillColor: const Color.fromARGB(255, 251, 247, 247),
-                            filled: true,
-                            suffixIcon: const Icon(Icons.search),
                           ),
                         ),
                       ),
@@ -229,51 +316,53 @@ class _MapdevicesState extends State<Mapdevices> {
                     height: 10,
                   ),
                   if (searchedUsers.isNotEmpty)
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Container(
-                        height: 70,
-                        width: 300,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Expanded(
-                          child: ListView(
-                            children: searchedUsers.map((user) {
-                              return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 10,
-                                      left: 20,
-                                    ),
-                                    child: Text(
-                                      user.name,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: searchedUsers.length,
+                        itemBuilder: (context, index) {
+                          final user = searchedUsers[index];
+                          final selected =
+                              selectedUserMobiles.contains(user.mobile);
+
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: ListTile(
+                                title: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 45.0, top: 10),
+                                  child: Text(
+                                    user.name,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 5,
-                                      left: 20,
-                                    ),
-                                    child: Text(
-                                      user.mobile,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                ),
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 45.0, bottom: 13),
+                                  child: Text(
+                                    user.mobile,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        ),
+                                ),
+                                onTap: () {
+                                  selectUser(user.mobile);
+                                },
+                                leading: Icon(
+                                  selected ? Icons.check_circle : Icons.circle,
+                                  color: selected ? Colors.green : Colors.grey,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                 ],
@@ -282,8 +371,8 @@ class _MapdevicesState extends State<Mapdevices> {
             const SizedBox(
               height: 10,
             ),
-            // Device container
             Container(
+              height: 150,
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.grey,
@@ -293,9 +382,8 @@ class _MapdevicesState extends State<Mapdevices> {
                 children: [
                   Row(
                     children: [
-                      // Device container text
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.only(left: 5, top: 5),
                         child: const Text(
                           'Device ',
                           style: TextStyle(
@@ -305,21 +393,23 @@ class _MapdevicesState extends State<Mapdevices> {
                           ),
                         ),
                       ),
-                      // Search box
                       Container(
                         height: 32,
-                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        margin: const EdgeInsets.only(left: 10, top: 10),
                         width: 230,
-                        child: TextField(
-                          onChanged: searchDevices,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(30),
-                              borderSide: BorderSide.none,
+                        child: Expanded(
+                          child: TextField(
+                            onChanged: searchDevices,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(30),
+                                borderSide: BorderSide.none,
+                              ),
+                              fillColor:
+                                  const Color.fromARGB(255, 246, 242, 242),
+                              filled: true,
+                              suffixIcon: const Icon(Icons.search),
                             ),
-                            fillColor: const Color.fromARGB(255, 246, 242, 242),
-                            filled: true,
-                            suffixIcon: const Icon(Icons.search),
                           ),
                         ),
                       ),
@@ -329,50 +419,53 @@ class _MapdevicesState extends State<Mapdevices> {
                     height: 10,
                   ),
                   if (searchedDevices.isNotEmpty)
-                    SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Container(
-                        height: 70,
-                        width: 300,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Expanded(
-                          child: ListView(
-                            children: searchedDevices.map((device) {
-                              return Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 10,
-                                      left: 20,
-                                    ),
-                                    child: Text(
-                                      device.name,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: searchedDevices.length,
+                        itemBuilder: (context, index) {
+                          final device = searchedDevices[index];
+                          final selected =
+                              selectedDeviceIds.contains(device.deviceId);
+
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: ListTile(
+                                title: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 45.0, top: 10),
+                                  child: Text(
+                                    device.name,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                      top: 5,
-                                      left: 20,
-                                    ),
-                                    child: Text(
-                                      device.deviceId,
-                                      style: const TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                ),
+                                subtitle: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 45.0, bottom: 13),
+                                  child: Text(
+                                    device.deviceId,
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
                                   ),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        ),
+                                ),
+                                onTap: () {
+                                  selectDevice(device.deviceId);
+                                },
+                                leading: Icon(
+                                  selected ? Icons.check_circle : Icons.circle,
+                                  color: selected ? Colors.green : Colors.grey,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                 ],
@@ -381,10 +474,9 @@ class _MapdevicesState extends State<Mapdevices> {
             const SizedBox(
               height: 30,
             ),
-            // Save button
             ElevatedButton(
               onPressed: () {
-                // Save user and device selection
+                mapDevices();
               },
               child: const Text('Save'),
               style: ElevatedButton.styleFrom(
@@ -421,7 +513,7 @@ class _MapdevicesState extends State<Mapdevices> {
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => Adminlandingpage(),
+                            builder: (context) => const Adminlandingpage(),
                           ),
                         );
                       },
@@ -443,7 +535,7 @@ class _MapdevicesState extends State<Mapdevices> {
                         onPressed: () {
                           Navigator.of(context).push(
                             MaterialPageRoute(
-                              builder: (context) => Adduser(),
+                              builder: (context) => const Adduser(),
                             ),
                           );
                         },

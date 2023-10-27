@@ -1,9 +1,11 @@
 // ignore_for_file: prefer_const_constructors
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Mapdevice extends StatefulWidget {
   const Mapdevice({super.key});
@@ -23,7 +25,46 @@ class _LimitsState extends State<Mapdevice> {
         width: double.infinity,
         // padding: EdgeInsets.all(16.0),
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: () async {
+            String userId = _userController.text;
+            String deviceId = _deviceController.text;
+
+            // Get the JWT token from SharedPreferences
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            String? jwtToken = prefs.getString('jwt_token');
+
+            if (jwtToken == null) {
+              // Handle the case where the token is missing
+              return;
+            }
+
+            // Prepare the headers with the JWT token
+            Map<String, String> headers = {
+              'Authorization': 'Bearer $jwtToken',
+              "Content-Type": "application/json",
+            };
+
+            // Make the API POST request with headers
+            Uri apiUrl = Uri.parse(
+                'https://console-api.theja.in/admin/mapDevice/$deviceId/$userId');
+            http.post(apiUrl, headers: headers).then((response) {
+              if (response.statusCode == 200) {
+                // Request was successful
+                print('API request successful');
+                // You can add further actions here if needed
+              } else {
+                // Request failed
+                print(
+                    'API request failed with status code: ${response.statusCode}');
+                print('Response body: ${response.body}');
+                // You can handle the error here
+              }
+            }).catchError((error) {
+              // Request failed
+              print('API request failed with error: $error');
+              // You can handle the error here
+            });
+          },
           style: ElevatedButton.styleFrom(
             primary: Colors.green,
             padding: EdgeInsets.symmetric(vertical: 20),

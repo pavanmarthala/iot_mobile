@@ -8,87 +8,27 @@ import 'package:get/get.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:iot_mobile_app/models/add_user_model.dart';
+import 'package:iot_mobile_app/pages/admin_landing_pages/select_destrict.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/select_state.dart';
+import 'package:iot_mobile_app/pages/admin_landing_pages/select_zone.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 // import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Adduser extends StatefulWidget {
-  const Adduser({super.key});
+  final String? selectedState;
+
+  const Adduser({Key? key, this.selectedState}) : super(key: key);
 
   @override
-  State<Adduser> createState() => _dataState();
+  _AdduserrState createState() => _AdduserrState(selectedState: selectedState);
 }
 
-Future<AdduserModel?> add(
-  String email,
-  String mobile,
-  String pin,
-  String preferredLanguage,
-  String role,
-  String subscriptionValidity,
-  String addressLine1,
-  String addressLine2,
-  String addressLine3,
-  String city,
-  String district,
-  String landMark,
-  // String pinCode,
-  String state,
-  String firstName,
-  String lastName,
-  String zone,
-) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? jwtToken =
-      prefs.getString('jwt_token'); // Retrieve the JWT token from local storage
+class _AdduserrState extends State<Adduser> {
+  String? selectedState;
+  String? selectedDistrict;
 
-  if (jwtToken == null) {
-    // Handle the case where the token is not found
-    return null;
-  }
-  var response = await http.post(
-    Uri.https('console-api.theja.in', 'admin/addUser'),
-    body: jsonEncode({
-      "active": "true",
-      "email": email,
-      "mobile": mobile,
-      "pin": pin,
-      "preferredLanguage": preferredLanguage,
-      "role": role,
-      "subscriptionValidity": subscriptionValidity,
-      "userDetails": {
-        "address": {
-          "addressLine1": addressLine1,
-          "addressLine2": addressLine2,
-          "addressLine3": addressLine3,
-          "city": city,
-          "district": district,
-          "landMark": landMark,
-          // "pinCode": pinCode,
-          "state": state,
-        },
-        "firstName": firstName,
-        "lastName": lastName,
-      },
-      "zone": zone,
-    }),
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $jwtToken'
-    },
-  );
-  var data = response.body;
-  print(data);
-  if (response.statusCode == 200) {
-    String responseString = response.body;
-    adduserModelFromJson(responseString);
-  } else {
-    return null;
-  }
-}
-
-class _dataState extends State<Adduser> {
+  _AdduserrState({this.selectedState});
   final _lastnameController = TextEditingController();
   final _firstnameController = TextEditingController();
   final _pinController = TextEditingController();
@@ -115,46 +55,93 @@ class _dataState extends State<Adduser> {
         // padding: EdgeInsets.all(16.0),
         child: ElevatedButton(
           onPressed: () async {
+            String mobileNumber = _mobileNocontroller.text;
+            String firstName = _firstnameController.text;
+            String lastName = _lastnameController.text;
             String email = _emailController.text;
-            String mobile = _mobileNocontroller.text;
+            String subscriptionValidity = _subscriptioncontroller.text;
             String pin = _pinController.text;
             String preferredLanguage = _languagecontroller.text;
             String role = _rolecontroller.text;
-            String subscriptionValidity = _subscriptioncontroller.text;
-            String addressLine1 = _address1controller.text;
-            String addressLine2 = _address2controller.text;
-            String addressLine3 = _address3controller.text;
-            String city = _citycontroller.text;
-            String district = _districtcontroller.text;
-            String landMark = _landmarkcontroller.text;
-            // String pinCode,
+            String address1 = _address1controller.text;
+            String address2 = _address2controller.text;
+            String address3 = _address3controller.text;
             String state = _statecontroller.text;
-            String firstName = _firstnameController.text;
-            String lastName = _lastnameController.text;
+            String district = _districtcontroller.text;
             String zone = _zonecontroller.text;
+            String city = _citycontroller.text;
+            String landmark = _landmarkcontroller.text;
 
-            AdduserModel? data = await add(
-                email,
-                mobile,
-                pin,
-                preferredLanguage,
-                role,
-                subscriptionValidity,
-                addressLine1,
-                addressLine2,
-                addressLine3,
-                city,
-                district,
-                landMark,
-                state,
-                firstName,
-                lastName,
-                zone);
-            if (data != null) {
-              setState(() {
-                _addusermodel = data;
-              });
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            String? jwtToken = prefs.getString('jwt_token');
+
+            if (jwtToken == null) {
+              // Handle the case where the token is missing
+              return;
             }
+
+            // Prepare the request body to match the API's expected structure
+            Map<String, dynamic> requestBody = {
+              "active": true,
+              "email": email,
+              "mobile": mobileNumber,
+              "pin": pin,
+              "preferredLanguage": preferredLanguage,
+              "role": role,
+              "subscriptionValidity": subscriptionValidity,
+              "userDetails": {
+                "address": {
+                  "addressLine1": address1,
+                  "addressLine2": address2,
+                  "addressLine3": address3,
+                  "city": city,
+                  "district": district,
+                  "landMark": landmark,
+                  "state": state,
+                  "pinCode":
+                      "string", // You may want to replace this with an actual pin code
+                },
+                "firstName": firstName,
+                "lastName": lastName,
+                "name": "$firstName $lastName",
+              },
+              "zone": zone,
+            };
+
+            // Prepare the headers with the JWT token
+            Map<String, String> headers = {
+              'Authorization': 'Bearer $jwtToken',
+              'Content-Type': 'application/json', // Specify JSON content type
+            };
+
+            // Make the API POST request with headers and request body
+            Uri apiUrl =
+                Uri.parse('https://console-api.theja.in/admin/addUser');
+            http
+                .post(
+              apiUrl,
+              headers: headers,
+              body: jsonEncode(requestBody), // Convert request body to JSON
+            )
+                .then((response) {
+              if (response.statusCode == 200) {
+                // Request was successful
+                print('API request successful');
+                // Parse the response if needed
+                final responseJson = jsonDecode(response.body);
+                // Handle the response data as required
+              } else {
+                // Request failed
+                print(
+                    'API request failed with status code: ${response.statusCode}');
+                print('Response body: ${response.body}');
+                // You can handle the error here
+              }
+            }).catchError((error) {
+              // Request failed
+              print('API request failed with error: $error');
+              // You can handle the error here
+            });
           },
           style: ElevatedButton.styleFrom(
             primary: Colors.green,
@@ -376,12 +363,19 @@ class _dataState extends State<Adduser> {
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
-                onTap: () {
-                  Navigator.of(context).push(
+                onTap: () async {
+                  final result = await Navigator.push<StateSelection>(
+                    context,
                     MaterialPageRoute(
                       builder: (context) => SelectState(),
                     ),
                   );
+
+                  if (result != null) {
+                    setState(() {
+                      _statecontroller.text = result.selectedState;
+                    });
+                  }
                 },
                 controller: _statecontroller,
                 decoration: InputDecoration(
@@ -398,6 +392,21 @@ class _dataState extends State<Adduser> {
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
+                onTap: () async {
+                  final selectedDistrict =
+                      await Navigator.of(context).push<String>(
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          SelectDistrict(_statecontroller.text),
+                    ),
+                  );
+
+                  if (selectedDistrict != null) {
+                    setState(() {
+                      _districtcontroller.text = selectedDistrict;
+                    });
+                  }
+                },
                 controller: _districtcontroller,
                 decoration: InputDecoration(
                   contentPadding:
@@ -410,6 +419,20 @@ class _dataState extends State<Adduser> {
                 style: Theme.of(context).textTheme.headline6,
               ),
               TextField(
+                onTap: () async {
+                  final selectedZone = await Navigator.of(context).push<String>(
+                    MaterialPageRoute(
+                      builder: (context) => SelectZone(
+                          _statecontroller.text, _districtcontroller.text),
+                    ),
+                  );
+
+                  if (selectedZone != null) {
+                    setState(() {
+                      _zonecontroller.text = selectedZone;
+                    });
+                  }
+                },
                 controller: _zonecontroller,
                 decoration: InputDecoration(
                   contentPadding:

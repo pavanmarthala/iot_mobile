@@ -40,6 +40,23 @@ class _ManagedeviceState extends State<Managedevice> {
     if (jwtToken == null) {
       // Handle the case where the token is not found
       // return null;
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text('Token was not Fount . Please try again later.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
     final response = await http.get(
       Uri.https('console-api.theja.in', '/admin/getAllDevices'),
@@ -158,7 +175,7 @@ class _ManagedeviceState extends State<Managedevice> {
                         ),
                       ),
                     ),
-                    Container(
+                    SizedBox(
                       height: 650,
                       child: Expanded(
                         child: ListView(
