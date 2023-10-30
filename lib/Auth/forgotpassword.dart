@@ -176,45 +176,45 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               ),
                             ),
                           SizedBox(height: 20.0),
-                          // Center(
-                          //   child: ElevatedButton(
-                          //     onPressed: isOtpSent ? _verifyOtp : _sendOtp,
-                          //     child: Text(
-                          //         isOtpSent ? "verify_otp".tr : "send_otp".tr),
-                          //     style: ElevatedButton.styleFrom(
-                          //       backgroundColor: Colors
-                          //           .green, // Change the button's background color
-                          //       fixedSize:
-                          //           Size(650, 50), // Increase the button's size
-                          //     ),
-                          //   ),
-                          // ),
                           Center(
-                            child: AnimatedButton(
-                                onTap: isOtpSent ? _verifyOtp : _sendOtp,
-                                animationDuration:
-                                    const Duration(milliseconds: 3000),
-                                initialText:
-                                    isOtpSent ? "verify_otp".tr : "send_otp".tr,
-                                finalText:
-                                    isOtpSent ? 'OTP Verfied' : "OTP Sent",
-                                iconData: Icons.check,
-                                iconSize: 32.0,
-                                buttonStyle: buttonstyle(
-                                  primaryColor: Colors.green.shade600,
-                                  secondaryColor: Colors.white,
-                                  initialTextStyle: TextStyle(
-                                    fontSize: 22.0,
-                                    color: Colors.white,
-                                  ),
-                                  finalTextStyle: TextStyle(
-                                    fontSize: 22.0,
-                                    color: Colors.green.shade600,
-                                  ),
-                                  elevation: 20.0,
-                                  borderRadius: 10.0,
-                                )),
+                            child: ElevatedButton(
+                              onPressed: isOtpSent ? _verifyOtp : _sendOtp,
+                              child: Text(
+                                  isOtpSent ? "verify_otp".tr : "send_otp".tr),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors
+                                    .green, // Change the button's background color
+                                fixedSize:
+                                    Size(650, 50), // Increase the button's size
+                              ),
+                            ),
                           ),
+                          // Center(
+                          //   child: AnimatedButton(
+                          //       onTap: isOtpSent ? _verifyOtp : _sendOtp,
+                          //       animationDuration:
+                          //           const Duration(milliseconds: 3000),
+                          //       initialText:
+                          //           isOtpSent ? "verify_otp".tr : "send_otp".tr,
+                          //       finalText:
+                          //           isOtpSent ? 'OTP Verfied' : "OTP Sent",
+                          //       iconData: Icons.check,
+                          //       iconSize: 32.0,
+                          //       buttonStyle: buttonstyle(
+                          //         primaryColor: Colors.green.shade600,
+                          //         secondaryColor: Colors.white,
+                          //         initialTextStyle: TextStyle(
+                          //           fontSize: 22.0,
+                          //           color: Colors.white,
+                          //         ),
+                          //         finalTextStyle: TextStyle(
+                          //           fontSize: 22.0,
+                          //           color: Colors.green.shade600,
+                          //         ),
+                          //         elevation: 20.0,
+                          //         borderRadius: 10.0,
+                          //       )),
+                          // ),
                           SizedBox(
                             height: 10,
                           ),

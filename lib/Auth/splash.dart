@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
       // Check user role
       List<dynamic> authorities = decodedToken['authorities'];
-      if (authorities.contains('Admin') || authorities.contains('superAdmin')) {
+      if (authorities.contains('admin') || authorities.contains('superAdmin')) {
         // User is a superadmin, navigate to AdminLandingPage.
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => Adminlandingpage()));

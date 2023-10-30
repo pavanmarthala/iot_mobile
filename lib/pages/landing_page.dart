@@ -19,15 +19,20 @@ class Landingpage extends StatefulWidget {
 }
 
 class _LandingpageState extends State<Landingpage> {
-  Future<List<Map<String, String>>>? devices;
+//   bool isSwitchedn = false;
+//  bool motorbox = false;
+//   bool powerStatusn = false;
+
+  Future<List<Map<String, dynamic>>>? devices;
 
   @override
   void initState() {
     super.initState();
+
     devices = fetchDevices();
   }
 
-  Future<List<Map<String, String>>> fetchDevices() async {
+  Future<List<Map<String, dynamic>>> fetchDevices() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwtToken = prefs.getString('jwt_token');
 
@@ -44,17 +49,21 @@ class _LandingpageState extends State<Landingpage> {
 
     if (response.statusCode == 200) {
       final List<dynamic> jsonResponse = json.decode(response.body);
+      print(jsonResponse);
 
       if (jsonResponse is List) {
         final devices = jsonResponse.map((device) {
           return {
             "deviceId": device["deviceId"].toString(),
             "name": device["name"].toString(),
+            "powerStatusn": device["powerAvailable"],
+            "isSwitchedn": device["givenState"],
+            "motorbox": device["deviceState"],
           };
         }).toList();
         return devices;
       } else {
-        return <Map<String, String>>[];
+        return <Map<String, dynamic>>[];
       }
     } else {
       print('API Response (Error): ${response.body}');
@@ -100,7 +109,7 @@ class _LandingpageState extends State<Landingpage> {
           ),
         ],
       ),
-      body: FutureBuilder<List<Map<String, String>>>(
+      body: FutureBuilder<List<Map<String, dynamic>>>(
         future: devices,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -169,7 +178,9 @@ class _LandingpageState extends State<Landingpage> {
                                 height: 55,
                                 width: 120,
                                 decoration: BoxDecoration(
-                                    color: Colors.green,
+                                    color: device["powerStatusn"]
+                                        ? Colors.green
+                                        : const Color.fromARGB(255, 253, 18, 1),
                                     borderRadius: BorderRadius.circular(30)),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -182,7 +193,10 @@ class _LandingpageState extends State<Landingpage> {
                                   height: 55,
                                   width: 120,
                                   decoration: BoxDecoration(
-                                      color: Colors.green,
+                                      color: device["motorbox"]
+                                          ? Colors.green
+                                          : const Color.fromARGB(
+                                              255, 253, 18, 1),
                                       borderRadius: BorderRadius.circular(30)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
@@ -196,11 +210,16 @@ class _LandingpageState extends State<Landingpage> {
                                   height: 55,
                                   width: 120,
                                   decoration: BoxDecoration(
-                                      color: Colors.green,
+                                      color: device["isSwitchedn"]
+                                          ? Colors.green
+                                          : const Color.fromARGB(
+                                              255, 253, 18, 1),
                                       borderRadius: BorderRadius.circular(30)),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: Image.asset("assets/on off.png"),
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: device["isSwitchedn"]
+                                        ? Image.asset("assets/off.jpg")
+                                        : Image.asset("assets/on.jpg"),
                                   ),
                                 ),
                               ),
