@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:iot_mobile_app/animited_button.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/Add_user.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/add_device.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
@@ -474,19 +475,46 @@ class _MapDevicesState extends State<MapDevices> {
             const SizedBox(
               height: 30,
             ),
-            ElevatedButton(
-              onPressed: () {
-                mapDevices();
-              },
-              child: const Text('Save'),
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: const Color.fromARGB(234, 42, 228, 138),
-                fixedSize: const Size(220, 50),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     mapDevices();
+            //   },
+            //   child: const Text('Save'),
+            //   style: ElevatedButton.styleFrom(
+            //     foregroundColor: Colors.black,
+            //     backgroundColor: const Color.fromARGB(234, 42, 228, 138),
+            //     fixedSize: const Size(220, 50),
+            //     shape: RoundedRectangleBorder(
+            //       borderRadius: BorderRadius.circular(10),
+            //     ),
+            //   ),
+            // ),
+            Center(
+              child: AnimatedButton(
+                  onTap: () {
+                    mapDevices();
+
+                    // print("animated button pressed");
+                  },
+                  animationDuration: const Duration(milliseconds: 2000),
+                  initialText: "Confirm",
+                  finalText: "Submitted",
+                  iconData: Icons.check,
+                  iconSize: 32.0,
+                  buttonStyle: buttonstyle(
+                    primaryColor: Colors.green.shade600,
+                    secondaryColor: Colors.white,
+                    initialTextStyle: TextStyle(
+                      fontSize: 22.0,
+                      color: Colors.white,
+                    ),
+                    finalTextStyle: TextStyle(
+                      fontSize: 22.0,
+                      color: Colors.green.shade600,
+                    ),
+                    elevation: 20.0,
+                    borderRadius: 10.0,
+                  )),
             ),
           ],
         ),

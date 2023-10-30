@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/Auth/singin.dart';
+import 'package:iot_mobile_app/animited_button.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 // import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
@@ -155,15 +156,39 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                             ),
                           ),
                           SizedBox(height: 20.0),
+                          // Center(
+                          //   child: ElevatedButton(
+                          //     onPressed: _updatePassword,
+                          //     child: Text("update_pass".tr),
+                          //     style: ElevatedButton.styleFrom(
+                          //       primary: Colors.green,
+                          //       fixedSize: Size(650, 50),
+                          //     ),
+                          //   ),
+                          // ),
                           Center(
-                            child: ElevatedButton(
-                              onPressed: _updatePassword,
-                              child: Text("update_pass".tr),
-                              style: ElevatedButton.styleFrom(
-                                primary: Colors.green,
-                                fixedSize: Size(650, 50),
-                              ),
-                            ),
+                            child: AnimatedButton(
+                                onTap: _updatePassword,
+                                animationDuration:
+                                    const Duration(milliseconds: 2000),
+                                initialText: "update_pass".tr,
+                                finalText: "PIN Updated",
+                                iconData: Icons.check,
+                                iconSize: 32.0,
+                                buttonStyle: buttonstyle(
+                                  primaryColor: Colors.green.shade600,
+                                  secondaryColor: Colors.white,
+                                  initialTextStyle: TextStyle(
+                                    fontSize: 22.0,
+                                    color: Colors.white,
+                                  ),
+                                  finalTextStyle: TextStyle(
+                                    fontSize: 22.0,
+                                    color: Colors.green.shade600,
+                                  ),
+                                  elevation: 20.0,
+                                  borderRadius: 10.0,
+                                )),
                           ),
                           SizedBox(height: 10),
                           Row(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iot_mobile_app/animited_button.dart';
 // import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/manage_device.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/map_devices.dart';
@@ -173,6 +174,32 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                     ),
                   ),
                 ),
+
+                // Center(
+                //   child: AnimatedButton(
+                //       onTap: () {
+                //         print("animated button pressed");
+                //       },
+                //       animationDuration: const Duration(milliseconds: 2000),
+                //       initialText: "Confirm",
+                //       finalText: "Submitted",
+                //       iconData: Icons.check,
+                //       iconSize: 32.0,
+                //       buttonStyle: buttonstyle(
+                //         primaryColor: Colors.green.shade600,
+                //         secondaryColor: Colors.white,
+                //         initialTextStyle: TextStyle(
+                //           fontSize: 22.0,
+                //           color: Colors.white,
+                //         ),
+                //         finalTextStyle: TextStyle(
+                //           fontSize: 22.0,
+                //           color: Colors.green.shade600,
+                //         ),
+                //         elevation: 20.0,
+                //         borderRadius: 10.0,
+                //       )),
+                // ),
               ],
             ),
           ),

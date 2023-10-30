@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:iot_mobile_app/animited_button.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:iot_mobile_app/pages/settings/select_device.dart';
 import 'package:iot_mobile_app/pages/settings/settings.dart';
@@ -214,23 +215,57 @@ class _LimitsState extends State<Limits> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        width: double.infinity,
-        // padding: EdgeInsets.all(16.0),
-        child: ElevatedButton(
-          onPressed: () {
-            // Navigator.of(context).push(
-            //   MaterialPageRoute(
-            //     builder: (context) => Settings(),
-            //   ),
-            // );
-            saveLimits();
-          },
-          style: ElevatedButton.styleFrom(
-            primary: Colors.green,
-            padding: EdgeInsets.symmetric(vertical: 20),
-          ),
-          child: Text('save_device_list'.tr, style: TextStyle(fontSize: 20)),
+      bottomNavigationBar:
+          // Container(
+          //   width: double.infinity,
+          //   // padding: EdgeInsets.all(16.0),
+          //   child: ElevatedButton(
+          //     onPressed: () {
+          //       // Navigator.of(context).push(
+          //       //   MaterialPageRoute(
+          //       //     builder: (context) => Settings(),
+          //       //   ),
+          //       // );
+          //       saveLimits();
+          //     },
+          //     style: ElevatedButton.styleFrom(
+          //       primary: Colors.green,
+          //       padding: EdgeInsets.symmetric(vertical: 20),
+          //     ),
+          //     child: Text('save_device_list'.tr, style: TextStyle(fontSize: 20)),
+          //   ),
+          // ),
+          Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AnimatedButton(
+                onTap: () {
+                  saveLimits();
+
+                  // print("animated button pressed");
+                },
+                animationDuration: const Duration(milliseconds: 2000),
+                initialText: 'save_device_list'.tr,
+                finalText: "Device Limits Saved",
+                iconData: Icons.check,
+                iconSize: 32.0,
+                buttonStyle: buttonstyle(
+                  primaryColor: Colors.green.shade600,
+                  secondaryColor: Colors.white,
+                  initialTextStyle: TextStyle(
+                    fontSize: 22.0,
+                    color: Colors.white,
+                  ),
+                  finalTextStyle: TextStyle(
+                    fontSize: 22.0,
+                    color: Colors.green.shade600,
+                  ),
+                  elevation: 20.0,
+                  borderRadius: 10.0,
+                )),
+          ],
         ),
       ),
       appBar: AppBar(
