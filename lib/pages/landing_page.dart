@@ -71,8 +71,6 @@ class _LandingpageState extends State<Landingpage> {
     }
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,107 +123,112 @@ class _LandingpageState extends State<Landingpage> {
               return Center(child: Text('No devices found.'));
             }
 
-            return Column(
-              children: deviceList.map((device) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 4),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  Homepage(device["deviceId"] ?? "")));
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: (Color.fromARGB(234, 203, 203, 203)),
-                      onPrimary: Colors.black,
-                      fixedSize: Size(402, 130),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
+            return SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: deviceList.map((device) {
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 20, left: 4),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    Homepage(device["deviceId"] ?? "")));
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: (Color.fromARGB(234, 203, 203, 203)),
+                        onPrimary: Colors.black,
+                        fixedSize: Size(402, 130),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Device ID:',
-                              style: TextStyle(fontSize: 25),
-                            ),
-                            Text(
-                              device["deviceId"] ?? "",
-                              style: TextStyle(fontSize: 25),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              'Name:',
-                              style: TextStyle(fontSize: 25),
-                            ),
-                            Text(
-                              device["name"] ?? "",
-                              style: TextStyle(fontSize: 25),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Container(
-                              height: 55,
-                              width: 120,
-                              decoration: BoxDecoration(
-                                  color: device["powerStatusn"]
-                                      ? Colors.green
-                                      : const Color.fromARGB(255, 253, 18, 1),
-                                  borderRadius: BorderRadius.circular(30)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset("assets/power.png"),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                'Device ID:',
+                                style: TextStyle(fontSize: 25),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5, top: 5),
-                              child: Container(
+                              Text(
+                                device["deviceId"] ?? "",
+                                style: TextStyle(fontSize: 25),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Name:',
+                                style: TextStyle(fontSize: 25),
+                              ),
+                              Text(
+                                device["name"] ?? "",
+                                style: TextStyle(fontSize: 25),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
                                 height: 55,
                                 width: 120,
                                 decoration: BoxDecoration(
-                                    color: device["motorbox"]
+                                    color: device["powerStatusn"]
                                         ? Colors.green
                                         : const Color.fromARGB(255, 253, 18, 1),
                                     borderRadius: BorderRadius.circular(30)),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset("assets/motor.jpeg"),
+                                  child: Image.asset("assets/power.png"),
                                 ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 5, top: 5),
-                              child: Container(
-                                height: 55,
-                                width: 120,
-                                decoration: BoxDecoration(
-                                    color: device["isSwitchedn"]
-                                        ? Colors.green
-                                        : const Color.fromARGB(255, 253, 18, 1),
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(0.0),
-                                  child: Image.asset("assets/on off.png"),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5, top: 5),
+                                child: Container(
+                                  height: 55,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                      color: device["motorbox"]
+                                          ? Colors.green
+                                          : const Color.fromARGB(
+                                              255, 253, 18, 1),
+                                      borderRadius: BorderRadius.circular(30)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset("assets/motor.jpeg"),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5, top: 5),
+                                child: Container(
+                                  height: 55,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                      color: device["isSwitchedn"]
+                                          ? Colors.green
+                                          : const Color.fromARGB(
+                                              255, 253, 18, 1),
+                                      borderRadius: BorderRadius.circular(30)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Image.asset("assets/off.jpg"),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
+                  );
+                }).toList(),
+              ),
             );
           }
         },
