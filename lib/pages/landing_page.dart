@@ -217,7 +217,9 @@ class _LandingpageState extends State<Landingpage> {
                                       borderRadius: BorderRadius.circular(30)),
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
-                                    child: Image.asset("assets/off.jpg"),
+                                    child: device["isSwitchedn"]
+                                        ? Image.asset("assets/off.jpg")
+                                        : Image.asset("assets/on.jpg"),
                                   ),
                                 ),
                               ),
