@@ -9,7 +9,6 @@ import 'package:iot_mobile_app/Auth/newpassword.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:iot_mobile_app/Auth/singin.dart';
-import 'package:iot_mobile_app/animited_button.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
@@ -21,45 +20,88 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   TextEditingController userInputController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   bool isOtpSent = false;
-
-  void _sendOtp() {
+  Future<void> _sendOtp(String userPhNumber) async {
     // You can implement your own logic here to send OTP.
     // For this example, we'll just simulate that OTP is sent.
-    setState(() {
-      isOtpSent = true;
-      userInputController.text = '';
-    });
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://console-api.theja.in/sendOtp/$userPhNumber'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+        print("OPT sent");
+        //   isOtpSent = true;
+        setState(() {
+          isOtpSent = true;
+        });
+        print("OTP staus:  $isOtpSent");
+
+        print(data);
+        print('OTP sent sucessfully');
+        return data;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
-  void _verifyOtp() {
+  // void _sendOtp() {
+  //   // You can implement your own logic here to send OTP.
+  //   // For this example, we'll just simulate that OTP is sent.
+  //   setState(() {
+  //     isOtpSent = true;
+  //     userInputController.text = '';
+  //   });
+  // }
+
+  Future<void> _verifyOtp(String userPhNumber, String otp) async {
     // You can implement your own logic here to verify OTP.
     // For this example, we'll just simulate that OTP is verified.
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('success'.tr),
-        content: Text('otp_verified'.tr),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => NewPasswordPage(),
-                ),
-              ); // Add your button's functionality here
-            },
-            child: Text('ok'.tr),
+    try {
+      final response = await http.post(
+        Uri.parse('http://console-api.theja.in/validateOtp/$userPhNumber/$otp'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+
+        print(data);
+        print('OTP verified sucessfully');
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('success'.tr),
+            content: Text('otp_verified'.tr),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => NewPasswordPage(),
+                    ),
+                  ); // Add your button's functionality here
+                },
+                child: Text('ok'.tr),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        );
+        return data;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
   }
 
   void _resendOtp() {
     // Implement your OTP resend logic here.
     // You can reset the timer or send a new OTP.
     // For this example, we'll just simulate resending OTP.
-    _sendOtp();
+    _sendOtp(userInputController.text);
   }
 
   @override
@@ -178,7 +220,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           SizedBox(height: 20.0),
                           Center(
                             child: ElevatedButton(
-                              onPressed: isOtpSent ? _verifyOtp : _sendOtp,
+                              onPressed: isOtpSent
+                                  ? () => _verifyOtp(
+                                      userInputController.text.toString(),
+                                      otpController.text.toString())
+                                  : () => _sendOtp(
+                                      userInputController.text.toString()),
                               child: Text(
                                   isOtpSent ? "verify_otp".tr : "send_otp".tr),
                               style: ElevatedButton.styleFrom(
@@ -189,32 +236,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               ),
                             ),
                           ),
-                          // Center(
-                          //   child: AnimatedButton(
-                          //       onTap: isOtpSent ? _verifyOtp : _sendOtp,
-                          //       animationDuration:
-                          //           const Duration(milliseconds: 3000),
-                          //       initialText:
-                          //           isOtpSent ? "verify_otp".tr : "send_otp".tr,
-                          //       finalText:
-                          //           isOtpSent ? 'OTP Verfied' : "OTP Sent",
-                          //       iconData: Icons.check,
-                          //       iconSize: 32.0,
-                          //       buttonStyle: buttonstyle(
-                          //         primaryColor: Colors.green.shade600,
-                          //         secondaryColor: Colors.white,
-                          //         initialTextStyle: TextStyle(
-                          //           fontSize: 22.0,
-                          //           color: Colors.white,
-                          //         ),
-                          //         finalTextStyle: TextStyle(
-                          //           fontSize: 22.0,
-                          //           color: Colors.green.shade600,
-                          //         ),
-                          //         elevation: 20.0,
-                          //         borderRadius: 10.0,
-                          //       )),
-                          // ),
                           SizedBox(
                             height: 10,
                           ),
@@ -289,32 +310,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 //   TextEditingController otpController = TextEditingController();
 //   bool isOtpSent = false;
 
-//   Future<void> _sendOtp(String userPhNumber) async {
-//     // You can implement your own logic here to send OTP.
-//     // For this example, we'll just simulate that OTP is sent.
-//     setState(() {
-//       isOtpSent = true;
-//     });
-
-//         try{
-//       final response = await http.post(
-//   Uri.parse('http://console-api.theja.in/sendOtp/${userPhNumber}'),
-//   body: jsonEncode(requestData),
-//   headers: {'Content-Type': 'application/json'},
-// );
-
-//       if(response.statusCode==200){
-//          var data = jsonDecode(response.body.toString());
-
-//       print(data);
-//       print('OTP sent sucessfully');
-//       return data;
-//       }
-
-//     }catch(e){
-//       print(e.toString());
-//    }
-//   }
+   
 
 //   void _verifyOtp() {
 //     // You can implement your own logic here to verify OTP.
@@ -327,8 +323,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 //         actions: [
 //           TextButton(
 //             onPressed: () {
-//                               Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NewPasswordPage(),),); // Add your button's functionality here
-// ;
+//           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>NewPasswordPage(),),); // Add your button's functionality here
+
 //             },
 //             child: Text('OK'),
 //           ),
