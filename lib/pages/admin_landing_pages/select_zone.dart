@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_type_check
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

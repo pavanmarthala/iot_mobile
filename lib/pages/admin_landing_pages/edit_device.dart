@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:convert';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -270,7 +271,7 @@ class _EditDeviceState extends State<EditDevice> {
     return Scaffold(
       backgroundColor: const Color(0xffcbcbcb),
       appBar: AppBar(
-        title: Text('Device Details'),
+        title: Text('device_details'.tr),
         actions: [
           isEditing
               ? IconButton(
@@ -343,17 +344,18 @@ class _EditDeviceState extends State<EditDevice> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            _UserDetail("deviceId", deviceIdController, false),
+            _UserDetail("device_id".tr, deviceIdController, false),
             _buildUserDetail(
-                "device Serial Number", deviceSerialNumberController, true),
-            _buildUserDetail("Name", nameController, true),
-            _buildUserDetail("Zone", zoneController, true),
-            _UserDetail("deviceState", deviceStateController, false),
-            _UserDetail("lastDeviceState", lastDeviceStateController, false),
-            _UserDetail("givenState", givenStateController, false),
-            _UserDetail("lastGivenState", lastGivenStateController, false),
-            _UserDetail("power Available", powerAvailableController, false),
-            _UserDetail("topic", topicController, false),
+                "device_serial-no".tr, deviceSerialNumberController, true),
+            _buildUserDetail("name".tr, nameController, true),
+            _buildUserDetail("zone".tr, zoneController, true),
+            _UserDetail("device_state".tr, deviceStateController, false),
+            _UserDetail(
+                "last_device_state".tr, lastDeviceStateController, false),
+            _UserDetail("given_state".tr, givenStateController, false),
+            _UserDetail("last_given_state".tr, lastGivenStateController, false),
+            _UserDetail("power_available".tr, powerAvailableController, false),
+            _UserDetail("topic".tr, topicController, false),
             // Display the accountIds as a list of text fields
             Padding(
               padding: const EdgeInsets.all(10),
@@ -374,7 +376,7 @@ class _EditDeviceState extends State<EditDevice> {
                   child: Column(
                     children: [
                       Text(
-                        'Account IDs',
+                        'accounts_ids'.tr,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
@@ -437,7 +439,7 @@ class _EditDeviceState extends State<EditDevice> {
                                           editingAccountIds.add("");
                                         });
                                       },
-                                      child: Text("Add"),
+                                      child: Text("add".tr),
                                     ),
                                   ],
                                 ),
@@ -450,32 +452,32 @@ class _EditDeviceState extends State<EditDevice> {
                 ),
               ),
             ),
-            _buildUserDetail(
-                "Subscription Valid", subscriptionValidController, false),
+            _buildUserDetail("sub".tr, subscriptionValidController, false),
             _UserDetail(
-                "lastPowerAvailable", lastPowerAvailableController, false),
-            _UserDetail("maxCurrent", maxCurrentController, false),
-            _UserDetail("minCurrent", minCurrentController, false),
-            _UserDetail("maxVoltage", maxVoltageController, false),
-            _UserDetail("minVoltage", minVoltageController, false),
-            _UserDetail("deviceLastPing", deviceLastPingController, false),
-            _UserDetail("loadLastPing", loadLastPingController, false),
-            _UserDetail("powerLastPing", powerLastPingController, false),
-            _UserDetail("lastPing", lastPingController, false),
-            _UserDetail("deviceSleepTime", deviceSleepTimeController, false),
-            _UserDetail("nthMessage", nthMessageController, false),
-            _UserDetail("simId", simIdController, false),
-            _UserDetail("active", activeController, false),
+                "last_power_available".tr, lastPowerAvailableController, false),
+            _UserDetail("maximum_current".tr, maxCurrentController, false),
+            _UserDetail("minimum_current".tr, minCurrentController, false),
+            _UserDetail("maximum_voltage".tr, maxVoltageController, false),
+            _UserDetail("minimum_voltage".tr, minVoltageController, false),
+            _UserDetail("device_last_ping".tr, deviceLastPingController, false),
+            _UserDetail("load_last_ping".tr, loadLastPingController, false),
+            _UserDetail("power_last_ping".tr, powerLastPingController, false),
+            _UserDetail("last_ping".tr, lastPingController, false),
             _UserDetail(
-                "metaCheckRequired", metaCheckRequiredController, false),
+                "device_sleep_time".tr, deviceSleepTimeController, false),
+            _UserDetail("nthmessage".tr, nthMessageController, false),
+            _UserDetail("simid".tr, simIdController, false),
+            _UserDetail("active".tr, activeController, false),
             _UserDetail(
-                "meta1CheckRequired", meta1CheckRequiredController, false),
-            _UserDetail("deviceModel", deviceModelController, false),
-            _UserDetail("fcmRegistrationTokens",
+                "meatcheckrequired".tr, metaCheckRequiredController, false),
+            _UserDetail(
+                "meat1checkrequired".tr, meta1CheckRequiredController, false),
+            _UserDetail("device_model".tr, deviceModelController, false),
+            _UserDetail("fcmRegistrationTokens".tr,
                 fcmRegistrationTokensController, false),
-            _UserDetail("modem_info", modemInfoController, false),
-            _UserDetail("CCID", CCIDController, false),
-            _UserDetail("IMEI", IMEIController, false),
+            _UserDetail("modem_info".tr, modemInfoController, false),
+            _UserDetail("ccid".tr, CCIDController, false),
+            _UserDetail("IMEI".tr, IMEIController, false),
             Padding(
               padding: const EdgeInsets.only(
                   left: 10, top: 10, right: 10, bottom: 20),
@@ -493,23 +495,23 @@ class _EditDeviceState extends State<EditDevice> {
                   children: [
                     Center(
                       child: Text(
-                        'meta1',
+                        'meta1'.tr,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    _UserDetail("device Id", device_idController, false),
-                    _UserDetail("IMSI", IMSIController, false),
-                    _UserDetail("Operator", OperatorController, false),
-                    _UserDetail("IP", IpController, false),
+                    _UserDetail("device_id".tr, device_idController, false),
+                    _UserDetail("imsi".tr, IMSIController, false),
+                    _UserDetail("oprator".tr, OperatorController, false),
+                    _UserDetail("IP".tr, IpController, false),
                     _UserDetail(
-                        "signal quality", signal_qualityController, false),
-                    _UserDetail("location", locationController, false),
-                    _UserDetail("Mobile Number", mob_numController, false),
-                    _UserDetail("minVol ", minVolController, false),
-                    _UserDetail("maxVol", maxVolController, false),
-                    _UserDetail("minCur", minCurController, false),
-                    _UserDetail("maxCur", maxCurController, false),
+                        "signal_quality".tr, signal_qualityController, false),
+                    _UserDetail("loaction".tr, locationController, false),
+                    _UserDetail("mobile_number".tr, mob_numController, false),
+                    _UserDetail("minimum_voltage".tr, minVolController, false),
+                    _UserDetail("maximum_voltage".tr, maxVolController, false),
+                    _UserDetail("minimum_current".tr, minCurController, false),
+                    _UserDetail("maximum_current".tr, maxCurController, false),
                   ],
                 ),
               ),
@@ -532,15 +534,15 @@ class _EditDeviceState extends State<EditDevice> {
                   child: Column(children: [
                     Center(
                       child: Text(
-                        'meta',
+                        'meta'.tr,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    _UserDetail("device Id", device_idController, false),
-                    _UserDetail("modem_info", modemInfoController, false),
-                    _UserDetail("CCID", CCIDController, false),
-                    _UserDetail("IMEI", IMEIController, false),
+                    _UserDetail("device_id".tr, device_idController, false),
+                    _UserDetail("modem_info".tr, modemInfoController, false),
+                    _UserDetail("ccid".tr, CCIDController, false),
+                    _UserDetail("IMEI".tr, IMEIController, false),
                   ]),
                 ),
               ),

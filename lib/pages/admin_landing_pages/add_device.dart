@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:iot_mobile_app/animited_button.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,63 +25,131 @@ class _AddDeviceState extends State<AddDevice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Container(
-        width: double.infinity,
-        child: ElevatedButton(
-          onPressed: () async {
-            // final url =
-            //     Uri.parse('https://console-api.theja.in/admin/addDevice');
-            final jsonData = {
-              "active": true,
-              "deviceId": _deviceController.text,
-              "deviceSerialNumber": _serialNocontroller.text,
-              "name": _devicenameController.text,
-              "simId": _simController.text,
-              "topic": _topiccontroller.text,
-              "zone": _zonecontroller.text,
-            };
+      bottomNavigationBar:
+          // BottomAppBar(
+          // Container(
+          //   width: double.infinity,
+          //   child: ElevatedButton(
+          //     onPressed: () async {
+          //       final jsonData = {
+          //         "active": true,
+          //         "deviceId": _deviceController.text,
+          //         "deviceSerialNumber": _serialNocontroller.text,
+          //         "name": _devicenameController.text,
+          //         "simId": _simController.text,
+          //         "topic": _topiccontroller.text,
+          //         "zone": _zonecontroller.text,
+          //       };
+          //       final jsonString = json.encode(jsonData);
+          //       SharedPreferences prefs = await SharedPreferences.getInstance();
+          //       String? jwtToken = prefs.getString('jwt_token');
+          //       if (jwtToken == null) {
+          //       }
+          //       final response = await http.post(
+          //           Uri.https('console-api.theja.in', '/admin/addDevice'),
+          //           headers: {
+          //             "Authorization": "Bearer $jwtToken",
+          //             "Content-Type": "application/json",
+          //           },
+          //           body: jsonString);
 
-            final jsonString = json.encode(jsonData);
+          //       if (response.statusCode == 200) {
+          //         // Successful response, you can handle it as per your requirement.
+          //         print("Device added successfully");
+          //         print("Response Body: ${response.body}");
+          //       } else {
+          //         // Error response, display an error message or handle it as needed.
+          //         print(
+          //             "Failed to add device. Status Code: ${response.statusCode}");
+          //         print("Response Body: ${response.body}");
+          //       }
+          //       Navigator.of(context).pop();
 
-            // final headers = {"Authorization": "Bearer "};
+          //       // Close the dialog after handling the response.
+          //     },
+          //     style: ElevatedButton.styleFrom(
+          //       primary: Colors.green,
+          //       padding: EdgeInsets.symmetric(vertical: 20),
+          //     ),
+          //     child: Text('add_device'.tr, style: TextStyle(fontSize: 20)),
+          //   ),
+          // )),
+          BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedButton(
+                  onTap: () async {
+                    final jsonData = {
+                      "active": true,
+                      "deviceId": _deviceController.text,
+                      "deviceSerialNumber": _serialNocontroller.text,
+                      "name": _devicenameController.text,
+                      "simId": _simController.text,
+                      "topic": _topiccontroller.text,
+                      "zone": _zonecontroller.text,
+                    };
 
-            // final response =
-            //     await http.post(url, headers: headers, );
+                    final jsonString = json.encode(jsonData);
 
-            SharedPreferences prefs = await SharedPreferences.getInstance();
-            String? jwtToken = prefs.getString('jwt_token');
+                    // final headers = {"Authorization": "Bearer "};
 
-            if (jwtToken == null) {
-              // Handle the case where the token is not found
-              // return null;
-            }
-            final response = await http.post(
-                Uri.https('console-api.theja.in', '/admin/addDevice'),
-                headers: {
-                  "Authorization": "Bearer $jwtToken",
-                  "Content-Type": "application/json",
-                },
-                body: jsonString);
+                    // final response =
+                    //     await http.post(url, headers: headers, );
 
-            if (response.statusCode == 200) {
-              // Successful response, you can handle it as per your requirement.
-              print("Device added successfully");
-              print("Response Body: ${response.body}");
-            } else {
-              // Error response, display an error message or handle it as needed.
-              print(
-                  "Failed to add device. Status Code: ${response.statusCode}");
-              print("Response Body: ${response.body}");
-            }
-            Navigator.of(context).pop();
+                    SharedPreferences prefs =
+                        await SharedPreferences.getInstance();
+                    String? jwtToken = prefs.getString('jwt_token');
 
-            // Close the dialog after handling the response.
-          },
-          style: ElevatedButton.styleFrom(
-            primary: Colors.green,
-            padding: EdgeInsets.symmetric(vertical: 20),
+                    if (jwtToken == null) {
+                      // Handle the case where the token is not found
+                      // return null;
+                    }
+                    final response = await http.post(
+                        Uri.https('console-api.theja.in', '/admin/addDevice'),
+                        headers: {
+                          "Authorization": "Bearer $jwtToken",
+                          "Content-Type": "application/json",
+                        },
+                        body: jsonString);
+
+                    if (response.statusCode == 200) {
+                      // Successful response, you can handle it as per your requirement.
+                      print("Device added successfully");
+                      print("Response Body: ${response.body}");
+                    } else {
+                      // Error response, display an error message or handle it as needed.
+                      print(
+                          "Failed to add device. Status Code: ${response.statusCode}");
+                      print("Response Body: ${response.body}");
+                    }
+                    // Navigator.of(context).pop();
+
+                    // Close the dialog after handling the response.
+                  },
+                  animationDuration: const Duration(milliseconds: 2000),
+                  initialText: 'add_device'.tr,
+                  finalText: "Device Added",
+                  iconData: Icons.check,
+                  iconSize: 32.0,
+                  buttonStyle: buttonstyle(
+                    primaryColor: Colors.green.shade600,
+                    secondaryColor: Colors.white,
+                    initialTextStyle: TextStyle(
+                      fontSize: 22.0,
+                      color: Colors.white,
+                    ),
+                    finalTextStyle: TextStyle(
+                      fontSize: 22.0,
+                      color: Colors.green.shade600,
+                    ),
+                    elevation: 20.0,
+                    borderRadius: 10.0,
+                  )),
+            ],
           ),
-          child: Text('add_device'.tr, style: TextStyle(fontSize: 20)),
         ),
       ),
       appBar: AppBar(

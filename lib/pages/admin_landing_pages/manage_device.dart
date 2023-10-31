@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
@@ -108,8 +109,8 @@ class _ManagedeviceState extends State<Managedevice> {
         backgroundColor: const Color(0xffcbcbcb),
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
-          title: const Text(
-            "Manage Devices",
+          title: Text(
+            "manage_devices".tr,
             style: TextStyle(color: Colors.black, fontSize: 25),
           ),
           actions: [
@@ -159,7 +160,7 @@ class _ManagedeviceState extends State<Managedevice> {
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 0),
                                   // hintText: 'Search for users',
-                                  hintText: 'search for Devices',
+                                  hintText: 'search_for_device'.tr,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: BorderSide(),
@@ -232,8 +233,8 @@ class _ManagedeviceState extends State<Managedevice> {
                                                 ),
                                               );
                                             },
-                                            child: const Text(
-                                              'View',
+                                            child: Text(
+                                              'view'.tr,
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
@@ -256,8 +257,8 @@ class _ManagedeviceState extends State<Managedevice> {
                                                 const EdgeInsets.only(left: 20),
                                             child: ElevatedButton(
                                               onPressed: () {},
-                                              child: const Text(
-                                                'Delete',
+                                              child: Text(
+                                                'delete'.tr,
                                                 style: TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold,
@@ -283,8 +284,8 @@ class _ManagedeviceState extends State<Managedevice> {
                                                 onPressed: () {},
                                                 child: Text(
                                                   device["active"] == "true"
-                                                      ? 'Deactivate'
-                                                      : 'Activate',
+                                                      ? 'deactivate'.tr
+                                                      : 'activate'.tr,
                                                   style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
@@ -357,8 +358,8 @@ class _ManagedeviceState extends State<Managedevice> {
 
                           // Go back to Home Screen
                         },
-                        child: const Text(
-                          'Home',
+                        child: Text(
+                          'home'.tr,
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -383,8 +384,8 @@ class _ManagedeviceState extends State<Managedevice> {
 
                             // Go back to Home Screen
                           },
-                          child: const Text(
-                            'Add User',
+                          child: Text(
+                            'add_user'.tr,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -410,8 +411,8 @@ class _ManagedeviceState extends State<Managedevice> {
 
                             // Go back to Home Screen
                           },
-                          child: const Text(
-                            'Add Device',
+                          child: Text(
+                            'add_device'.tr,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -437,8 +438,8 @@ class _ManagedeviceState extends State<Managedevice> {
 
                             // Go back to Home Screen
                           },
-                          child: const Text(
-                            'Map Device',
+                          child: Text(
+                            'map_device'.tr,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),

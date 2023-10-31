@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iot_mobile_app/animited_button.dart';
+import 'package:get/get.dart';
 // import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/manage_device.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/map_devices.dart';
@@ -21,7 +21,7 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Manage Users',
+          'manage_users'.tr,
           style: TextStyle(color: Colors.black, fontSize: 25),
         ),
         automaticallyImplyLeading: false,
@@ -82,7 +82,7 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                       ),
                     ),
                     child: Text(
-                      'Manage Users',
+                      'manage_users'.tr,
                       style: TextStyle(fontSize: 25, color: Colors.black),
                     ),
                   ),
@@ -111,7 +111,7 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                       ),
                     ),
                     child: Text(
-                      'Manage Devices',
+                      'manage_devices'.tr,
                       style: TextStyle(fontSize: 25, color: Colors.black),
                     ),
                   ),
@@ -140,7 +140,7 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                       ),
                     ),
                     child: Text(
-                      'Map a Device',
+                      'map_a_device'.tr,
                       style: TextStyle(color: Colors.black, fontSize: 25),
                     ),
                   ),
@@ -169,7 +169,7 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                       ),
                     ),
                     child: Text(
-                      'View Mapped Devices',
+                      'view_mapped_device'.tr,
                       style: TextStyle(color: Colors.black, fontSize: 25),
                     ),
                   ),

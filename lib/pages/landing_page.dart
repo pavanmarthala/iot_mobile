@@ -151,7 +151,7 @@ class _LandingpageState extends State<Landingpage> {
                           Row(
                             children: [
                               Text(
-                                'Device ID:',
+                                'device_id:'.tr,
                                 style: TextStyle(fontSize: 25),
                               ),
                               Text(
@@ -163,7 +163,7 @@ class _LandingpageState extends State<Landingpage> {
                           Row(
                             children: [
                               Text(
-                                'Name:',
+                                'name'.tr,
                                 style: TextStyle(fontSize: 25),
                               ),
                               Text(
