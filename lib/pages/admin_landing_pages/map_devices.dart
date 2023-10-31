@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unnecessary_null_comparison
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -282,8 +282,8 @@ class _MapDevicesState extends State<MapDevices> {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(10),
-                        child: const Text(
-                          'User ',
+                        child: Text(
+                          'user'.tr,
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -385,8 +385,8 @@ class _MapDevicesState extends State<MapDevices> {
                     children: [
                       Container(
                         padding: const EdgeInsets.only(left: 5, top: 5),
-                        child: const Text(
-                          'Device ',
+                        child: Text(
+                          'device'.tr,
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
@@ -497,8 +497,8 @@ class _MapDevicesState extends State<MapDevices> {
                     // print("animated button pressed");
                   },
                   animationDuration: const Duration(milliseconds: 2000),
-                  initialText: "Confirm",
-                  finalText: "Submitted",
+                  initialText: "map_user_to_device".tr,
+                  finalText: " Mapped successful",
                   iconData: Icons.check,
                   iconSize: 32.0,
                   buttonStyle: buttonstyle(

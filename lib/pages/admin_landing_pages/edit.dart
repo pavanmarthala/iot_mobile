@@ -1,8 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
@@ -147,7 +148,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     return Scaffold(
       backgroundColor: const Color(0xffcbcbcb),
       appBar: AppBar(
-        title: Text('User Details'),
+        title: Text('user_deatils'.tr),
         actions: [
           isEditing
               ? IconButton(
@@ -194,12 +195,12 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            _UserDetail("Mobile Number", mobileNumberController, false),
-            _buildUserDetail("Email", emailController),
-            _buildUserDetail("Role", roleController),
-            _UserDetail("Status", statusController, false),
-            _buildUserDetail("PIN", pinController),
-            _buildUserDetail("Language", languageController),
+            _UserDetail("mobile_number".tr, mobileNumberController, false),
+            _buildUserDetail("email_id".tr, emailController),
+            _buildUserDetail("role".tr, roleController),
+            _UserDetail("status".tr, statusController, false),
+            _buildUserDetail("pin".tr, pinController),
+            _buildUserDetail("language ".tr, languageController),
             Padding(
               padding: const EdgeInsets.all(10),
               child: Container(
@@ -220,7 +221,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     children: [
                       Center(
                         child: Text(
-                          'Device IDs',
+                          'device_ids'.tr,
                           style: TextStyle(
                               fontSize: 16, fontWeight: FontWeight.bold),
                         ),
@@ -284,7 +285,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                           editingdeviceIds.add("");
                                         });
                                       },
-                                      child: Text("Add"),
+                                      child: Text("add".tr),
                                     ),
                                   ],
                                 ),
@@ -297,8 +298,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                 ),
               ),
             ),
-            _buildUserDetail("Zone", zoneController),
-            _buildUserDetail("Subscription Valid", subscriptionValidController),
+            _buildUserDetail("zone".tr, zoneController),
+            _SubscriptionDetail("sub".tr, subscriptionValidController),
             Padding(
               padding: const EdgeInsets.only(
                   left: 10, top: 10, right: 10, bottom: 20),
@@ -318,13 +319,14 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                     children: [
                       Center(
                           child: Text(
-                        'User Deatils',
+                        'user_deatils'.tr,
                         style: TextStyle(
                             fontSize: 15, fontWeight: FontWeight.bold),
                       )),
-                      _UserDetail("Name", nameController, false),
-                      _UserDetail("First Name", firstnameController, false),
-                      _UserDetail("Last Name", lastnameController, false),
+                      _UserDetail("name".tr, nameController, false),
+                      _UserDetail(
+                          "first_number".tr, firstnameController, false),
+                      _UserDetail("last_name".tr, lastnameController, false),
                       Padding(
                         padding: const EdgeInsets.all(10),
                         child: Container(
@@ -344,37 +346,37 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                                 children: [
                                   Center(
                                       child: Text(
-                                    'Address',
+                                    'address'.tr,
                                     style: TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold),
                                   )),
                                   _buildUserDetail(
-                                    "Name",
+                                    "name".tr,
                                     nameController,
                                   ),
                                   _buildUserDetail(
-                                    "First Name",
+                                    "first_number".tr,
                                     firstnameController,
                                   ),
                                   _buildUserDetail(
-                                    "Last Name",
+                                    "last_name".tr,
                                     lastnameController,
                                   ),
                                   _buildUserDetail(
-                                      "Address Line 1", address1Controller),
+                                      "address1".tr, address1Controller),
                                   _buildUserDetail(
-                                      "Address Line 2", address2Controller),
+                                      "address2".tr, address2Controller),
                                   _buildUserDetail(
-                                      "Address Line 3", address3Controller),
+                                      "address3".tr, address3Controller),
                                   _buildUserDetail(
-                                      "Land mark", landmarkController),
-                                  _buildUserDetail("City", cityController),
+                                      "land_mark".tr, landmarkController),
+                                  _buildUserDetail("city".tr, cityController),
                                   _buildUserDetail(
-                                      "District", districtController),
-                                  _buildUserDetail("State", stateController),
+                                      "district".tr, districtController),
+                                  _buildUserDetail("state".tr, stateController),
                                   _buildUserDetail(
-                                      "Pincode", pincodeController),
+                                      "pincode".tr, pincodeController),
                                 ],
                               ),
                             )),
@@ -460,6 +462,88 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _SubscriptionDetail(
+    String label,
+    TextEditingController controller,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, top: 15, right: 10),
+      child: Container(
+        width: 380,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(
+            color: Colors.black, // Border color
+            width: 1.0, // Border width
+            style: BorderStyle.solid, // Border style
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              isEditing
+                  ? SubscriptionValidityTextField()
+                  : Text(
+                      controller.text,
+                      style: TextStyle(fontSize: 16.0),
+                    ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SubscriptionValidityTextField extends StatefulWidget {
+  @override
+  _SubscriptionValidityTextFieldState createState() =>
+      _SubscriptionValidityTextFieldState();
+}
+
+class _SubscriptionValidityTextFieldState
+    extends State<SubscriptionValidityTextField> {
+  DateTime _dateTime = DateTime.now();
+  TextEditingController _subscriptioncontroller = TextEditingController();
+
+  void _showDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: _dateTime,
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2025),
+    ).then((value) {
+      if (value != null) {
+        // Format the date to display only the date part
+        final formattedDate = DateFormat('yyyy/MM/dd').format(value);
+
+        setState(() {
+          _dateTime = value;
+          _subscriptioncontroller.text =
+              formattedDate; // Update the date in the TextField
+        });
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      onTap: _showDatePicker,
+      controller: _subscriptioncontroller,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 0),
+        hintText: 'select_validity'.tr,
       ),
     );
   }

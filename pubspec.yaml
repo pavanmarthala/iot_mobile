@@ -50,6 +50,7 @@ dependencies:
   flutter_svg: ^2.0.7
   rive: ^0.11.17
   jwt_decoder: ^2.0.1
+  flutter_advanced_drawer: ^1.3.5
 
 dev_dependencies:
   flutter_test:

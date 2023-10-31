@@ -1,7 +1,8 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unnecessary_type_check
 
 import 'dart:convert';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/Add_user.dart';
@@ -110,8 +111,8 @@ class _UsersState extends State<Users> {
         backgroundColor: const Color(0xffcbcbcb),
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
-          title: const Text(
-            "Manage Users",
+          title: Text(
+            "manage_users".tr,
             style: TextStyle(color: Colors.black, fontSize: 25),
           ),
           actions: [
@@ -161,7 +162,7 @@ class _UsersState extends State<Users> {
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 0),
                                   // hintText: 'Search for users',
-                                  hintText: 'search for users',
+                                  hintText: 'search_for_users'.tr,
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     borderSide: BorderSide(),
@@ -233,8 +234,8 @@ class _UsersState extends State<Users> {
                                                 ),
                                               );
                                             },
-                                            child: const Text(
-                                              'View',
+                                            child: Text(
+                                              'view'.tr,
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
@@ -257,8 +258,8 @@ class _UsersState extends State<Users> {
                                                 const EdgeInsets.only(left: 20),
                                             child: ElevatedButton(
                                               onPressed: () {},
-                                              child: const Text(
-                                                'Delete',
+                                              child: Text(
+                                                'delete'.tr,
                                                 style: TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold,
@@ -284,8 +285,8 @@ class _UsersState extends State<Users> {
                                                 onPressed: () {},
                                                 child: Text(
                                                   device["active"] == "true"
-                                                      ? 'Deactivate'
-                                                      : 'Activate',
+                                                      ? 'deactivate'.tr
+                                                      : 'activate'.tr,
                                                   style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
@@ -358,8 +359,8 @@ class _UsersState extends State<Users> {
 
                           // Go back to Home Screen
                         },
-                        child: const Text(
-                          'Home',
+                        child: Text(
+                          'home'.tr,
                           style: TextStyle(color: Colors.white),
                         ),
                       ),
@@ -384,8 +385,8 @@ class _UsersState extends State<Users> {
 
                             // Go back to Home Screen
                           },
-                          child: const Text(
-                            'Add User',
+                          child: Text(
+                            'add_user'.tr,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -411,8 +412,8 @@ class _UsersState extends State<Users> {
 
                             // Go back to Home Screen
                           },
-                          child: const Text(
-                            'Add Device',
+                          child: Text(
+                            'add_device'.tr,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),
@@ -438,8 +439,8 @@ class _UsersState extends State<Users> {
 
                             // Go back to Home Screen
                           },
-                          child: const Text(
-                            'Map Device',
+                          child: Text(
+                            'map_device'.tr,
                             style: TextStyle(color: Colors.white),
                           ),
                         ),

@@ -77,10 +77,11 @@ class _MyDrawerState extends State<MyDrawer> {
             return Center(child: Text('No device IDs found.'));
           }
 
-          return Drawer(
+          return Container(
             child: Center(
               child: ListView(children: [
-                DrawerHeader(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
                   child: Image.asset("assets/logo.png"),
                 ),
                 ListView.builder(
@@ -96,7 +97,7 @@ class _MyDrawerState extends State<MyDrawer> {
                           ),
                           Padding(
                             padding: const EdgeInsets.only(
-                                left: 5, right: 5, top: 10),
+                                left: 15, right: 5, top: 10),
                             child: ElevatedButton(
                               onPressed: () {
                                 Navigator.of(context).push(
