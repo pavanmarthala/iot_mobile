@@ -91,6 +91,23 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
         );
         return data;
+      } else {
+        // Handle incorrect OTP case here
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('Error'),
+            content: Text('Incorrect OTP. Please try again.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
       }
     } catch (e) {
       print(e.toString());

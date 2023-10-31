@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/Auth/singin.dart';
-import 'package:iot_mobile_app/animited_button.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
-// import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
-
-// import '../pages/Home_page.dart';
-
-// Existing ForgotPasswordPage code...
 
 class NewPasswordPage extends StatefulWidget {
   @override
@@ -20,29 +16,105 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
-  void _updatePassword() {
-    // You can implement your own logic here to update the password.
-    // For this example, we'll just simulate the update.
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('success'.tr),
-        content: Text('pass_verified'.tr),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Adminlandingpage(),
-                ),
-              );
-              // Navigate back to the sign-in page or any other page as needed.
-            },
-            child: Text('ok'.tr),
+  Future<void> _updatePassword() async {
+    String newPassword = newPasswordController.text;
+    String confirmNewPassword = confirmNewPasswordController.text;
+
+    // Check if passwords match
+    if (newPassword != confirmNewPassword) {
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Error'),
+          content: Text('Passwords do not match.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    // Send a POST request to the API to update the password
+    final Map<String, dynamic> requestData = {
+      "newPassword": newPassword,
+      // Add any other required data, e.g., user identifier
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://console-api.theja.in/updatePassword'),
+        body: jsonEncode(requestData),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body.toString());
+
+        print(data);
+        print('Password updated successfully');
+
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('Success'),
+            content: Text('Password updated successfully.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => Adminlandingpage(),
+                    ),
+                  );
+                },
+                child: Text('OK'),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        );
+      } else {
+        // Handle API errors here
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('Error'),
+            content: Text('Failed to update password.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      print(e.toString());
+      // Handle network or other errors here
+      showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text('Error'),
+          content: Text('An error occurred.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   @override
@@ -54,7 +126,10 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
         title: Text(
           'new_pass'.tr,
           style: TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black),
+            fontWeight: FontWeight.bold,
+            fontSize: 25,
+            color: Colors.black,
+          ),
         ),
         actions: [
           Padding(
@@ -70,12 +145,8 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
               child: CircleAvatar(
                 radius: 18,
                 backgroundColor: Color.fromARGB(255, 165, 227, 106),
-
-                // backgroundImage: AssetImage('assets/language-icon.png'),
                 child: SvgPicture.asset(
                   'assets/language-icon.svg',
-                  // width: 100.0, // Adjust the width as needed
-                  // height: 100.0, // Adjust the height as needed
                 ),
               ),
             ),
@@ -156,39 +227,15 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                             ),
                           ),
                           SizedBox(height: 20.0),
-                          // Center(
-                          //   child: ElevatedButton(
-                          //     onPressed: _updatePassword,
-                          //     child: Text("update_pass".tr),
-                          //     style: ElevatedButton.styleFrom(
-                          //       primary: Colors.green,
-                          //       fixedSize: Size(650, 50),
-                          //     ),
-                          //   ),
-                          // ),
                           Center(
-                            child: AnimatedButton(
-                                onTap: _updatePassword,
-                                animationDuration:
-                                    const Duration(milliseconds: 2000),
-                                initialText: "update_pass".tr,
-                                finalText: "PIN Updated",
-                                iconData: Icons.check,
-                                iconSize: 32.0,
-                                buttonStyle: buttonstyle(
-                                  primaryColor: Colors.green.shade600,
-                                  secondaryColor: Colors.white,
-                                  initialTextStyle: TextStyle(
-                                    fontSize: 22.0,
-                                    color: Colors.white,
-                                  ),
-                                  finalTextStyle: TextStyle(
-                                    fontSize: 22.0,
-                                    color: Colors.green.shade600,
-                                  ),
-                                  elevation: 20.0,
-                                  borderRadius: 10.0,
-                                )),
+                            child: ElevatedButton(
+                              onPressed: _updatePassword,
+                              child: Text("update_pass".tr),
+                              style: ElevatedButton.styleFrom(
+                                primary: Colors.green,
+                                fixedSize: Size(650, 50),
+                              ),
+                            ),
                           ),
                           SizedBox(height: 10),
                           Row(

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 // import 'package:iot_mobile_app/pages/Drawer/Drawer.dart';
 import 'package:iot_mobile_app/pages/Home_page.dart';
+import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -85,7 +86,7 @@ class _LandingpageState extends State<Landingpage> {
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 30),
+            padding: EdgeInsets.only(right: 10),
             child: GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
@@ -105,6 +106,25 @@ class _LandingpageState extends State<Landingpage> {
                   // height: 100.0, // Adjust the height as needed
                 ),
               ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 20, left: 10),
+            child: CircleAvatar(
+              radius: 16,
+              backgroundColor: Colors.white,
+              child: IconButton(
+                  onPressed: () async {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => Adminlandingpage()),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.home_outlined,
+                    size: 30,
+                    color: Colors.black,
+                  )),
             ),
           ),
         ],
