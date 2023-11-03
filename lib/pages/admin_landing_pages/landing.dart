@@ -4,6 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+<<<<<<< HEAD
+=======
+import 'package:iot_mobile_app/Auth/singin.dart';
+>>>>>>> e787e51550fd7a7f8998b89497a0deeae7cdaac3
 import 'package:iot_mobile_app/animited_button.dart';
 // import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/manage_device.dart';
@@ -11,7 +15,11 @@ import 'package:iot_mobile_app/pages/admin_landing_pages/map_devices.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/manage_user.dart';
 import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
+<<<<<<< HEAD
 import 'package:iot_mobile_app/providers/firebase_message.dart';
+=======
+import 'package:shared_preferences/shared_preferences.dart';
+>>>>>>> e787e51550fd7a7f8998b89497a0deeae7cdaac3
 
 class Adminlandingpage extends StatefulWidget {
   const Adminlandingpage({Key? key}) : super(key: key);
@@ -21,7 +29,22 @@ class Adminlandingpage extends StatefulWidget {
 }
 
 class _AdminlandingpageState extends State<Adminlandingpage> {
+<<<<<<< HEAD
   FirebaseApi firebaseApi = FirebaseApi();
+=======
+  void logout() async {
+    // Clear user login details from shared preferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('username');
+    prefs.remove('password');
+    prefs.remove('jwt_token');
+
+    // Navigate back to the login page
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => SingIN()),
+    );
+  }
+>>>>>>> e787e51550fd7a7f8998b89497a0deeae7cdaac3
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +58,7 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
         backgroundColor: Colors.green,
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 30),
+            padding: EdgeInsets.only(right: 5),
             child: GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
@@ -55,6 +78,22 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                   // height: 100.0, // Adjust the height as needed
                 ),
               ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 20, left: 10),
+            child: CircleAvatar(
+              radius: 16,
+              backgroundColor: Colors.green,
+              child: IconButton(
+                  onPressed: () async {
+                    logout();
+                  },
+                  icon: Icon(
+                    Icons.logout,
+                    size: 30,
+                    color: Colors.black,
+                  )),
             ),
           ),
         ],
