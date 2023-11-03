@@ -24,7 +24,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
-<<<<<<< HEAD
+
   Future<void> _updatePassword() async {
     String newPassword = newPasswordController.text;
     String confirmNewPassword = confirmNewPasswordController.text;
@@ -84,7 +84,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                 child: const Text('OK'),
               ),
             ],
-=======
+
   void _updatePassword() {
     // You can implement your own logic here to update the password.
     // For this example, we'll just simulate the update.
@@ -104,7 +104,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
               // Navigate back to the sign-in page or any other page as needed.
             },
             child: Text('ok'.tr),
->>>>>>> e787e51550fd7a7f8998b89497a0deeae7cdaac3
+
           ),
         ],
       ),
