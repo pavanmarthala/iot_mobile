@@ -1,0 +1,5 @@
+<resources>
+    <string name="notification_icon">notification_icon</string>
+    <string name="notification_title">Hello world</string>
+<string name="notification_message">This is a message</string>
+</resources>

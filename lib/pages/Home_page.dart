@@ -8,6 +8,7 @@ import 'package:iot_mobile_app/pages/settings/settings.dart';
 import 'package:iot_mobile_app/pages/tabs/Logs.dart';
 import 'package:iot_mobile_app/pages/tabs/dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iot_mobile_app/providers/firebase_message.dart';
 
 import 'Drawer/Drawer.dart';
 import 'lang_page.dart';
@@ -26,6 +27,7 @@ class Homepage extends StatefulWidget {
 // final drawercontroller = AdvancedDrawerController();
 
 class _HomepageState extends State<Homepage> {
+  FirebaseApi firebaseApi = FirebaseApi();
   int index = 0;
   List<Widget> screens = []; // Initialize the screens list
 
@@ -52,25 +54,20 @@ class _HomepageState extends State<Homepage> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Colors.blueGrey, Colors.blueGrey.withOpacity(0.2)],
+            colors: [
+              Colors.blueGrey.withOpacity(0.2),
+              Colors.blueGrey,
+            ],
           ),
         ),
       ),
       controller: _advancedDrawerController,
       // rtlOpening: true,
-      animationCurve: Curves.easeInBack,
-      animationDuration: Duration(milliseconds: 800),
+      animationCurve: Curves.easeInOut,
+      animationDuration: Duration(milliseconds: 300),
       animateChildDecoration: true,
       disabledGestures: false,
       childDecoration: const BoxDecoration(
-        // NOTICE: Uncomment if you want to add shadow behind the page.
-        // Keep in mind that it may cause animation jerks.
-        // boxShadow: <BoxShadow>[
-        //   BoxShadow(
-        //     color: Colors.black12,
-        //     blurRadius: 0.0,
-        //   ),
-        // ],
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
 

@@ -27,7 +27,7 @@ class _SingINState extends State<SingIN> {
   final _usernameController = TextEditingController();
 
   final _passwordController = TextEditingController();
-
+  bool _obscureText = true; // Initially obscure text
   @override
   void initState() {
     super.initState();
@@ -85,7 +85,7 @@ class _SingINState extends State<SingIN> {
           // Navigate to the user panel (Landingpage)
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => Landingpage(),
+              builder: (context) => Landingpage(id: ""),
             ),
           );
         }
@@ -193,16 +193,27 @@ class _SingINState extends State<SingIN> {
                             SizedBox(
                               height: 10,
                             ),
-                            TextFormField(
+                            TextField(
                               controller: _passwordController,
-                              keyboardType: TextInputType.text,
-                              obscureText: true,
+                              obscureText: _obscureText,
                               decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 0),
-                                hintText: "enter_pin".tr,
+                                // labelText: 'Password',
+                                hintText: 'enter_pin'.tr,
+                                suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      _obscureText = !_obscureText;
+                                    });
+                                  },
+                                  icon: Icon(
+                                    _obscureText
+                                        ? Icons.visibility
+                                        : Icons.visibility_off,
+                                  ),
+                                ),
                               ),
                             ),
+
                             SizedBox(
                               height: 20,
                             ),

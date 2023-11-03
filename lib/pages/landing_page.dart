@@ -12,7 +12,8 @@ import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Landingpage extends StatefulWidget {
-  const Landingpage({Key? key}) : super(key: key);
+  final String id;
+  const Landingpage({Key? key, required this.id}) : super(key: key);
 
   @override
   State<Landingpage> createState() => _LandingpageState();
@@ -158,6 +159,7 @@ class _LandingpageState extends State<Landingpage> {
                                 device["deviceId"] ?? "",
                                 style: TextStyle(fontSize: 25),
                               ),
+                              Text(widget.id)
                             ],
                           ),
                           Row(

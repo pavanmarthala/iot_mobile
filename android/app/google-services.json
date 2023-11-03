@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "196358992254",
+    "project_id": "iot-ktech-console",
+    "storage_bucket": "iot-ktech-console.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196358992254:android:5e22639ec3b99f06f8832f",
+        "android_client_info": {
+          "package_name": "com.example.iot_mobile_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3-tkzqCizCE489ktwF25lJZ2DGabmXwM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

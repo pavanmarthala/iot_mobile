@@ -352,9 +352,18 @@ class _DashState extends State<Dash> {
                                         fontSize: 20,
                                       ),
                                     ),
+                                    Column(
+                                      children: [],
+                                    )
                                   ],
                                 ),
-                              )
+                              ),
+                              // Row(
+                              //   children: [
+                              //     Text(
+                              //         'Date- ${DateFormat('yyyy-MM-dd').format(time)}'),
+                              //   ],
+                              // )
                             ],
                           ),
                         ),
@@ -429,6 +438,7 @@ class _DashState extends State<Dash> {
                                             Image.asset("assets/motor.jpeg")),
                                     SizedBox(
                                       width: 15,
+                                      // height: 50,
                                     ),
                                     Text(
                                       'last_on'.tr,

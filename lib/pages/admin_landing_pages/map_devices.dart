@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unnecessary_null_comparison
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unnecessary_null_comparison, prefer_adjacent_string_concatenation
 
 import 'dart:convert';
 import 'package:flutter/material.dart';
@@ -11,6 +11,7 @@ import 'package:iot_mobile_app/pages/admin_landing_pages/add_device.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/map_device.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:iot_mobile_app/providers/firebase_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class User {
@@ -41,6 +42,7 @@ class _MapDevicesState extends State<MapDevices> {
   List<Device> searchedDevices = [];
   List<String> selectedUserMobiles = [];
   List<String> selectedDeviceIds = [];
+  List<String> selectedDeviceNames = [];
 
   void searchUsers(String query) {
     setState(() {
@@ -51,9 +53,9 @@ class _MapDevicesState extends State<MapDevices> {
                 user.mobile.toLowerCase().contains(query.toLowerCase()))
             .toList();
       } else {
-        searchedUsers.clear();
+        // searchedUsers.clear();
       }
-      searchedDevices.clear();
+      // searchedDevices.clear();
     });
   }
 
@@ -66,9 +68,9 @@ class _MapDevicesState extends State<MapDevices> {
                 device.deviceId.toLowerCase().contains(query.toLowerCase()))
             .toList();
       } else {
-        searchedDevices.clear();
+        // searchedDevices.clear();
       }
-      searchedUsers.clear();
+      // searchedUsers.clear();
     });
   }
 
@@ -88,8 +90,16 @@ class _MapDevicesState extends State<MapDevices> {
         selectedDeviceIds.remove(deviceId);
       } else {
         selectedDeviceIds.add(deviceId);
+        selectedDeviceNames.add(getDeviceName(deviceId));
       }
     });
+  }
+
+  String getDeviceName(String deviceId) {
+    // Find and return the device name from the devices list
+    final device = devices.firstWhere((device) => device.deviceId == deviceId,
+        orElse: () => Device('', ''));
+    return device.deviceId;
   }
 
   Future<void> mapDevices() async {
@@ -228,6 +238,8 @@ class _MapDevicesState extends State<MapDevices> {
     return devices;
   }
 
+  FirebaseApi firebaseApi = FirebaseApi();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -299,6 +311,9 @@ class _MapDevicesState extends State<MapDevices> {
                           child: TextField(
                             onChanged: searchUsers,
                             decoration: InputDecoration(
+                              hintText: 'search_for_users'.tr,
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 0),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide: BorderSide.none,
@@ -402,6 +417,10 @@ class _MapDevicesState extends State<MapDevices> {
                           child: TextField(
                             onChanged: searchDevices,
                             decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 0),
+                              // hintText: 'Search for users',
+                              hintText: 'search_for_device'.tr,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 borderSide: BorderSide.none,
@@ -493,6 +512,42 @@ class _MapDevicesState extends State<MapDevices> {
               child: AnimatedButton(
                   onTap: () {
                     mapDevices();
+                    firebaseApi.getDeviceToken().then((value) async {
+                      var deviceNames = selectedDeviceNames.join(', ');
+                      var data = {
+                        'to': value.toString(),
+                        'notification': {
+                          'title': 'New Device Update',
+                          'body':
+                              'Device: $deviceNames ' + 'Added to your Account',
+                        },
+                        'android': {
+                          'notification': {
+                            'notification_count': 23,
+                          },
+                        },
+                        'data': {'type': 'message', 'id': 'pavan'}
+                      };
+
+                      await http.post(
+                          Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                          body: jsonEncode(data),
+                          headers: {
+                            'Content-Type': 'application/json; charset=UTF-8',
+                            'Authorization':
+                                'key=AAAALbfocX4:APA91bFVgtoqpq0gwRcp1016R45Pts1pQFFGWJzXozyEslix8VE1m1ZtyBCH7ueldVPeHvXqKTsGz9iTqHKE5hhsTZf9fUMeuA-3EAYl3Bqh9bW806x5AUN2B_9l1LrLWTrK5aUoVGia'
+                          }
+                          //     ).then((value) {
+                          //   if (kDebugMode) {
+                          //     print(value.body.toString());
+                          //   }
+                          // }).onError((error, stackTrace) {
+                          //   if (kDebugMode) {
+                          //     print(error);
+                          //   }
+                          // }
+                          );
+                    });
 
                     // print("animated button pressed");
                   },

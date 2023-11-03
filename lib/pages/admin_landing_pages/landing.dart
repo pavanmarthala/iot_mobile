@@ -1,12 +1,17 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:iot_mobile_app/animited_button.dart';
 // import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/manage_device.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/map_devices.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/manage_user.dart';
 import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:iot_mobile_app/providers/firebase_message.dart';
 
 class Adminlandingpage extends StatefulWidget {
   const Adminlandingpage({Key? key}) : super(key: key);
@@ -16,6 +21,8 @@ class Adminlandingpage extends StatefulWidget {
 }
 
 class _AdminlandingpageState extends State<Adminlandingpage> {
+  FirebaseApi firebaseApi = FirebaseApi();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,7 +163,7 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => Landingpage(),
+                          builder: (context) => Landingpage(id: ""),
                         ),
                       );
 
@@ -175,31 +182,66 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                   ),
                 ),
 
-                // Center(
-                //   child: AnimatedButton(
-                //       onTap: () {
-                //         print("animated button pressed");
-                //       },
-                //       animationDuration: const Duration(milliseconds: 2000),
-                //       initialText: "Confirm",
-                //       finalText: "Submitted",
-                //       iconData: Icons.check,
-                //       iconSize: 32.0,
-                //       buttonStyle: buttonstyle(
-                //         primaryColor: Colors.green.shade600,
-                //         secondaryColor: Colors.white,
-                //         initialTextStyle: TextStyle(
-                //           fontSize: 22.0,
-                //           color: Colors.white,
-                //         ),
-                //         finalTextStyle: TextStyle(
-                //           fontSize: 22.0,
-                //           color: Colors.green.shade600,
-                //         ),
-                //         elevation: 20.0,
-                //         borderRadius: 10.0,
-                //       )),
-                // ),
+                Center(
+                  child: AnimatedButton(
+                      onTap: () {
+                        // send notification from one device to another
+                        firebaseApi.getDeviceToken().then((value) async {
+                          var data = {
+                            'to': value.toString(),
+                            'notification': {
+                              'title': 'pavan',
+                              'body': 'Subscribe to my channel',
+                            },
+                            'android': {
+                              'notification': {
+                                'notification_count': 23,
+                              },
+                            },
+                            'data': {'type': 'message', 'id': 'pavan'}
+                          };
+
+                          await http.post(
+                              Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                              body: jsonEncode(data),
+                              headers: {
+                                'Content-Type':
+                                    'application/json; charset=UTF-8',
+                                'Authorization':
+                                    'key=AAAALbfocX4:APA91bFVgtoqpq0gwRcp1016R45Pts1pQFFGWJzXozyEslix8VE1m1ZtyBCH7ueldVPeHvXqKTsGz9iTqHKE5hhsTZf9fUMeuA-3EAYl3Bqh9bW806x5AUN2B_9l1LrLWTrK5aUoVGia'
+                              }
+                              //     ).then((value) {
+                              //   if (kDebugMode) {
+                              //     print(value.body.toString());
+                              //   }
+                              // }).onError((error, stackTrace) {
+                              //   if (kDebugMode) {
+                              //     print(error);
+                              //   }
+                              // }
+                              );
+                        });
+                      },
+                      animationDuration: const Duration(milliseconds: 2000),
+                      initialText: "Confirm",
+                      finalText: "Submitted",
+                      iconData: Icons.check,
+                      iconSize: 32.0,
+                      buttonStyle: buttonstyle(
+                        primaryColor: Colors.green.shade600,
+                        secondaryColor: Colors.white,
+                        initialTextStyle: TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.white,
+                        ),
+                        finalTextStyle: TextStyle(
+                          fontSize: 22.0,
+                          color: Colors.green.shade600,
+                        ),
+                        elevation: 20.0,
+                        borderRadius: 10.0,
+                      )),
+                ),
               ],
             ),
           ),

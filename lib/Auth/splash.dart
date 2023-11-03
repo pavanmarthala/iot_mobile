@@ -2,10 +2,12 @@
 
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:iot_mobile_app/Auth/singin.dart';
 // import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
+import 'package:iot_mobile_app/providers/firebase_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:iot_mobile_app/pages/landing_page.dart';
 
@@ -30,9 +32,21 @@ class _SplashScreenState extends State<SplashScreen> {
     return map;
   }
 
+  FirebaseApi firebaseApi = FirebaseApi();
   @override
   void initState() {
     super.initState();
+    firebaseApi.initNotifications();
+    firebaseApi.isTokenRefresh();
+    firebaseApi.firebaseInit(context);
+    firebaseApi.setupInteractMessage(context);
+    firebaseApi.getDeviceToken().then((value) {
+      if (kDebugMode) {
+        print('device token');
+        print(value);
+      }
+    });
+
     _navigateToPage();
   }
 
@@ -43,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // Fetch the stored JWT token
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwtToken = prefs.getString('jwt_token');
-
+    String? userId = prefs.getString('user_id');
     if (jwtToken == null) {
       // If the token is not found, go to the login page.
       Navigator.pushReplacement(
@@ -61,7 +75,9 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         // User is not a superadmin, navigate to the user landing page.
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => Landingpage()));
+            context,
+            MaterialPageRoute(
+                builder: (context) => Landingpage(id: userId ?? "")));
       }
     }
   }

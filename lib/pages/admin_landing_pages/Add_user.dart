@@ -14,6 +14,7 @@ import 'package:iot_mobile_app/pages/admin_landing_pages/select_destrict.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/select_state.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/select_zone.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:iot_mobile_app/providers/firebase_message.dart';
 // import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -52,6 +53,8 @@ class _AdduserrState extends State<Adduser>
   @override
   Widget build(BuildContext context) {
     AdduserModel? _addusermodel;
+    final FirebaseApi firebaseApi = FirebaseApi();
+
     return Scaffold(
       bottomNavigationBar:
           // Container(
@@ -252,6 +255,40 @@ class _AdduserrState extends State<Adduser>
                       // Request failed
                       print('API request failed with error: $error');
                       // You can handle the error here
+                    });
+                    firebaseApi.getDeviceToken().then((value) async {
+                      var data = {
+                        'to': value.toString(),
+                        'notification': {
+                          'title': 'pavan',
+                          'body': '',
+                        },
+                        'android': {
+                          'notification': {
+                            'notification_count': 23,
+                          },
+                        },
+                        'data': {'type': 'message', 'id': 'pavan'}
+                      };
+
+                      await http.post(
+                          Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                          body: jsonEncode(data),
+                          headers: {
+                            'Content-Type': 'application/json; charset=UTF-8',
+                            'Authorization':
+                                'key=AAAALbfocX4:APA91bFVgtoqpq0gwRcp1016R45Pts1pQFFGWJzXozyEslix8VE1m1ZtyBCH7ueldVPeHvXqKTsGz9iTqHKE5hhsTZf9fUMeuA-3EAYl3Bqh9bW806x5AUN2B_9l1LrLWTrK5aUoVGia'
+                          }
+                          //     ).then((value) {
+                          //   if (kDebugMode) {
+                          //     print(value.body.toString());
+                          //   }
+                          // }).onError((error, stackTrace) {
+                          //   if (kDebugMode) {
+                          //     print(error);
+                          //   }
+                          // }
+                          );
                     });
                   },
                   animationDuration: const Duration(milliseconds: 2000),
