@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, unnecessary_type_check
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_brace_in_string_interps, unnecessary_type_check, dead_code
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -21,8 +21,12 @@ class _DashState extends State<Dash> {
   bool isSwitched = false;
   var time = DateTime.now();
   DateTime motorSwitch = DateTime.now();
-  // DateTime motorStatus = DateTime.now();
-  // DateTime powerStatus = DateTime.now();
+  String motorSwitchOnTime = '';
+  String powerStatusOnTime = '';
+  String motorStatusOnTime = '';
+  String motorSwitchOnDate = '';
+  String powerStatusOnDate = '';
+  String motorStatusOnDate = '';
   bool powerStatus = false;
   bool motorStatus = false;
   bool isDeviceSwitched = false;
@@ -33,6 +37,28 @@ class _DashState extends State<Dash> {
     super.initState();
     deviceIds = fetchDeviceIds();
     fetchDeviceStatus();
+    loadTimes();
+  }
+
+  void loadTimes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    motorSwitchOnTime = prefs.getString('motorSwitchOnTime') ?? '';
+    powerStatusOnTime = prefs.getString('powerStatusOnTime') ?? '';
+    motorStatusOnTime = prefs.getString('motorStatusOnTime') ?? '';
+    motorSwitchOnTime = prefs.getString('motorSwitchOnDate') ?? '';
+    powerStatusOnTime = prefs.getString('powerStatusOnDate') ?? '';
+    motorStatusOnTime = prefs.getString('motorStatusOnDate') ?? '';
+  }
+
+  // Save times to SharedPreferences
+  void saveTimes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('motorSwitchOnTime', motorSwitchOnTime);
+    prefs.setString('powerStatusOnTime', powerStatusOnTime);
+    prefs.setString('motorStatusOnTime', motorStatusOnTime);
+    prefs.setString('motorSwitchOnDate', motorSwitchOnDate);
+    prefs.setString('powerStatusOnDate', powerStatusOnDate);
+    prefs.setString('motorStatusOnDate', motorStatusOnDate);
   }
 
   Future<List<String>> fetchDeviceIds() async {
@@ -95,7 +121,37 @@ class _DashState extends State<Dash> {
       powerStatus = jsonResponse["powerAvailable"];
       motorStatus = jsonResponse["deviceState"];
       isDeviceSwitched = jsonResponse["givenState"];
-      motorSwitch = DateTime.now(); // Update motor switch time
+      if (isSwitched) {
+        motorSwitchOnTime =
+            DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now());
+        saveTimes(); // Save the updated time to SharedPreferences
+      }
+
+      if (powerStatus) {
+        powerStatusOnTime =
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+        saveTimes(); // Save the updated time to SharedPreferences
+      }
+
+      if (motorStatus) {
+        motorStatusOnTime =
+            DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+        saveTimes(); // Save the updated time to SharedPreferences
+      } // Update motor switch time
+      if (isSwitched) {
+        motorSwitchOnDate = DateFormat('dd-MM-yyyy ').format(DateTime.now());
+        saveTimes(); // Save the updated time to SharedPreferences
+      }
+
+      if (powerStatus) {
+        powerStatusOnDate = DateFormat('yyyy-MM-dd ').format(DateTime.now());
+        saveTimes(); // Save the updated time to SharedPreferences
+      }
+
+      if (motorStatus) {
+        motorStatusOnDate = DateFormat('yyyy-MM-dd ').format(DateTime.now());
+        saveTimes(); // Save the updated time to SharedPreferences
+      }
 
       setState(() {}); // Update the UI to reflect the new state values
     } else {
@@ -225,7 +281,18 @@ class _DashState extends State<Dash> {
                                                 widget.deviceId,
                                                 isDeviceSwitched);
                                             isDeviceSwitched = value;
-                                            motorSwitch = DateTime.now();
+                                            if (isDeviceSwitched) {
+                                              motorSwitchOnTime = DateFormat(
+                                                      'dd-MM-yyyy HH:mm:ss')
+                                                  .format(DateTime.now());
+                                              saveTimes();
+                                            }
+                                            // if (isDeviceSwitched) {
+                                            //   motorSwitchOnDate =
+                                            //       DateFormat('dd-MM-yyyy ')
+                                            //           .format(DateTime.now());
+                                            //   saveTimes();
+                                            // }
                                           });
                                         },
                                         activeTrackColor: Colors.green,
@@ -253,10 +320,10 @@ class _DashState extends State<Dash> {
                                           padding:
                                               const EdgeInsets.only(top: 40),
                                           child: Text(
-                                            '${DateFormat('jms').format(motorSwitch)} ',
+                                            ' $motorSwitchOnTime',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 20,
+                                              fontSize: 16,
                                             ),
                                           ),
                                         ),
@@ -264,7 +331,19 @@ class _DashState extends State<Dash> {
                                     ),
                                   ],
                                 ),
-                              )
+                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.only(
+                              //     left: 130,
+                              //   ),
+                              //   child: Text(
+                              //     'Date : $motorSwitchOnDate',
+                              //     style: TextStyle(
+                              //       fontWeight: FontWeight.bold,
+                              //       fontSize: 16,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -347,7 +426,7 @@ class _DashState extends State<Dash> {
                                       ),
                                     ),
                                     Text(
-                                      '${DateFormat('jms').format(time)} ',
+                                      ' $powerStatusOnTime',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
@@ -449,7 +528,7 @@ class _DashState extends State<Dash> {
                                       ),
                                     ),
                                     Text(
-                                      '${DateFormat('jms').format(time)}',
+                                      ' $motorStatusOnTime',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 20,
