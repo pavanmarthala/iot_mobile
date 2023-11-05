@@ -31,7 +31,6 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   // Subscribe to the "power_status" topic
-  await _subscribeToPowerStatusTopic();
 
   Map<String, Map<String, String>> _languages = await dep.init();
   runApp(
@@ -42,23 +41,6 @@ void main() async {
       child: MyApp(languages: _languages),
     ),
   );
-}
-
-Future<void> _subscribeToPowerStatusTopic() async {
-  try {
-    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-
-    // Replace 'power_status' with the topic name you want to subscribe to
-    await _firebaseMessaging.subscribeToTopic('power_status');
-
-    if (kDebugMode) {
-      print('Subscribed to power status topic');
-    }
-  } catch (e) {
-    if (kDebugMode) {
-      print('Error subscribing to topic: $e');
-    }
-  }
 }
 
 @pragma('vm:entry-point')

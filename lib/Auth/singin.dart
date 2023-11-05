@@ -1,7 +1,8 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, use_build_context_synchronously
 
 import 'dart:convert';
-
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -89,6 +90,33 @@ class _SingINState extends State<SingIN> {
             ),
           );
         }
+      } else {
+        // Show a toast message for wrong credentials
+        // Fluttertoast.showToast(
+        //   msg: "Wrong credentials. Try again!",
+        //   toastLength: Toast.LENGTH_SHORT,
+        //   gravity: ToastGravity.BOTTOM,
+        //   timeInSecForIosWeb: 3,
+        //   backgroundColor: Colors.red,
+        //   textColor: Colors.white,
+        // );
+        //Simple to use, no global configuration
+        showToast(
+          "Wrong credentials. Try again!",
+          position: StyledToastPosition.bottom,
+          context: context,
+          animation: StyledToastAnimation.slideFromBottom,
+          reverseAnimation: StyledToastAnimation.slideToBottom,
+          duration: Duration(seconds: 4),
+          animDuration: Duration(seconds: 1),
+          curve: Curves.elasticOut,
+          reverseCurve: Curves.linear,
+          // backgroundColor: Colors.red,
+          textStyle: TextStyle(color: Colors.white, fontSize: 16),
+        );
+
+//Customize toast content widget, no global configuration
+        // showToastWidget(Text('hello styled toast'), context: context);
       }
     } catch (e) {
       print(e.toString());
@@ -147,6 +175,9 @@ class _SingINState extends State<SingIN> {
                   key: formkey,
                   child: Center(
                     child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
                       color: const Color.fromARGB(255, 255, 255, 255),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -171,7 +202,7 @@ class _SingINState extends State<SingIN> {
                             SizedBox(
                               height: 10,
                             ),
-                            TextField(
+                            TextFormField(
                               controller: _usernameController,
                               keyboardType: TextInputType.text,
                               decoration: InputDecoration(
@@ -180,6 +211,12 @@ class _SingINState extends State<SingIN> {
                                 // hintText: "mobile/email".tr,
                                 hintText: "enter_mobile/email".tr,
                               ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'mobile/email'.tr + ' is Required';
+                                }
+                                return null;
+                              },
                             ),
                             SizedBox(
                               height: 30,
@@ -193,7 +230,7 @@ class _SingINState extends State<SingIN> {
                             SizedBox(
                               height: 10,
                             ),
-                            TextField(
+                            TextFormField(
                               controller: _passwordController,
                               obscureText: _obscureText,
                               decoration: InputDecoration(
@@ -212,6 +249,12 @@ class _SingINState extends State<SingIN> {
                                   ),
                                 ),
                               ),
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'pin'.tr + ' is required';
+                                }
+                                return null;
+                              },
                             ),
 
                             SizedBox(
@@ -234,8 +277,12 @@ class _SingINState extends State<SingIN> {
                             Center(
                               child: AnimatedButton(
                                   onTap: () {
-                                    login(_usernameController.text.toString(),
-                                        _passwordController.text.toString());
+                                    if (formkey.currentState!.validate()) {
+                                      login(
+                                        _usernameController.text.toString(),
+                                        _passwordController.text.toString(),
+                                      );
+                                    }
                                   },
                                   animationDuration:
                                       const Duration(milliseconds: 2000),

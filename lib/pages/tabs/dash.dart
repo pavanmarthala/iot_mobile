@@ -19,8 +19,7 @@ class Dash extends StatefulWidget {
 
 class _DashState extends State<Dash> {
   bool isSwitched = false;
-  var time = DateTime.now();
-  DateTime motorSwitch = DateTime.now();
+
   String motorSwitchOnTime = '';
   String powerStatusOnTime = '';
   String motorStatusOnTime = '';
@@ -274,7 +273,7 @@ class _DashState extends State<Dash> {
                                       ),
                                     ),
                                     SizedBox(width: 58),
-                                    Row(
+                                    Wrap(
                                       children: [
                                         Padding(
                                           padding:
@@ -283,7 +282,7 @@ class _DashState extends State<Dash> {
                                             'last_on'.tr,
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 20,
+                                              fontSize: 18,
                                             ),
                                           ),
                                         ),
@@ -381,14 +380,14 @@ class _DashState extends State<Dash> {
                                       'last_on'.tr,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                        fontSize: 18,
                                       ),
                                     ),
                                     Text(
                                       ' $powerStatusOnTime',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     Column(
@@ -483,14 +482,14 @@ class _DashState extends State<Dash> {
                                       'last_on'.tr,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                        fontSize: 18,
                                       ),
                                     ),
                                     Text(
                                       ' $motorStatusOnTime',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                        fontSize: 16,
                                       ),
                                     ),
                                   ],

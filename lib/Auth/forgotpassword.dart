@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -51,6 +51,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         print(data);
         print('OTP sent sucessfully');
         return data;
+      } else {
+        showToast(
+          "Invalid Mobile/Email. Try again!",
+          position: StyledToastPosition.bottom,
+          context: context,
+          animation: StyledToastAnimation.slideFromLeft,
+          reverseAnimation: StyledToastAnimation.slideToLeft,
+          duration: Duration(seconds: 4),
+          animDuration: Duration(seconds: 1),
+          curve: Curves.elasticOut,
+          reverseCurve: Curves.linear,
+          // backgroundColor: Colors.red,
+          textStyle: TextStyle(color: Colors.white, fontSize: 16),
+        );
       }
     } catch (e) {
       print(e.toString());
@@ -102,20 +116,33 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         return data;
       } else {
         // Handle incorrect OTP case here
-        showDialog(
+        // showDialog(
+        //   context: context,
+        //   builder: (_) => AlertDialog(
+        //     title: Text('Error'),
+        //     content: Text('Incorrect OTP. Please try again.'),
+        //     actions: [
+        //       TextButton(
+        //         onPressed: () {
+        //           Navigator.pop(context);
+        //         },
+        //         child: Text('OK'),
+        //       ),
+        //     ],
+        //   ),
+        // );
+        showToast(
+          "Wrong OTP Try again!",
+          position: StyledToastPosition.bottom,
           context: context,
-          builder: (_) => AlertDialog(
-            title: Text('Error'),
-            content: Text('Incorrect OTP. Please try again.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('OK'),
-              ),
-            ],
-          ),
+          animation: StyledToastAnimation.slideFromRight,
+          reverseAnimation: StyledToastAnimation.slideToRight,
+          duration: Duration(seconds: 4),
+          animDuration: Duration(seconds: 1),
+          curve: Curves.elasticOut,
+          reverseCurve: Curves.linear,
+          // backgroundColor: Colors.red,
+          textStyle: TextStyle(color: Colors.white, fontSize: 16),
         );
       }
     } catch (e) {
@@ -198,152 +225,156 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Card(
-                    elevation: 4.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Container(
-                      padding: EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        //gradient: LinearGradient(
-                        // colors: [Colors.white, Colors.green],
-                        // begin: Alignment.topCenter,
-                        // end: Alignment.bottomCenter,
-                        // ),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Card(
+                      elevation: 4.0,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'forgot-pass'.tr,
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          SizedBox(height: 20),
-                          Text(
-                            "mobile/email".tr,
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          TextField(
-                            controller: userInputController,
-                            enabled: !isOtpSent,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 0),
-                              hintText: "enter_mobile/email".tr,
-                            ),
-                          ),
-                          SizedBox(height: 20.0),
-                          if (isOtpSent)
+                      child: Container(
+                        padding: EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          //gradient: LinearGradient(
+                          // colors: [Colors.white, Colors.green],
+                          // begin: Alignment.topCenter,
+                          // end: Alignment.bottomCenter,
+                          // ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
                             Text(
-                              "OTP".tr,
+                              'forgot-pass'.tr,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            SizedBox(height: 20),
+                            Text(
+                              "mobile/email".tr,
                               style: TextStyle(
                                 fontSize: 20,
                               ),
                             ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          if (isOtpSent)
-                            TextFormField(
-                              controller: otpController,
+                            SizedBox(
+                              height: 10,
+                            ),
+                            TextField(
+                              controller: userInputController,
+                              enabled: !isOtpSent,
+                              keyboardType: TextInputType.text,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 0),
-                                hintText: "enter_otp".tr,
+                                hintText: "enter_mobile/email".tr,
                               ),
                             ),
-                          SizedBox(height: 20.0),
-                          Center(
-                            child: ElevatedButton(
-                              onPressed: isOtpSent
-                                  ? () => _verifyOtp(
-                                      userInputController.text.toString(),
-                                      otpController.text.toString())
-                                  : () {
-                                      // Start the timer when clicking the "Send OTP" button
-                                      _startResendTimer();
-                                      _sendOtp(
-                                          userInputController.text.toString());
-                                    },
-                              child: Text(
-                                  isOtpSent ? "verify_otp".tr : "send_otp".tr),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                fixedSize: Size(650, 50),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            children: [
+                            SizedBox(height: 20.0),
+                            if (isOtpSent)
                               Text(
-                                'go_to_signin'.tr,
-                                style: TextStyle(color: Colors.grey),
+                                "OTP".tr,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                ),
                               ),
-                              SizedBox(
-                                width: 5,
+                            SizedBox(
+                              height: 10,
+                            ),
+                            if (isOtpSent)
+                              TextFormField(
+                                controller: otpController,
+                                decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 0),
+                                  hintText: "enter_otp".tr,
+                                ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => SingIN(),
+                            SizedBox(height: 20.0),
+                            Center(
+                              child: ElevatedButton(
+                                onPressed: isOtpSent
+                                    ? () => _verifyOtp(
+                                        userInputController.text.toString(),
+                                        otpController.text.toString())
+                                    : () {
+                                        // Start the timer when clicking the "Send OTP" button
+                                        _startResendTimer();
+                                        _sendOtp(userInputController.text
+                                            .toString());
+                                      },
+                                child: Text(isOtpSent
+                                    ? "verify_otp".tr
+                                    : "send_otp".tr),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  fixedSize: Size(650, 50),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'go_to_signin'.tr,
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (context) => SingIN(),
+                                      ),
+                                    ); // Add your button's functionality here
+                                  },
+                                  child: Text(
+                                    "click".tr,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold,
+                                      // Change the text color as needed
+                                      fontSize:
+                                          16, // Adjust the text size as needed
                                     ),
-                                  ); // Add your button's functionality here
-                                },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (isOtpSent && _resendTimer == null)
+                              TextButton(
+                                onPressed: _resendOtp,
                                 child: Text(
-                                  "click".tr,
+                                  "Resend OTP",
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,
-                                    // Change the text color as needed
-                                    fontSize:
-                                        16, // Adjust the text size as needed
+                                    fontSize: 16,
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                          if (isOtpSent && _resendTimer == null)
-                            TextButton(
-                              onPressed: _resendOtp,
-                              child: Text(
-                                "Resend OTP",
+                            if (isOtpSent && _resendTimer != null)
+                              Text(
+                                "Resend OTP in $_remainingTime seconds",
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: Colors.grey,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
                               ),
-                            ),
-                          if (isOtpSent && _resendTimer != null)
-                            Text(
-                              "Resend OTP in $_remainingTime seconds",
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
