@@ -24,67 +24,6 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
-<<<<<<< HEAD
-  Future<void> _updatePassword() async {
-    String newPassword = newPasswordController.text;
-    String confirmNewPassword = confirmNewPasswordController.text;
-
-    // Check if passwords match
-    if (newPassword != confirmNewPassword) {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Error'),
-          content: const Text('Passwords do not match.'),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        ),
-      );
-      return;
-    }
-
-    // Send a POST request to the API to update the password
-    final Map<String, dynamic> requestData = {
-      "newPassword": newPassword,
-      "id": id, // Pass the user's ID when updating the password
-    };
-    try {
-      final response = await http.post(
-        Uri.parse('https://console-api.theja.in/updatePassword'),
-        body: jsonEncode(requestData),
-        headers: {'Content-Type': 'application/json'},
-      );
-
-      if (response.statusCode == 200) {
-        var data = jsonDecode(response.body.toString());
-
-        print(data);
-        print('Password updated successfully');
-
-        showDialog(
-          context: context,
-          builder: (_) => AlertDialog(
-            title: const Text('Success'),
-            content: const Text('Password updated successfully.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const Adminlandingpage(),
-                    ),
-                  );
-                },
-                child: const Text('OK'),
-              ),
-            ],
-=======
   void _updatePassword() {
     // You can implement your own logic here to update the password.
     // For this example, we'll just simulate the update.
@@ -104,7 +43,6 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
               // Navigate back to the sign-in page or any other page as needed.
             },
             child: Text('ok'.tr),
->>>>>>> e787e51550fd7a7f8998b89497a0deeae7cdaac3
           ),
         ],
       ),

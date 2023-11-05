@@ -25,6 +25,7 @@ class _DashState extends State<Dash> {
   // DateTime powerStatus = DateTime.now();
   bool powerStatus = false;
   bool motorStatus = false;
+  bool isDeviceSwitched = false;
   Future<List<String>>? deviceIds;
 
   @override
@@ -93,7 +94,7 @@ class _DashState extends State<Dash> {
       print(response.body);
       powerStatus = jsonResponse["powerAvailable"];
       motorStatus = jsonResponse["deviceState"];
-      isSwitched = jsonResponse["givenState"];
+      isDeviceSwitched = jsonResponse["givenState"];
       motorSwitch = DateTime.now(); // Update motor switch time
 
       setState(() {}); // Update the UI to reflect the new state values
@@ -176,7 +177,7 @@ class _DashState extends State<Dash> {
                                   height: 70,
                                   width: 380,
                                   decoration: BoxDecoration(
-                                    color: switchState.isSwitched
+                                    color: isDeviceSwitched
                                         ? Colors.green
                                         : Color.fromARGB(255, 255, 17, 0),
                                     borderRadius: BorderRadius.only(
@@ -198,9 +199,7 @@ class _DashState extends State<Dash> {
                                           width: 120,
                                         ),
                                         Text(
-                                          switchState.isSwitched
-                                              ? 'on'.tr
-                                              : 'off'.tr,
+                                          isDeviceSwitched ? 'on'.tr : 'off'.tr,
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
@@ -222,8 +221,10 @@ class _DashState extends State<Dash> {
                                       child: Switch(
                                         onChanged: (value) {
                                           setState(() {
-                                            switchState.toggleSwitch();
-                                            isSwitched = value;
+                                            switchState.updateDeviceStatus(
+                                                widget.deviceId,
+                                                isDeviceSwitched);
+                                            isDeviceSwitched = value;
                                             motorSwitch = DateTime.now();
                                           });
                                         },
@@ -231,7 +232,7 @@ class _DashState extends State<Dash> {
                                         activeColor: Colors.white,
                                         inactiveTrackColor: Colors.red,
                                         inactiveThumbColor: Colors.white,
-                                        value: switchState.isSwitched,
+                                        value: isDeviceSwitched,
                                       ),
                                     ),
                                     SizedBox(width: 58),
@@ -475,10 +476,40 @@ class _DashState extends State<Dash> {
 }
 
 class SwitchState extends ChangeNotifier {
-  bool isSwitched = false;
-
-  void toggleSwitch() {
+  void toggleSwitch(String deviceId, bool isSwitched) {
     isSwitched = !isSwitched;
+    updateDeviceStatus(deviceId, isSwitched);
     notifyListeners();
+  }
+
+  Future<bool> updateDeviceStatus(String deviceId, bool isSwitched) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs
+        .getString('jwt_token'); // Retrieve the JWT token from local storage
+
+    if (jwtToken == null) {
+      // Handle the case where the token is not found
+      // return null;
+    }
+    String url = isSwitched
+        ? '/motor/offCommand/${deviceId}'
+        : '/motor/onCommand/${deviceId}';
+    final response = await http.get(
+      Uri.https('console-api.theja.in', url), // Use the correct endpoint
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      isSwitched = json.decode(response.body);
+      return isSwitched;
+      print('Switch staus:  ${isSwitched}');
+    } else {
+      print('API Response (Error): ${response.body}');
+      throw Exception('Failed to update device status');
+    }
+
+    return isSwitched;
   }
 }
