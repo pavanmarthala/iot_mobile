@@ -13,9 +13,7 @@ import 'package:iot_mobile_app/pages/admin_landing_pages/manage_user.dart';
 import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:iot_mobile_app/providers/firebase_message.dart';
-=======
 import 'package:shared_preferences/shared_preferences.dart';
->>>>>>> e787e51550fd7a7f8998b89497a0deeae7cdaac3
 
 class Adminlandingpage extends StatefulWidget {
   const Adminlandingpage({Key? key}) : super(key: key);
@@ -25,9 +23,8 @@ class Adminlandingpage extends StatefulWidget {
 }
 
 class _AdminlandingpageState extends State<Adminlandingpage> {
-<<<<<<< HEAD
   FirebaseApi firebaseApi = FirebaseApi();
-=======
+
   void logout() async {
     // Clear user login details from shared preferences
     SharedPreferences prefs = await SharedPreferences.getInstance();

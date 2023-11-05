@@ -271,15 +271,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   ? () => _verifyOtp(
                                       userInputController.text.toString(),
                                       otpController.text.toString())
-                                  : () => _sendOtp(
-                                      userInputController.text.toString()),
+                                  : () {
+                                      // Start the timer when clicking the "Send OTP" button
+                                      _startResendTimer();
+                                      _sendOtp(
+                                          userInputController.text.toString());
+                                    },
                               child: Text(
                                   isOtpSent ? "verify_otp".tr : "send_otp".tr),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors
-                                    .green, // Change the button's background color
-                                fixedSize:
-                                    Size(650, 50), // Increase the button's size
+                                backgroundColor: Colors.green,
+                                fixedSize: Size(650, 50),
                               ),
                             ),
                           ),
@@ -316,21 +318,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          if (isOtpSent)
+                          if (isOtpSent && _resendTimer == null)
                             TextButton(
                               onPressed: _resendOtp,
                               child: Text(
-                                "Resend OTP".tr + "in $_remainingTime seconds",
+                                "Resend OTP",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
-                                  // Change the text color as needed
-                                  fontSize:
-                                      16, // Adjust the text size as needed
+                                  fontSize: 16,
                                 ),
+                              ),
+                            ),
+                          if (isOtpSent && _resendTimer != null)
+                            Text(
+                              "Resend OTP in $_remainingTime seconds",
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
                             ),
                         ],
