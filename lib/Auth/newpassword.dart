@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/Auth/singin.dart';
 import 'package:iot_mobile_app/animited_button.dart';
-import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 
 class NewPasswordPage extends StatefulWidget {
@@ -24,86 +22,6 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
 
-  // Future<void> _updatePassword() async {
-  //   String newPassword = newPasswordController.text;
-  //   String confirmNewPassword = confirmNewPasswordController.text;
-
-  //   if (newPassword != confirmNewPassword) {
-  //     showDialog(
-  //       context: context,
-  //       builder: (_) => AlertDialog(
-  //         title: const Text('Error'),
-  //         content: const Text('Passwords do not match.'),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () {
-  //               Navigator.pop(context);
-  //             },
-  //             child: const Text('OK'),
-  //           ),
-  //         ],
-  //       ),
-  //     );
-  //     return;
-  //   }
-
-  //   final Map<String, dynamic> requestData = {
-  //     "newPassword": newPassword,
-  //     "id": id,
-  //   };
-
-  //   try {
-  //     final response = await http.post(
-  //       Uri.parse('https://console-api.theja.in/updatePassword'),
-  //       body: jsonEncode(requestData),
-  //       headers: {'Content-Type': 'application/json'},
-  //     );
-
-  //     if (response.statusCode == 200) {
-  //       var data = jsonDecode(response.body.toString());
-
-  //       print(data);
-  //       print('Password updated successfully');
-
-  //       showDialog(
-  //         context: context,
-  //         builder: (_) => AlertDialog(
-  //           title: const Text('Success'),
-  //           content: const Text('Password updated successfully.'),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 Navigator.of(context).push(
-  //                   MaterialPageRoute(
-  //                     builder: (context) => Adminlandingpage(),
-  //                   ),
-  //                 );
-  //               },
-  //               child: const Text('OK'),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     } catch (error) {
-  //       print('Error: $error');
-  //       showDialog(
-  //         context: context,
-  //         builder: (_) => AlertDialog(
-  //           title: const Text('Error'),
-  //           content: const Text('An error occurred while updating the password.'),
-  //           actions: [
-  //             TextButton(
-  //               onPressed: () {
-  //                 Navigator.pop(context);
-  //               },
-  //               child: const Text('OK'),
-  //             ),
-  //           ],
-  //         ),
-  //       );
-  //     }
-  //   }
-  // }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -213,20 +131,9 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                             ),
                           ),
                           SizedBox(height: 20.0),
-                          // Center(
-                          //   child: ElevatedButton(
-                          //     onPressed: _updatePassword,
-                          //     child: Text("update_pass".tr),
-                          //     style: ElevatedButton.styleFrom(
-                          //       primary: Colors.green,
-                          //       fixedSize: Size(650, 50),
-                          //     ),
-                          //   ),
-                          // ),
                           Center(
                             child: AnimatedButton(
                                 onTap: () {},
-                                //  _updatePassword,
                                 animationDuration:
                                     const Duration(milliseconds: 2000),
                                 initialText: "update_pass".tr,
