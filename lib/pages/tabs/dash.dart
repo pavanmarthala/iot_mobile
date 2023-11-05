@@ -19,11 +19,13 @@ class Dash extends StatefulWidget {
 
 class _DashState extends State<Dash> {
   bool isSwitched = false;
+  var time = DateTime.now();
+  DateTime motorSwitch = DateTime.now();
+  // DateTime motorStatus = DateTime.now();
+  // DateTime powerStatus = DateTime.now();
   bool powerStatus = false;
   bool motorStatus = false;
-  String motorSwitchOnTime = '';
-  String powerStatusOnTime = '';
-  String motorStatusOnTime = '';
+  bool isDeviceSwitched = false;
   Future<List<String>>? deviceIds;
 
   @override
@@ -31,22 +33,6 @@ class _DashState extends State<Dash> {
     super.initState();
     deviceIds = fetchDeviceIds();
     fetchDeviceStatus();
-    loadTimes();
-  }
-
-  void loadTimes() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    motorSwitchOnTime = prefs.getString('motorSwitchOnTime') ?? '';
-    powerStatusOnTime = prefs.getString('powerStatusOnTime') ?? '';
-    motorStatusOnTime = prefs.getString('motorStatusOnTime') ?? '';
-  }
-
-  // Save times to SharedPreferences
-  void saveTimes() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('motorSwitchOnTime', motorSwitchOnTime);
-    prefs.setString('powerStatusOnTime', powerStatusOnTime);
-    prefs.setString('motorStatusOnTime', motorStatusOnTime);
   }
 
   Future<List<String>> fetchDeviceIds() async {
@@ -108,28 +94,8 @@ class _DashState extends State<Dash> {
       print(response.body);
       powerStatus = jsonResponse["powerAvailable"];
       motorStatus = jsonResponse["deviceState"];
-      isSwitched = jsonResponse["givenState"];
-
-      if (isSwitched) {
-        motorSwitchOnTime = motorSwitchOnTime.isEmpty
-            ? DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())
-            : motorSwitchOnTime; // Update time if not previously set
-        saveTimes(); // Save the updated time to SharedPreferences
-      }
-
-      if (powerStatus) {
-        powerStatusOnTime = powerStatusOnTime.isEmpty
-            ? DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())
-            : powerStatusOnTime; // Update time if not previously set
-        saveTimes(); // Save the updated time to SharedPreferences
-      }
-
-      if (motorStatus) {
-        motorStatusOnTime = motorStatusOnTime.isEmpty
-            ? DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())
-            : motorStatusOnTime; // Update time if not previously set
-        saveTimes(); // Save the updated time to SharedPreferences
-      }
+      isDeviceSwitched = jsonResponse["givenState"];
+      motorSwitch = DateTime.now(); // Update motor switch time
 
       setState(() {}); // Update the UI to reflect the new state values
     } else {
@@ -211,7 +177,7 @@ class _DashState extends State<Dash> {
                                   height: 70,
                                   width: 380,
                                   decoration: BoxDecoration(
-                                    color: switchState.isSwitched
+                                    color: isDeviceSwitched
                                         ? Colors.green
                                         : Color.fromARGB(255, 255, 17, 0),
                                     borderRadius: BorderRadius.only(
@@ -233,9 +199,7 @@ class _DashState extends State<Dash> {
                                           width: 120,
                                         ),
                                         Text(
-                                          switchState.isSwitched
-                                              ? 'on'.tr
-                                              : 'off'.tr,
+                                          isDeviceSwitched ? 'on'.tr : 'off'.tr,
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
@@ -257,46 +221,46 @@ class _DashState extends State<Dash> {
                                       child: Switch(
                                         onChanged: (value) {
                                           setState(() {
-                                            switchState.toggleSwitch();
-                                            isSwitched = value;
-                                            if (isSwitched) {
-                                              motorSwitchOnTime = DateFormat(
-                                                      'yyyy-MM-dd HH:mm:ss')
-                                                  .format(DateTime.now());
-                                              saveTimes();
-                                            }
+                                            switchState.updateDeviceStatus(
+                                                widget.deviceId,
+                                                isDeviceSwitched);
+                                            isDeviceSwitched = value;
+                                            motorSwitch = DateTime.now();
                                           });
                                         },
                                         activeTrackColor: Colors.green,
                                         activeColor: Colors.white,
                                         inactiveTrackColor: Colors.red,
                                         inactiveThumbColor: Colors.white,
-                                        value: switchState.isSwitched,
+                                        value: isDeviceSwitched,
                                       ),
                                     ),
-                                    SizedBox(width: 28),
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 35),
-                                      child: Row(
-                                        children: [
-                                          Text(
+                                    SizedBox(width: 58),
+                                    Row(
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 40),
+                                          child: Text(
                                             'last_on'.tr,
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
                                             ),
                                           ),
-                                          // Check if the switch is on
-                                          Text(
-                                            ' $motorSwitchOnTime', // Display the time here
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 40),
+                                          child: Text(
+                                            '${DateFormat('jms').format(motorSwitch)} ',
                                             style: TextStyle(
-                                              color: Colors.black,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                              fontSize: 20,
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -382,13 +346,11 @@ class _DashState extends State<Dash> {
                                         fontSize: 20,
                                       ),
                                     ),
-                                    // Check if power status is true
                                     Text(
-                                      ' $powerStatusOnTime', // Display the time here
+                                      '${DateFormat('jms').format(time)} ',
                                       style: TextStyle(
-                                        color: Colors.black,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                        fontSize: 20,
                                       ),
                                     ),
                                     Column(
@@ -397,6 +359,12 @@ class _DashState extends State<Dash> {
                                   ],
                                 ),
                               ),
+                              // Row(
+                              //   children: [
+                              //     Text(
+                              //         'Date- ${DateFormat('yyyy-MM-dd').format(time)}'),
+                              //   ],
+                              // )
                             ],
                           ),
                         ),
@@ -481,11 +449,10 @@ class _DashState extends State<Dash> {
                                       ),
                                     ),
                                     Text(
-                                      ' $motorStatusOnTime', // Display the time here
+                                      '${DateFormat('jms').format(time)}',
                                       style: TextStyle(
-                                        color: Colors.black,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                        fontSize: 20,
                                       ),
                                     ),
                                   ],
@@ -509,10 +476,40 @@ class _DashState extends State<Dash> {
 }
 
 class SwitchState extends ChangeNotifier {
-  bool isSwitched = false;
-
-  void toggleSwitch() {
+  void toggleSwitch(String deviceId, bool isSwitched) {
     isSwitched = !isSwitched;
+    updateDeviceStatus(deviceId, isSwitched);
     notifyListeners();
+  }
+
+  Future<bool> updateDeviceStatus(String deviceId, bool isSwitched) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs
+        .getString('jwt_token'); // Retrieve the JWT token from local storage
+
+    if (jwtToken == null) {
+      // Handle the case where the token is not found
+      // return null;
+    }
+    String url = isSwitched
+        ? '/motor/offCommand/${deviceId}'
+        : '/motor/onCommand/${deviceId}';
+    final response = await http.get(
+      Uri.https('console-api.theja.in', url), // Use the correct endpoint
+      headers: {
+        "Authorization": "Bearer $jwtToken",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      isSwitched = json.decode(response.body);
+      return isSwitched;
+      print('Switch staus:  ${isSwitched}');
+    } else {
+      print('API Response (Error): ${response.body}');
+      throw Exception('Failed to update device status');
+    }
+
+    return isSwitched;
   }
 }
