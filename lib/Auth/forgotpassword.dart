@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last, library_private_types_in_public_api, use_key_in_widget_constructors
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, library_private_types_in_public_api, use_key_in_widget_constructors, use_build_context_synchronously
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -21,6 +22,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   TextEditingController otpController = TextEditingController();
   bool isOtpSent = false;
   String userId = "";
+  Timer? _resendTimer;
+  int _remainingTime = 30; // 30 seconds
+
   Future<void> _sendOtp(String userPhNumber) async {
     // You can implement your own logic here to send OTP.
     // For this example, we'll just simulate that OTP is sent.
@@ -120,10 +124,31 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   void _resendOtp() {
+    // Start the timer
+    _startResendTimer();
+
+    // Disable the button
+    setState(() {
+      isOtpSent = false;
+    });
     // Implement your OTP resend logic here.
     // You can reset the timer or send a new OTP.
     // For this example, we'll just simulate resending OTP.
     _sendOtp(userInputController.text);
+  }
+
+  void _startResendTimer() {
+    _remainingTime = 30; // Reset the timer to 30 seconds
+    _resendTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_remainingTime > 0) {
+          _remainingTime--;
+        } else {
+          _resendTimer?.cancel(); // Cancel the timer when it reaches 0
+          _resendTimer = null;
+        }
+      });
+    });
   }
 
   @override
@@ -289,25 +314,25 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: 6,
-                              ),
-                              if (isOtpSent)
-                                TextButton(
-                                  onPressed: _resendOtp,
-                                  child: Text(
-                                    "Resend OTP".tr,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      // Change the text color as needed
-                                      fontSize:
-                                          16, // Adjust the text size as needed
-                                    ),
-                                  ),
-                                ),
                             ],
                           ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                          if (isOtpSent)
+                            TextButton(
+                              onPressed: _resendOtp,
+                              child: Text(
+                                "Resend OTP".tr + "in $_remainingTime seconds",
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                  // Change the text color as needed
+                                  fontSize:
+                                      16, // Adjust the text size as needed
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),

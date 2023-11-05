@@ -307,22 +307,19 @@ class _MapDevicesState extends State<MapDevices> {
                         height: 32,
                         margin: const EdgeInsets.symmetric(horizontal: 20),
                         width: 230,
-                        child: Expanded(
-                          child: TextField(
-                            onChanged: searchUsers,
-                            decoration: InputDecoration(
-                              hintText: 'search_for_users'.tr,
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 0),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
-                              ),
-                              fillColor:
-                                  const Color.fromARGB(255, 251, 247, 247),
-                              filled: true,
-                              suffixIcon: const Icon(Icons.search),
+                        child: TextField(
+                          onChanged: searchUsers,
+                          decoration: InputDecoration(
+                            hintText: 'search_for_users'.tr,
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 0),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide.none,
                             ),
+                            fillColor: const Color.fromARGB(255, 251, 247, 247),
+                            filled: true,
+                            suffixIcon: const Icon(Icons.search),
                           ),
                         ),
                       ),
@@ -413,23 +410,20 @@ class _MapDevicesState extends State<MapDevices> {
                         height: 32,
                         margin: const EdgeInsets.only(left: 10, top: 10),
                         width: 230,
-                        child: Expanded(
-                          child: TextField(
-                            onChanged: searchDevices,
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 0),
-                              // hintText: 'Search for users',
-                              hintText: 'search_for_device'.tr,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                                borderSide: BorderSide.none,
-                              ),
-                              fillColor:
-                                  const Color.fromARGB(255, 246, 242, 242),
-                              filled: true,
-                              suffixIcon: const Icon(Icons.search),
+                        child: TextField(
+                          onChanged: searchDevices,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 0),
+                            // hintText: 'Search for users',
+                            hintText: 'search_for_device'.tr,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide.none,
                             ),
+                            fillColor: const Color.fromARGB(255, 246, 242, 242),
+                            filled: true,
+                            suffixIcon: const Icon(Icons.search),
                           ),
                         ),
                       ),

@@ -180,72 +180,95 @@ class _UsersState extends State<Users> {
                     ),
                     Container(
                       height: 650,
-                      child: Expanded(
-                        child: ListView(
-                          children: filteredDeviceList.map((device) {
-                            return Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 10, left: 5, right: 5),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(13),
-                                  color: Colors.white,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 10, left: 20),
-                                      child: Text(
-                                        device["name"] ?? "user",
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                      child: ListView(
+                        children: filteredDeviceList.map((device) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                top: 10, left: 5, right: 5),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(13),
+                                color: Colors.white,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, left: 20),
+                                    child: Text(
+                                      device["name"] ?? "user",
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 5, left: 20),
-                                      child: Text(
-                                        device["mobile"] ?? "",
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.only(top: 5, left: 20),
+                                    child: Text(
+                                      device["mobile"] ?? "",
+                                      style: const TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 15, bottom: 10, top: 5),
-                                      child: Row(
-                                        children: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              Navigator.of(context).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      UserDetailsScreen(
-                                                    mobileId:
-                                                        device["mobile"] ?? "",
-                                                    deviceIdId: '',
-                                                  ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 15, bottom: 10, top: 5),
+                                    child: Row(
+                                      children: [
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    UserDetailsScreen(
+                                                  mobileId:
+                                                      device["mobile"] ?? "",
+                                                  deviceIdId: '',
                                                 ),
-                                              );
-                                            },
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            'view'.tr,
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          style: ElevatedButton.styleFrom(
+                                            foregroundColor: Colors.black,
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    234, 42, 228, 138),
+                                            fixedSize: const Size(100, 45),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(17),
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 20),
+                                          child: ElevatedButton(
+                                            onPressed: () {},
                                             child: Text(
-                                              'view'.tr,
+                                              'delete'.tr,
                                               style: TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
                                               ),
                                             ),
                                             style: ElevatedButton.styleFrom(
-                                              foregroundColor: Colors.black,
                                               backgroundColor:
                                                   const Color.fromARGB(
-                                                      234, 42, 228, 138),
+                                                      234, 239, 9, 9),
+                                              onPrimary: Colors.black,
                                               fixedSize: const Size(100, 45),
                                               shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -253,74 +276,46 @@ class _UsersState extends State<Users> {
                                               ),
                                             ),
                                           ),
-                                          Padding(
+                                        ),
+                                        Padding(
                                             padding:
                                                 const EdgeInsets.only(left: 20),
                                             child: ElevatedButton(
                                               onPressed: () {},
                                               child: Text(
-                                                'delete'.tr,
+                                                device["active"] == "true"
+                                                    ? 'deactivate'.tr
+                                                    : 'activate'.tr,
                                                 style: TextStyle(
-                                                  fontSize: 20,
+                                                  fontSize: 18,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor:
-                                                    const Color.fromARGB(
-                                                        234, 239, 9, 9),
+                                                    device["active"] == "true"
+                                                        ? const Color.fromARGB(
+                                                            234, 42, 228, 138)
+                                                        : const Color.fromARGB(
+                                                            234, 239, 9, 9),
+
+                                                // Green
                                                 onPrimary: Colors.black,
-                                                fixedSize: const Size(100, 45),
+                                                fixedSize: const Size(120, 50),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius:
                                                       BorderRadius.circular(17),
                                                 ),
                                               ),
-                                            ),
-                                          ),
-                                          Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 20),
-                                              child: ElevatedButton(
-                                                onPressed: () {},
-                                                child: Text(
-                                                  device["active"] == "true"
-                                                      ? 'deactivate'.tr
-                                                      : 'activate'.tr,
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor: device[
-                                                              "active"] ==
-                                                          "true"
-                                                      ? const Color.fromARGB(
-                                                          234, 42, 228, 138)
-                                                      : const Color.fromARGB(
-                                                          234, 239, 9, 9),
-
-                                                  // Green
-                                                  onPrimary: Colors.black,
-                                                  fixedSize:
-                                                      const Size(120, 50),
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            17),
-                                                  ),
-                                                ),
-                                              )),
-                                        ],
-                                      ),
+                                            )),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                            );
-                          }).toList(),
-                        ),
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
                   ],

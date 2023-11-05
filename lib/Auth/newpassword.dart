@@ -1,53 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/Auth/singin.dart';
 import 'package:iot_mobile_app/animited_button.dart';
-import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 
 class NewPasswordPage extends StatefulWidget {
-  final String id; // Add this line
+  final String id;
 
-  NewPasswordPage({required this.id}); // Add this constructor
+  NewPasswordPage({required this.id});
 
   @override
   _NewPasswordPageState createState() => _NewPasswordPageState(id: id);
 }
 
 class _NewPasswordPageState extends State<NewPasswordPage> {
-  final String id; // Store the user's ID
+  final String id;
 
   _NewPasswordPageState({required this.id});
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
-
-  void _updatePassword() {
-    // You can implement your own logic here to update the password.
-    // For this example, we'll just simulate the update.
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('success'.tr),
-        content: Text('pass_verified'.tr),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => Adminlandingpage(),
-                ),
-              );
-              // Navigate back to the sign-in page or any other page as needed.
-            },
-            child: Text('ok'.tr),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,19 +131,9 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                             ),
                           ),
                           SizedBox(height: 20.0),
-                          // Center(
-                          //   child: ElevatedButton(
-                          //     onPressed: _updatePassword,
-                          //     child: Text("update_pass".tr),
-                          //     style: ElevatedButton.styleFrom(
-                          //       primary: Colors.green,
-                          //       fixedSize: Size(650, 50),
-                          //     ),
-                          //   ),
-                          // ),
                           Center(
                             child: AnimatedButton(
-                                onTap: _updatePassword,
+                                onTap: () {},
                                 animationDuration:
                                     const Duration(milliseconds: 2000),
                                 initialText: "update_pass".tr,
