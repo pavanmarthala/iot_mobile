@@ -19,12 +19,11 @@ class Dash extends StatefulWidget {
 
 class _DashState extends State<Dash> {
   bool isSwitched = false;
-  var time = DateTime.now();
-  DateTime motorSwitch = DateTime.now();
-  // DateTime motorStatus = DateTime.now();
-  // DateTime powerStatus = DateTime.now();
   bool powerStatus = false;
   bool motorStatus = false;
+  String motorSwitchOnTime = '';
+  String powerStatusOnTime = '';
+  String motorStatusOnTime = '';
   Future<List<String>>? deviceIds;
 
   @override
@@ -32,6 +31,22 @@ class _DashState extends State<Dash> {
     super.initState();
     deviceIds = fetchDeviceIds();
     fetchDeviceStatus();
+    loadTimes();
+  }
+
+  void loadTimes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    motorSwitchOnTime = prefs.getString('motorSwitchOnTime') ?? '';
+    powerStatusOnTime = prefs.getString('powerStatusOnTime') ?? '';
+    motorStatusOnTime = prefs.getString('motorStatusOnTime') ?? '';
+  }
+
+  // Save times to SharedPreferences
+  void saveTimes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('motorSwitchOnTime', motorSwitchOnTime);
+    prefs.setString('powerStatusOnTime', powerStatusOnTime);
+    prefs.setString('motorStatusOnTime', motorStatusOnTime);
   }
 
   Future<List<String>> fetchDeviceIds() async {
@@ -94,7 +109,27 @@ class _DashState extends State<Dash> {
       powerStatus = jsonResponse["powerAvailable"];
       motorStatus = jsonResponse["deviceState"];
       isSwitched = jsonResponse["givenState"];
-      motorSwitch = DateTime.now(); // Update motor switch time
+
+      if (isSwitched) {
+        motorSwitchOnTime = motorSwitchOnTime.isEmpty
+            ? DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())
+            : motorSwitchOnTime; // Update time if not previously set
+        saveTimes(); // Save the updated time to SharedPreferences
+      }
+
+      if (powerStatus) {
+        powerStatusOnTime = powerStatusOnTime.isEmpty
+            ? DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())
+            : powerStatusOnTime; // Update time if not previously set
+        saveTimes(); // Save the updated time to SharedPreferences
+      }
+
+      if (motorStatus) {
+        motorStatusOnTime = motorStatusOnTime.isEmpty
+            ? DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now())
+            : motorStatusOnTime; // Update time if not previously set
+        saveTimes(); // Save the updated time to SharedPreferences
+      }
 
       setState(() {}); // Update the UI to reflect the new state values
     } else {
@@ -224,7 +259,12 @@ class _DashState extends State<Dash> {
                                           setState(() {
                                             switchState.toggleSwitch();
                                             isSwitched = value;
-                                            motorSwitch = DateTime.now();
+                                            if (isSwitched) {
+                                              motorSwitchOnTime = DateFormat(
+                                                      'yyyy-MM-dd HH:mm:ss')
+                                                  .format(DateTime.now());
+                                              saveTimes();
+                                            }
                                           });
                                         },
                                         activeTrackColor: Colors.green,
@@ -234,32 +274,29 @@ class _DashState extends State<Dash> {
                                         value: switchState.isSwitched,
                                       ),
                                     ),
-                                    SizedBox(width: 58),
-                                    Row(
-                                      children: [
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 40),
-                                          child: Text(
+                                    SizedBox(width: 28),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 35),
+                                      child: Row(
+                                        children: [
+                                          Text(
                                             'last_on'.tr,
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20,
                                             ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 40),
-                                          child: Text(
-                                            '${DateFormat('jms').format(motorSwitch)} ',
+                                          // Check if the switch is on
+                                          Text(
+                                            ' $motorSwitchOnTime', // Display the time here
                                             style: TextStyle(
+                                              color: Colors.black,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 20,
+                                              fontSize: 16,
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -345,11 +382,13 @@ class _DashState extends State<Dash> {
                                         fontSize: 20,
                                       ),
                                     ),
+                                    // Check if power status is true
                                     Text(
-                                      '${DateFormat('jms').format(time)} ',
+                                      ' $powerStatusOnTime', // Display the time here
                                       style: TextStyle(
+                                        color: Colors.black,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                        fontSize: 16,
                                       ),
                                     ),
                                     Column(
@@ -358,12 +397,6 @@ class _DashState extends State<Dash> {
                                   ],
                                 ),
                               ),
-                              // Row(
-                              //   children: [
-                              //     Text(
-                              //         'Date- ${DateFormat('yyyy-MM-dd').format(time)}'),
-                              //   ],
-                              // )
                             ],
                           ),
                         ),
@@ -448,10 +481,11 @@ class _DashState extends State<Dash> {
                                       ),
                                     ),
                                     Text(
-                                      '${DateFormat('jms').format(time)}',
+                                      ' $motorStatusOnTime', // Display the time here
                                       style: TextStyle(
+                                        color: Colors.black,
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20,
+                                        fontSize: 16,
                                       ),
                                     ),
                                   ],
