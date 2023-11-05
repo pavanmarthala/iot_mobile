@@ -24,9 +24,6 @@ class _DashState extends State<Dash> {
   String motorSwitchOnTime = '';
   String powerStatusOnTime = '';
   String motorStatusOnTime = '';
-  String motorSwitchOnDate = '';
-  String powerStatusOnDate = '';
-  String motorStatusOnDate = '';
   bool powerStatus = false;
   bool motorStatus = false;
   bool isDeviceSwitched = false;
@@ -45,9 +42,6 @@ class _DashState extends State<Dash> {
     motorSwitchOnTime = prefs.getString('motorSwitchOnTime') ?? '';
     powerStatusOnTime = prefs.getString('powerStatusOnTime') ?? '';
     motorStatusOnTime = prefs.getString('motorStatusOnTime') ?? '';
-    motorSwitchOnTime = prefs.getString('motorSwitchOnDate') ?? '';
-    powerStatusOnTime = prefs.getString('powerStatusOnDate') ?? '';
-    motorStatusOnTime = prefs.getString('motorStatusOnDate') ?? '';
   }
 
   // Save times to SharedPreferences
@@ -56,9 +50,6 @@ class _DashState extends State<Dash> {
     prefs.setString('motorSwitchOnTime', motorSwitchOnTime);
     prefs.setString('powerStatusOnTime', powerStatusOnTime);
     prefs.setString('motorStatusOnTime', motorStatusOnTime);
-    prefs.setString('motorSwitchOnDate', motorSwitchOnDate);
-    prefs.setString('powerStatusOnDate', powerStatusOnDate);
-    prefs.setString('motorStatusOnDate', motorStatusOnDate);
   }
 
   Future<List<String>> fetchDeviceIds() async {
@@ -138,20 +129,6 @@ class _DashState extends State<Dash> {
             DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
         saveTimes(); // Save the updated time to SharedPreferences
       } // Update motor switch time
-      if (isSwitched) {
-        motorSwitchOnDate = DateFormat('dd-MM-yyyy ').format(DateTime.now());
-        saveTimes(); // Save the updated time to SharedPreferences
-      }
-
-      if (powerStatus) {
-        powerStatusOnDate = DateFormat('yyyy-MM-dd ').format(DateTime.now());
-        saveTimes(); // Save the updated time to SharedPreferences
-      }
-
-      if (motorStatus) {
-        motorStatusOnDate = DateFormat('yyyy-MM-dd ').format(DateTime.now());
-        saveTimes(); // Save the updated time to SharedPreferences
-      }
 
       setState(() {}); // Update the UI to reflect the new state values
     } else {
@@ -287,12 +264,6 @@ class _DashState extends State<Dash> {
                                                   .format(DateTime.now());
                                               saveTimes();
                                             }
-                                            // if (isDeviceSwitched) {
-                                            //   motorSwitchOnDate =
-                                            //       DateFormat('dd-MM-yyyy ')
-                                            //           .format(DateTime.now());
-                                            //   saveTimes();
-                                            // }
                                           });
                                         },
                                         activeTrackColor: Colors.green,
@@ -332,18 +303,6 @@ class _DashState extends State<Dash> {
                                   ],
                                 ),
                               ),
-                              // Padding(
-                              //   padding: const EdgeInsets.only(
-                              //     left: 130,
-                              //   ),
-                              //   child: Text(
-                              //     'Date : $motorSwitchOnDate',
-                              //     style: TextStyle(
-                              //       fontWeight: FontWeight.bold,
-                              //       fontSize: 16,
-                              //     ),
-                              //   ),
-                              // ),
                             ],
                           ),
                         ),
