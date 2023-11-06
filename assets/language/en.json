@@ -11,6 +11,7 @@
   "status": "Status",
   "logs": "Logs",
   "last_on": "Last On:",
+  "last_off": "Last Off:",
   "log_date": "Log Date",
   "power": "Power",
   "motor": "Motor",

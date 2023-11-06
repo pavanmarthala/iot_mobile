@@ -1,10 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/Auth/singin.dart';
 import 'package:iot_mobile_app/animited_button.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:http/http.dart' as http;
 
 class NewPasswordPage extends StatefulWidget {
   final String id;
@@ -21,6 +24,96 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   _NewPasswordPageState({required this.id});
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController confirmNewPasswordController = TextEditingController();
+
+  void updateNewPin(
+    int newPin,
+    int confirmPin,
+  ) async {
+    // You can implement your own logic here to verify OTP.
+    // For this example, we'll just simulate that OTP is verified.
+
+    if (newPin != confirmPin) {
+      showToast(
+        "Passwords do not match. Try again!",
+        position: StyledToastPosition.bottom,
+        context: context,
+        animation: StyledToastAnimation.slideFromRight,
+        reverseAnimation: StyledToastAnimation.slideToRight,
+        duration: Duration(seconds: 4),
+        animDuration: Duration(seconds: 1),
+        curve: Curves.elasticOut,
+        reverseCurve: Curves.linear,
+        // backgroundColor: Colors.red,
+        textStyle: TextStyle(color: Colors.white, fontSize: 16),
+      );
+      return;
+    }
+
+    final Map<String, dynamic> requestData = {"id": id, "pin": newPin};
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://console-api.theja.in/updatePassword'),
+        body: jsonEncode(requestData),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        print("Successfully updated Pin");
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text('success'.tr),
+            content: Text('New Pin Updated'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SingIN(),
+                    ),
+                  ); // Add your button's functionality here
+                },
+                child: Text('ok'.tr),
+              ),
+            ],
+          ),
+        );
+      } else {
+        // Handle incorrect pin case here
+        // showDialog(
+        //   context: context,
+        //   builder: (_) => AlertDialog(
+        //     title: Text('Error'),
+        //     content: Text('Incorrect OTP. Please try again.'),
+        //     actions: [
+        //       TextButton(
+        //         onPressed: () {
+        //           Navigator.pop(context);
+        //         },
+        //         child: Text('OK'),
+        //       ),
+        //     ],
+        //   ),
+        // );
+        showToast(
+          "Unable to update PIN, please try again!",
+          position: StyledToastPosition.bottom,
+          context: context,
+          animation: StyledToastAnimation.slideFromRight,
+          reverseAnimation: StyledToastAnimation.slideToRight,
+          duration: Duration(seconds: 4),
+          animDuration: Duration(seconds: 1),
+          curve: Curves.elasticOut,
+          reverseCurve: Curves.linear,
+          // backgroundColor: Colors.red,
+          textStyle: TextStyle(color: Colors.white, fontSize: 16),
+        );
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +196,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                           ),
                           TextFormField(
                             controller: newPasswordController,
+                            keyboardType: TextInputType.number,
                             obscureText: true,
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(
@@ -122,6 +216,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                           ),
                           TextFormField(
                             controller: confirmNewPasswordController,
+                            keyboardType: TextInputType.number,
                             obscureText: true,
                             decoration: InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(
@@ -133,7 +228,14 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                           SizedBox(height: 20.0),
                           Center(
                             child: AnimatedButton(
-                                onTap: () {},
+                                onTap: () => {
+                                      updateNewPin(
+                                          int.parse(newPasswordController.text
+                                              .toString()),
+                                          int.parse(confirmNewPasswordController
+                                              .text
+                                              .toString()))
+                                    },
                                 animationDuration:
                                     const Duration(milliseconds: 2000),
                                 initialText: "update_pass".tr,
