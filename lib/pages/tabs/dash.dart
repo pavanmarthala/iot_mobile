@@ -33,7 +33,7 @@ class _DashState extends State<Dash> {
     super.initState();
     deviceIds = fetchDeviceIds();
     fetchDeviceStatus();
-    loadTimes();
+//   loadTimes();
   }
 
   void loadTimes() async {
@@ -111,21 +111,21 @@ class _DashState extends State<Dash> {
       powerStatus = jsonResponse["powerAvailable"];
       motorStatus = jsonResponse["deviceState"];
       isDeviceSwitched = jsonResponse["givenState"];
+      motorSwitchOnTime = jsonResponse["lastGivenState"] ?? '';
+      powerStatusOnTime = jsonResponse["lastPowerAvailable"] ?? '';
+      motorStatusOnTime = jsonResponse["lastDeviceState"] ?? '';
       if (isSwitched) {
-        motorSwitchOnTime =
-            DateFormat('dd-MM-yyyy HH:mm:ss').format(DateTime.now());
+        motorSwitchOnTime = DateFormat('HH:mm:ss a').format(DateTime.now());
         saveTimes(); // Save the updated time to SharedPreferences
       }
 
       if (powerStatus) {
-        powerStatusOnTime =
-            DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+        powerStatusOnTime = DateFormat('HH:mm:ss').format(DateTime.now());
         saveTimes(); // Save the updated time to SharedPreferences
       }
 
       if (motorStatus) {
-        motorStatusOnTime =
-            DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+        motorStatusOnTime = DateFormat('HH:mm:ss').format(DateTime.now());
         saveTimes(); // Save the updated time to SharedPreferences
       } // Update motor switch time
 
@@ -258,9 +258,9 @@ class _DashState extends State<Dash> {
                                                 isDeviceSwitched);
                                             isDeviceSwitched = value;
                                             if (isDeviceSwitched) {
-                                              motorSwitchOnTime = DateFormat(
-                                                      'dd-MM-yyyy HH:mm:ss')
-                                                  .format(DateTime.now());
+                                              motorSwitchOnTime =
+                                                  DateFormat('HH:mm:ss a')
+                                                      .format(DateTime.now());
                                               saveTimes();
                                             }
                                           });
@@ -278,13 +278,21 @@ class _DashState extends State<Dash> {
                                         Padding(
                                           padding:
                                               const EdgeInsets.only(top: 40),
-                                          child: Text(
-                                            'last_on'.tr,
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
+                                          child: isDeviceSwitched
+                                              ? Text(
+                                                  'last_off'.tr,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                  ),
+                                                )
+                                              : Text(
+                                                  'last_on'.tr,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 18,
+                                                  ),
+                                                ),
                                         ),
                                         Padding(
                                           padding:
