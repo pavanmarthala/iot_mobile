@@ -149,7 +149,7 @@ class _LandingpageState extends State<Landingpage> {
               child: Column(
                 children: deviceList.map((device) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 4),
+                    padding: const EdgeInsets.only(top: 20, left: 4, right: 4),
                     child: ElevatedButton(
                       onPressed: () {
                         Navigator.pushReplacement(
