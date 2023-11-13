@@ -163,23 +163,27 @@ class _LogsState extends State<Logs> with SingleTickerProviderStateMixin {
                     final loadLogs = logData["loadLogsDto"];
 
                     return Container(
-                        color: Color.fromARGB(255, 247, 242, 242),
+                        color: Color(0xffcbcbcb),
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 30, top: 45),
+                              padding: const EdgeInsets.only(left: 30, top: 35),
                               child: Row(
                                 children: [
                                   Text(
                                     'device_no:1'.tr,
                                     style: TextStyle(
-                                        fontSize: 25,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.05,
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     '${widget.deviceId}',
                                     style: TextStyle(
-                                        fontSize: 25,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.05,
                                         fontWeight: FontWeight.bold),
                                   ),
                                 ],
@@ -192,10 +196,14 @@ class _LogsState extends State<Logs> with SingleTickerProviderStateMixin {
                                   Text(
                                     'log_date'.tr,
                                     style: TextStyle(
-                                        fontSize: 25,
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.05,
                                         fontWeight: FontWeight.bold),
                                   ),
-                                  SizedBox(width: 100),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.2),
                                   Padding(
                                     padding: const EdgeInsets.only(top: 10),
                                     child: TextButton(
@@ -204,7 +212,10 @@ class _LogsState extends State<Logs> with SingleTickerProviderStateMixin {
                                         _formattedDate,
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 18,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
                                         ),
                                       ),
                                     ),
@@ -213,7 +224,7 @@ class _LogsState extends State<Logs> with SingleTickerProviderStateMixin {
                               ),
                             ),
                             SizedBox(
-                              height: 20,
+                              height: MediaQuery.of(context).size.height * 0.01,
                             ),
                             Padding(
                               padding:
@@ -242,16 +253,31 @@ class _LogsState extends State<Logs> with SingleTickerProviderStateMixin {
                                         tabs: [
                                           Tab(
                                               child: Text('power'.tr,
-                                                  style:
-                                                      TextStyle(fontSize: 20))),
+                                                  style: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
+                                                  ))),
                                           Tab(
                                               child: Text('motor'.tr,
-                                                  style:
-                                                      TextStyle(fontSize: 20))),
+                                                  style: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
+                                                  ))),
                                           Tab(
                                               child: Text('load'.tr,
-                                                  style:
-                                                      TextStyle(fontSize: 20))),
+                                                  style: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
+                                                  ))),
                                         ],
                                       ),
                                     ),

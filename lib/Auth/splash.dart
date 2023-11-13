@@ -57,7 +57,9 @@ class _SplashScreenState extends State<SplashScreen> {
     // Fetch the stored JWT token
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwtToken = prefs.getString('jwt_token');
-    String? userId = prefs.getString('user_id');
+    String? userId = prefs.getString('username');
+    print('JWT Token: $jwtToken');
+    print('User ID: $userId');
     if (jwtToken == null) {
       // If the token is not found, go to the login page.
       Navigator.pushReplacement(
@@ -70,14 +72,19 @@ class _SplashScreenState extends State<SplashScreen> {
       List<dynamic> authorities = decodedToken['authorities'];
       if (authorities.contains('admin') || authorities.contains('superAdmin')) {
         // User is a superadmin, navigate to AdminLandingPage.
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) => Adminlandingpage()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => Adminlandingpage()),
+          (route) => false,
+        );
       } else {
         // User is not a superadmin, navigate to the user landing page.
-        Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => Landingpage(id: userId ?? "")));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => Landingpage(id: userId ?? "")),
+          (route) => false,
+        );
       }
     }
   }

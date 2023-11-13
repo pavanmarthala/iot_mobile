@@ -12,6 +12,7 @@ import 'package:iot_mobile_app/pages/admin_landing_pages/map_devices.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/manage_user.dart';
 import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:iot_mobile_app/pages/user_landing.dart';
 import 'package:iot_mobile_app/providers/firebase_message.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,7 +45,10 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
       appBar: AppBar(
         title: Text(
           'manage_users'.tr,
-          style: TextStyle(color: Colors.black, fontSize: 25),
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: MediaQuery.of(context).size.width * 0.06,
+          ),
         ),
         automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
@@ -121,7 +125,9 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                     ),
                     child: Text(
                       'manage_users'.tr,
-                      style: TextStyle(fontSize: 25, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * 0.07,
+                          color: Colors.black),
                     ),
                   ),
                 ),
@@ -150,7 +156,9 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                     ),
                     child: Text(
                       'manage_devices'.tr,
-                      style: TextStyle(fontSize: 25, color: Colors.black),
+                      style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * 0.07,
+                          color: Colors.black),
                     ),
                   ),
                 ),
@@ -179,7 +187,10 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                     ),
                     child: Text(
                       'map_a_device'.tr,
-                      style: TextStyle(color: Colors.black, fontSize: 25),
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: MediaQuery.of(context).size.width * 0.07,
+                      ),
                     ),
                   ),
                 ),
@@ -194,8 +205,11 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (context) => Landingpage(id: ""),
-                        ),
+                            builder: (context) =>
+                                // Landingpage(id: ""),
+                                Landingpage(
+                                  id: '',
+                                )),
                       );
 
                       // Provide a valid function for the button
@@ -208,7 +222,9 @@ class _AdminlandingpageState extends State<Adminlandingpage> {
                     ),
                     child: Text(
                       'view_mapped_device'.tr,
-                      style: TextStyle(color: Colors.black, fontSize: 25),
+                      style: TextStyle(
+                          color: Colors.black,
+                          fontSize: MediaQuery.of(context).size.width * 0.07),
                     ),
                   ),
                 ),

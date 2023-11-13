@@ -127,18 +127,18 @@ class _LimitsState extends State<Mapdevice> {
                   },
                   animationDuration: const Duration(milliseconds: 2000),
                   initialText: 'map_user_to_device'.tr,
-                  finalText: " Mapped successful",
+                  finalText: "Mapped successful",
                   iconData: Icons.check,
                   iconSize: 32.0,
                   buttonStyle: buttonstyle(
                     primaryColor: Colors.green.shade600,
                     secondaryColor: Colors.white,
                     initialTextStyle: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
                       color: Colors.white,
                     ),
                     finalTextStyle: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: MediaQuery.of(context).size.width * 0.04,
                       color: Colors.green.shade600,
                     ),
                     elevation: 20.0,
@@ -154,7 +154,9 @@ class _LimitsState extends State<Mapdevice> {
         title: Text(
           "map_user_to_device".tr,
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25),
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+              fontSize: MediaQuery.of(context).size.width * 0.05),
         ),
         actions: [
           Padding(
@@ -193,7 +195,11 @@ class _LimitsState extends State<Mapdevice> {
               ),
               Text(
                 'user_id'.tr,
-                style: Theme.of(context).textTheme.headline6,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: MediaQuery.of(context).size.width * 0.06,
+                ),
               ),
               TextField(
                 controller: _userController,
@@ -208,7 +214,11 @@ class _LimitsState extends State<Mapdevice> {
               ),
               Text(
                 'device_id'.tr,
-                style: Theme.of(context).textTheme.headline6,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: MediaQuery.of(context).size.width * 0.06,
+                ),
               ),
               TextField(
                 controller: _deviceController,

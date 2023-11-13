@@ -8,7 +8,10 @@ import 'package:iot_mobile_app/pages/settings/settings.dart';
 import 'package:iot_mobile_app/pages/tabs/Logs.dart';
 import 'package:iot_mobile_app/pages/tabs/dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:iot_mobile_app/providers/DeviceController.dart';
+import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
 import 'package:iot_mobile_app/providers/firebase_message.dart';
+import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
 
 import 'Drawer/Drawer.dart';
 import 'lang_page.dart';
@@ -17,8 +20,9 @@ import 'lang_page.dart';
 
 class Homepage extends StatefulWidget {
   final String deviceId;
-
-  Homepage(this.deviceId);
+  Homepage(
+    this.deviceId,
+  );
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -37,6 +41,7 @@ class _HomepageState extends State<Homepage> {
     screens = [
       Dash(widget.deviceId), // You can pass widget.deviceId here
       Logs(widget.deviceId),
+      Settings(),
     ];
   }
 
@@ -46,6 +51,7 @@ class _HomepageState extends State<Homepage> {
 
   @override
   Widget build(BuildContext context) {
+    // final selectedDeviceId = deviceController.selectedDeviceId;
     return AdvancedDrawer(
       backdrop: Container(
         width: double.infinity,
@@ -70,115 +76,169 @@ class _HomepageState extends State<Homepage> {
       childDecoration: const BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
-
       child: Scaffold(
-        backgroundColor: const Color(0xffcbcbcb),
-        // drawer: MyDrawer(),
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          title: Text(
-            "dashboard".tr,
-            style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 25, color: Colors.black),
-          ),
-          leading: IconButton(
-            onPressed: _handleMenuButtonPressed,
-            icon: ValueListenableBuilder<AdvancedDrawerValue>(
-              valueListenable: _advancedDrawerController,
-              builder: (_, value, __) {
-                return AnimatedSwitcher(
-                  duration: Duration(milliseconds: 250),
-                  child: Icon(
-                    value.visible ? Icons.clear : Icons.menu,
-                    key: ValueKey<bool>(value.visible),
-                  ),
-                );
-              },
+          backgroundColor: const Color(0xffcbcbcb),
+          // drawer: MyDrawer(),
+          appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
+            title: Text(
+              "dashboard".tr,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: MediaQuery.of(context).size.width * 0.06,
+                  color: Colors.black),
             ),
-          ),
-          actions: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 1.0,
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => Langscreen(),
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/user_landing');
+              },
+              icon: Icon(Icons.arrow_back_ios),
+            ),
+            actions: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 1.0,
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Langscreen(),
+                      ),
+                    );
+                  },
+                  child: CircleAvatar(
+                    radius: 18,
+                    backgroundColor: Colors.green,
+                    // backgroundImage: AssetImage('assets/language-icon.png'),
+                    child: SvgPicture.asset(
+                      'assets/language-icon.svg',
+                      // width: 100.0, // Adjust the width as needed
+                      // height: 100.0, // Adjust the height as needed
                     ),
-                  );
-                },
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.green,
-                  // backgroundImage: AssetImage('assets/language-icon.png'),
-                  child: SvgPicture.asset(
-                    'assets/language-icon.svg',
-                    // width: 100.0, // Adjust the width as needed
-                    // height: 100.0, // Adjust the height as needed
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 20.0),
-              child: CircleAvatar(
-                radius: 16,
-                backgroundColor: Colors.green,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Settings(),
+                  onPressed: _handleMenuButtonPressed,
+                  icon: ValueListenableBuilder<AdvancedDrawerValue>(
+                    valueListenable: _advancedDrawerController,
+                    builder: (_, value, __) {
+                      return AnimatedSwitcher(
+                        duration: Duration(milliseconds: 250),
+                        child: Icon(
+                          value.visible ? Icons.clear : Icons.menu,
+                          key: ValueKey<bool>(value.visible),
                         ),
                       );
                     },
-                    icon: Icon(
-                      Icons.settings,
-                      size: 30,
-                      color: Colors.black,
-                    )),
+                  ),
+                ),
               ),
-            ),
-          ],
-        ),
-        body: screens[index],
-        //  Stack(
-        //   children: [
-        //     Offstage(
-        //       offstage: currentIndex != 0,
-        //       child: Dash(widget.deviceId),
-        //     ),
-        //     Offstage(
-        //       offstage: currentIndex != 1,
-        //       child: Logs(),
-        //     ),
-        //   ],
-        // ),
-        bottomNavigationBar: NavigationBarTheme(
-          data: NavigationBarThemeData(
-              indicatorColor: Colors.blue.shade100,
-              labelTextStyle: MaterialStateProperty.all(
-                  TextStyle(fontSize: 14, fontWeight: FontWeight.w500))),
-          child: NavigationBar(
-              height: 60,
-              backgroundColor: Colors.green,
-              selectedIndex: index,
-              onDestinationSelected: (index) =>
-                  setState(() => this.index = index),
-              destinations: [
-                NavigationDestination(
-                    icon: Icon(
-                      Icons.signal_cellular_alt_outlined,
-                    ),
-                    // selectedIcon:Icon(Icons.signal_cellular_alt_outlined, ) ,
-                    label: 'status'.tr),
-                NavigationDestination(
-                    icon: Icon(Icons.format_list_bulleted), label: 'logs'.tr)
-              ]),
-        ),
-      ),
+              // Padding(
+              //   padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 20.0),
+              //   child: CircleAvatar(
+              //     radius: 16,
+              //     backgroundColor: Colors.green,
+              //     child: IconButton(
+              //         onPressed: () {
+              //           Navigator.of(context).push(
+              //             MaterialPageRoute(
+              //               builder: (context) => Settings(),
+              //             ),
+              //           );
+              //         },
+              //         icon: Icon(
+              //           Icons.settings,
+              //           size: 30,
+              //           color: Colors.black,
+              //         )),
+              //   ),
+              // ),
+            ],
+          ),
+          body: screens[index],
+          //  Stack(
+          //   children: [
+          //     Offstage(
+          //       offstage: currentIndex != 0,
+          //       child: Dash(widget.deviceId),
+          //     ),
+          //     Offstage(
+          //       offstage: currentIndex != 1,
+          //       child: Logs(),
+          //     ),
+          //   ],
+          // ),
+          bottomNavigationBar: MoltenBottomNavigationBar(
+            // margin: EdgeInsets.all(10),
+            // borderRaduis: BorderRadius.circular(15),
+            barHeight: 60,
+            domeHeight: 10,
+            curve: Curves.easeInBack,
+            domeCircleSize: 40,
+            selectedIndex: index,
+            onTabChange: (int newIndex) {
+              setState(() {
+                index = newIndex;
+              });
+            },
+            tabs: [
+              MoltenTab(
+                icon: Icon(Icons.signal_cellular_alt_outlined),
+                title: Text(
+                  'status'.tr,
+                ),
+                selectedColor: Colors.white,
+              ),
+              MoltenTab(
+                icon: Icon(Icons.format_list_bulleted),
+                title: Text(
+                  'logs'.tr,
+                ),
+                selectedColor: Colors.white,
+              ),
+              MoltenTab(
+                icon: Icon(Icons.settings),
+                title: Text(
+                  'settings'.tr,
+                ),
+                selectedColor: Colors.white,
+              ),
+            ],
+          )
+          // SnakeNavigationBar.color(
+          //   behaviour: SnakeBarBehaviour.floating,
+          //   snakeShape: SnakeShape.circle,
+          //   shape:
+          //       RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          //   padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
+          //   snakeViewColor: Colors.black,
+          //   selectedItemColor: Colors.white,
+          //   unselectedItemColor: Colors.black,
+          //   showSelectedLabels: true,
+          //   showUnselectedLabels: true,
+          //   currentIndex: index,
+          //   onTap: (index) => setState(() => this.index = index),
+          //   items: [
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.signal_cellular_alt_outlined),
+          //       label: 'status'.tr,
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.format_list_bulleted),
+          //       label: 'logs'.tr,
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.settings),
+          //       label: 'settings'.tr,
+          //     ),
+          //   ],
+          // ),
+
+          ),
       drawer: SafeArea(child: MyDrawer()),
     );
   }

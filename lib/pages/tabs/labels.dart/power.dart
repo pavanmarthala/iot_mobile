@@ -75,18 +75,20 @@ class _PowerState extends State<Power> {
         child: Column(
           children: [
             SizedBox(
-              height: 30,
+              height: 15,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 40, right: 40),
               child: Row(
                 children: [
                   SizedBox(
-                    width: 80,
+                    width: MediaQuery.of(context).size.width * 0.3,
                   ),
                   Text(
                     'refresh_logs'.tr,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontWeight: FontWeight.w500),
                   ),
                   SizedBox(width: 5),
                   isRefreshing
@@ -107,47 +109,50 @@ class _PowerState extends State<Power> {
               height: 10,
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 30),
+              padding: const EdgeInsets.only(left: 20),
               child: Row(
                 children: [
                   Container(
                     height: 50,
-                    width: 90, // Adjust the height as needed for the first row
+                    width: MediaQuery.of(context).size.width *
+                        0.3, // Adjust the height as needed for the first row
                     color: Color.fromARGB(
                         181, 51, 42, 55), // Background color for the first row
                     child: Center(
                         child: Text("on".tr,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
                             ))),
                   ),
                   Container(
                     height: 50,
-                    width: 135, // Adjust the height as needed for the first row
+                    width: MediaQuery.of(context).size.width *
+                        0.3, // Adjust the height as needed for the first row
                     // Adjust the height as needed for the first row
                     color: Color.fromARGB(181, 51, 42, 55),
                     child: Center(
-                        child: Padding(
-                      padding: const EdgeInsets.only(left: 30),
-                      child: Text("off".tr,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                          )),
-                    )),
+                        child: Text("off".tr,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
+                            ))),
                   ),
                   //  SizedBox(width: 10,),
                   Container(
                     height: 50,
-                    width: 135, // Adjust the height as needed for the first row
+                    width: MediaQuery.of(context).size.width *
+                        0.3, // Adjust the height as needed for the first row
                     // Adjust the height as needed for the first row
                     color: Color.fromARGB(181, 51, 42, 55),
                     child: Center(
                         child: Text("duration".tr,
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize:
+                                  MediaQuery.of(context).size.width * 0.05,
                             ))),
                   ),
                 ],
@@ -199,15 +204,19 @@ class _PowerState extends State<Power> {
               child: Row(
                 children: [
                   SizedBox(
-                    width: 100,
+                    width: MediaQuery.of(context).size.width * 0.1,
                   ),
                   Text(
                     'total_duration'.tr,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontWeight: FontWeight.w500),
                   ),
                   Text(
                     ': ${powerLogs?['totalTime']}',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontWeight: FontWeight.w500),
                   ),
                 ],
               ),

@@ -100,11 +100,13 @@ class _MyDrawerState extends State<MyDrawer> {
                                 left: 15, right: 5, top: 10),
                             child: ElevatedButton(
                               onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          Homepage(deviceIdsList[index])),
-                                );
+                                Navigator.pushNamed(context, '/homepage',
+                                    arguments: deviceIdsList[index]);
+                                // Navigator.of(context).push(
+                                //   MaterialPageRoute(
+                                //       builder: (context) =>
+                                //           Homepage(deviceIdsList[index])),
+                                // );
                                 //
                                 // Handle button press for each device
                                 // You can navigate to a specific page or perform other actions here
@@ -116,6 +118,9 @@ class _MyDrawerState extends State<MyDrawer> {
                                     style: TextStyle(
                                       color: const Color.fromARGB(
                                           255, 195, 51, 41),
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
                                     ),
                                   ),
                                   Text(
@@ -123,7 +128,9 @@ class _MyDrawerState extends State<MyDrawer> {
                                     style: TextStyle(
                                       color: const Color.fromARGB(
                                           255, 195, 51, 41),
-                                      fontSize: 15,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.04,
                                     ),
                                   ),
                                 ],

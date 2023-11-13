@@ -138,11 +138,11 @@ class _AddDeviceState extends State<AddDevice> {
                     primaryColor: Colors.green.shade600,
                     secondaryColor: Colors.white,
                     initialTextStyle: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
                       color: Colors.white,
                     ),
                     finalTextStyle: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
                       color: Colors.green.shade600,
                     ),
                     elevation: 20.0,
@@ -158,9 +158,9 @@ class _AddDeviceState extends State<AddDevice> {
         title: Text(
           'add_device'.tr,
           style: TextStyle(
-            fontWeight: FontWeight.bold,
+            fontWeight: FontWeight.w500,
             color: Colors.black,
-            fontSize: 25,
+            fontSize: MediaQuery.of(context).size.width * 0.06,
           ),
         ),
         actions: [
@@ -196,10 +196,12 @@ class _AddDeviceState extends State<AddDevice> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 20),
-              Text(
-                'device_id'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('device_id'.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                  )),
               TextField(
                 controller: _deviceController,
                 decoration: InputDecoration(
@@ -209,10 +211,12 @@ class _AddDeviceState extends State<AddDevice> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'device_name'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('device_name'.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                  )),
               TextField(
                 controller: _devicenameController,
                 decoration: InputDecoration(
@@ -222,10 +226,12 @@ class _AddDeviceState extends State<AddDevice> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'pin'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('pin'.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                  )),
               TextField(
                 controller: _pinController,
                 decoration: InputDecoration(
@@ -235,10 +241,12 @@ class _AddDeviceState extends State<AddDevice> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'sim'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('sim'.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                  )),
               TextField(
                 controller: _simController,
                 decoration: InputDecoration(
@@ -248,10 +256,12 @@ class _AddDeviceState extends State<AddDevice> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'topic'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('topic'.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                  )),
               TextField(
                 controller: _topiccontroller,
                 decoration: InputDecoration(
@@ -261,10 +271,12 @@ class _AddDeviceState extends State<AddDevice> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'zone'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('zone'.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                  )),
               TextField(
                 controller: _zonecontroller,
                 decoration: InputDecoration(
@@ -274,10 +286,12 @@ class _AddDeviceState extends State<AddDevice> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'device_serial-no'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('device_serial-no'.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                  )),
               TextField(
                 controller: _serialNocontroller,
                 decoration: InputDecoration(
@@ -287,10 +301,12 @@ class _AddDeviceState extends State<AddDevice> {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'mobile_number'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('mobile_number'.tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                  )),
               TextField(
                 controller: _mobileNocontroller,
                 decoration: InputDecoration(

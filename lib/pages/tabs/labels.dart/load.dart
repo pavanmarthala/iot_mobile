@@ -52,7 +52,9 @@ class _LoadState extends State<Load> {
               ),
               Text(
                 'refresh_logs'.tr,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                    fontWeight: FontWeight.w500),
               ),
               SizedBox(width: 5),
               isRefreshing
@@ -73,30 +75,32 @@ class _LoadState extends State<Load> {
           height: 10,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 30),
+          padding: const EdgeInsets.only(left: 15),
           child: Row(
             children: [
               Container(
                 height: 50,
-                width: 170, // Adjust the height as needed for the first row
+                width: MediaQuery.of(context).size.width *
+                    0.5, // Adjust the height as needed for the first row
                 color: Color.fromARGB(
                     181, 51, 42, 55), // Background color for the first row
                 child: Center(
                     child: Text("current".tr,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                         ))),
               ),
               Container(
                 height: 50,
-                width: 170, // Adjust the height as needed for the first row
+                width: MediaQuery.of(context).size.width *
+                    0.4, // Adjust the height as needed for the first row
                 color: Color.fromARGB(181, 51, 42, 55),
                 child: Center(
                     child: Text("voltage".tr,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                         ))),
               ),
               // Container(
@@ -128,14 +132,18 @@ class _LoadState extends State<Load> {
                   child: Center(
                       child: Text(
                     avgCurrent,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontWeight: FontWeight.w500),
                   ))),
               SizedBox(
                   height: 30,
                   child: Center(
                       child: Text(
                     avgVoltage,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.05,
+                        fontWeight: FontWeight.w500),
                   ))),
             ]),
           ],
@@ -148,15 +156,19 @@ class _LoadState extends State<Load> {
           child: Row(
             children: [
               SizedBox(
-                width: 150,
+                width: MediaQuery.of(context).size.width * 0.2,
               ),
               Text(
                 'total_records'.tr,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                    fontWeight: FontWeight.w500),
               ),
               Text(
                 ': $totalRecords',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                style: TextStyle(
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
+                    fontWeight: FontWeight.w500),
               ),
             ],
           ),

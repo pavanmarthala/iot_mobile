@@ -1,15 +1,19 @@
-// ignore_for_file: unnecessary_type_check
+// ignore_for_file: unnecessary_type_check, prefer_const_constructors
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:iot_mobile_app/pages/Drawer/Drawer.dart';
-import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
+// import 'package:iot_mobile_app/pages/Drawer/Drawer.dart';
+
 import 'package:iot_mobile_app/pages/lang_page.dart';
+import 'package:iot_mobile_app/providers/firebase_message.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Landingpage extends StatefulWidget {
@@ -24,14 +28,50 @@ class _LandingpageState extends State<Landingpage> {
 //   bool isSwitchedn = false;
 //  bool motorbox = false;
 //   bool powerStatusn = false;
+  FirebaseApi firebaseApi = FirebaseApi();
 
   Future<List<Map<String, dynamic>>>? devices;
-
+  late bool isAdminOrSuperAdmin;
   @override
   void initState() {
     super.initState();
-
+    isAdminOrSuperAdmin = false;
     devices = fetchDevices();
+    firebaseApi.initNotifications();
+    firebaseApi.isTokenRefresh();
+    firebaseApi.firebaseInit(context);
+    firebaseApi.setupInteractMessage(context);
+    firebaseApi.getDeviceToken().then((value) {
+      if (kDebugMode) {
+        print('device token');
+        print(value);
+      }
+    });
+    // checkUserRole();
+  }
+
+  Map<String, dynamic> decodeJwt(String token) {
+    try {
+      return JwtDecoder.decode(token);
+    } catch (e) {
+      print('Error decoding JWT: $e');
+      return {};
+    }
+  }
+
+  Future<bool> checkUserRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken != null) {
+      Map<String, dynamic> decodedToken = decodeJwt(jwtToken);
+      List<dynamic> authorities = decodedToken['authorities'];
+
+      return authorities.contains('admin') ||
+          authorities.contains('superAdmin');
+    }
+
+    return false;
   }
 
   Future<List<Map<String, dynamic>>> fetchDevices() async {
@@ -63,6 +103,7 @@ class _LandingpageState extends State<Landingpage> {
             "motorbox": device["deviceState"],
           };
         }).toList();
+
         return devices;
       } else {
         return <Map<String, dynamic>>[];
@@ -83,11 +124,36 @@ class _LandingpageState extends State<Landingpage> {
         title: Text(
           "map_device".tr,
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25),
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: MediaQuery.of(context).size.width * 0.05,
+          ),
         ),
         actions: [
+          FutureBuilder<bool>(
+            future: checkUserRole(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.data == true) {
+                  return Padding(
+                    padding: EdgeInsets.only(right: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => Adminlandingpage(),
+                            ),
+                          );
+                        },
+                        child: Icon(Icons.home)),
+                  );
+                }
+              }
+              return Container(); // Return an empty container if not admin or superadmin
+            },
+          ),
           Padding(
-            padding: EdgeInsets.only(right: 10),
+            padding: EdgeInsets.only(right: 20),
             child: GestureDetector(
               onTap: () {
                 Navigator.of(context).push(
@@ -99,35 +165,12 @@ class _LandingpageState extends State<Landingpage> {
               child: CircleAvatar(
                 radius: 18,
                 backgroundColor: Colors.white,
-
-                // backgroundImage: AssetImage('assets/language-icon.png'),
                 child: SvgPicture.asset(
                   'assets/language-icon.svg',
-                  // width: 100.0, // Adjust the width as needed
-                  // height: 100.0, // Adjust the height as needed
                 ),
               ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 20, left: 10),
-            child: CircleAvatar(
-              radius: 16,
-              backgroundColor: Colors.white,
-              child: IconButton(
-                  onPressed: () async {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => Adminlandingpage()),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.home_outlined,
-                    size: 30,
-                    color: Colors.black,
-                  )),
-            ),
-          ),
+          )
         ],
       ),
       body: FutureBuilder<List<Map<String, dynamic>>>(
@@ -148,72 +191,104 @@ class _LandingpageState extends State<Landingpage> {
               scrollDirection: Axis.vertical,
               child: Column(
                 children: deviceList.map((device) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 4, right: 4),
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    Homepage(device["deviceId"] ?? "")));
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: (Color.fromARGB(234, 203, 203, 203)),
-                        onPrimary: Colors.black,
-                        fixedSize: Size(402, 130),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                  return GestureDetector(
+                    onTap: () async {
+                      // Navigator.pushReplacement(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) =>
+                      //             // Homepage(device["deviceId"] ?? "")
+                      //             Settings()));
+
+                      Navigator.pushNamed(context, '/homepage',
+                          arguments: device["deviceId"]);
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 99,
+                      height: 120,
+                      margin: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 191, 188, 188),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                'device_id:'.tr,
-                                style: TextStyle(fontSize: 25),
-                              ),
-                              Text(
-                                device["deviceId"] ?? "",
-                                style: TextStyle(fontSize: 25),
-                              ),
-                              Text(widget.id)
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                'name'.tr,
-                                style: TextStyle(fontSize: 25),
-                              ),
-                              Text(
-                                device["name"] ?? "",
-                                style: TextStyle(fontSize: 25),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Container(
-                                height: 55,
-                                width: 120,
-                                decoration: BoxDecoration(
-                                    color: device["powerStatusn"]
-                                        ? Colors.green
-                                        : const Color.fromARGB(255, 253, 18, 1),
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Image.asset("assets/power.png"),
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.03,
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5, top: 5),
-                                child: Container(
-                                  height: 55,
-                                  width: 120,
+                                Text(
+                                  'device_id:'.tr,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  device["deviceId"] ?? "",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.03,
+                                ),
+                                Text(
+                                  'name'.tr,
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  device["name"] ?? "",
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 6,
+                            ),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                ),
+                                Container(
+                                  height: 45,
+                                  // margin: EdgeInsets.symmetric(horizontal: 4),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
+                                  decoration: BoxDecoration(
+                                      color: device["powerStatusn"]
+                                          ? Colors.green
+                                          : const Color.fromARGB(
+                                              255, 253, 18, 1),
+                                      borderRadius: BorderRadius.circular(30)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset("assets/power.png"),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                ),
+                                Container(
+                                  height: 45,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
                                   decoration: BoxDecoration(
                                       color: device["motorbox"]
                                           ? Colors.green
@@ -225,12 +300,14 @@ class _LandingpageState extends State<Landingpage> {
                                     child: Image.asset("assets/motor.jpeg"),
                                   ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5, top: 5),
-                                child: Container(
-                                  height: 55,
-                                  width: 120,
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.01,
+                                ),
+                                Container(
+                                  height: 45,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.3,
                                   decoration: BoxDecoration(
                                       color: device["isSwitchedn"]
                                           ? Colors.green
@@ -244,10 +321,10 @@ class _LandingpageState extends State<Landingpage> {
                                         : Image.asset("assets/on.jpg"),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

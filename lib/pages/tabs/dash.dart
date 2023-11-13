@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter/widgets.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -112,7 +113,7 @@ class _DashState extends State<Dash> {
       motorStatus = jsonResponse["deviceState"];
       isDeviceSwitched = jsonResponse["givenState"];
       motorSwitchOnTime = jsonResponse["lastGivenState"] ?? '';
-      powerStatusOnTime = jsonResponse["lastPowerAvailable"] ?? '';
+      powerStatusOnTime = jsonResponse["powerLastPing"] ?? '';
       motorStatusOnTime = jsonResponse["lastDeviceState"] ?? '';
       if (isSwitched) {
         motorSwitchOnTime = DateFormat('HH:mm:ss a').format(DateTime.now());
@@ -153,61 +154,68 @@ class _DashState extends State<Dash> {
             }
 
             final switchState = Provider.of<SwitchState>(context);
+            final Size screenSize = MediaQuery.of(context).size;
 
-            return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 30, top: 20),
-                    child: Row(
-                      children: [
-                        Text(
-                          'device_no:1'.tr,
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '${widget.deviceId}',
-                          style: TextStyle(
-                              fontSize: 25, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 140),
-                        Container(
-                          height: 30,
-                          width: 30,
-                          child: GestureDetector(
-                              onTap:
-                                  () {}, // Call handleRefresh when the icon is tapped
-                              child: Image.asset(
-                                "assets/refresh.png",
-                              )),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 180,
-                          width: 380,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(30),
+            return Container(
+              width: screenSize.width * 100,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 30, top: 10),
+                      child: Row(
+                        children: [
+                          Text(
+                            'device_no:1'.tr,
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.06,
+                                fontWeight: FontWeight.bold),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 70,
-                                  width: 380,
+                          Text(
+                            '${widget.deviceId}',
+                            style: TextStyle(
+                                fontSize:
+                                    MediaQuery.of(context).size.width * 0.06,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: screenSize.width * 0.3,
+                          ),
+                          SizedBox(
+                            width: 30,
+                            child: GestureDetector(
+                                onTap:
+                                    () {}, // Call handleRefresh when the icon is tapped
+                                child: Image.asset(
+                                  "assets/refresh.png",
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 11),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: screenSize.height * 0.22,
+                            width: screenSize.width * 0.94,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: screenSize.height * 0.07,
+                                  width: screenSize.width * 0.94,
                                   decoration: BoxDecoration(
                                     color: isDeviceSwitched
                                         ? Colors.green
@@ -217,7 +225,7 @@ class _DashState extends State<Dash> {
                                         topLeft: Radius.circular(30)),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(20),
+                                    padding: const EdgeInsets.only(left: 20),
                                     child: Row(
                                       children: [
                                         Text(
@@ -225,26 +233,35 @@ class _DashState extends State<Dash> {
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 20),
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.05),
                                         ),
                                         SizedBox(
-                                          width: 120,
+                                          width: screenSize.width * 0.3,
                                         ),
-                                        Text(
-                                          isDeviceSwitched ? 'on'.tr : 'off'.tr,
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 20),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 0),
+                                          child: Text(
+                                            isDeviceSwitched
+                                                ? 'on'.tr
+                                                : 'off'.tr,
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05),
+                                          ),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Row(
+                                Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Padding(
@@ -272,7 +289,9 @@ class _DashState extends State<Dash> {
                                         value: isDeviceSwitched,
                                       ),
                                     ),
-                                    SizedBox(width: 58),
+                                    SizedBox(
+                                      width: screenSize.width * 0.08,
+                                    ),
                                     Wrap(
                                       children: [
                                         Padding(
@@ -283,14 +302,22 @@ class _DashState extends State<Dash> {
                                                   'last_off'.tr,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
                                                   ),
                                                 )
                                               : Text(
                                                   'last_on'.tr,
                                                   style: TextStyle(
                                                     fontWeight: FontWeight.bold,
-                                                    fontSize: 18,
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
                                                   ),
                                                 ),
                                         ),
@@ -301,7 +328,10 @@ class _DashState extends State<Dash> {
                                             ' $motorSwitchOnTime',
                                             style: TextStyle(
                                               fontWeight: FontWeight.bold,
-                                              fontSize: 16,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.05,
                                             ),
                                           ),
                                         ),
@@ -309,34 +339,32 @@ class _DashState extends State<Dash> {
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 180,
-                          width: 380,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 70,
-                                  width: 380,
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 11),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: screenSize.height * 0.22,
+                            width: screenSize.width * 0.94,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: screenSize.height * 0.07,
+                                  width: screenSize.width * 0.94,
                                   decoration: BoxDecoration(
                                     color: powerStatus
                                         ? Colors.green
@@ -347,7 +375,7 @@ class _DashState extends State<Dash> {
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(20),
+                                    padding: const EdgeInsets.only(left: 20),
                                     child: Row(
                                       children: [
                                         Text(
@@ -355,88 +383,93 @@ class _DashState extends State<Dash> {
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 20,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.05,
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 120,
+                                          width: screenSize.width * 0.3,
                                         ),
                                         Text(
                                           powerStatus ? 'on'.tr : 'off'.tr,
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 20,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.05,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                        padding: const EdgeInsets.all(13.0),
-                                        child: Image.asset("assets/power.png")),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      'last_on'.tr,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
+                                Expanded(
+                                  flex: 2,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                          padding: const EdgeInsets.all(13.0),
+                                          child:
+                                              Image.asset("assets/power.png")),
+                                      SizedBox(
+                                        width: screenSize.width * 0.01,
                                       ),
-                                    ),
-                                    Text(
-                                      ' $powerStatusOnTime',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                      Text(
+                                        'last_on'.tr,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                        ),
                                       ),
-                                    ),
-                                    Column(
-                                      children: [],
-                                    )
-                                  ],
+                                      Text(
+                                        ' $powerStatusOnTime',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                        ),
+                                      ),
+                                      Column(
+                                        children: [],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              // Row(
-                              //   children: [
-                              //     Text(
-                              //         'Date- ${DateFormat('yyyy-MM-dd').format(time)}'),
-                              //   ],
-                              // )
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15),
-                    child: Row(
-                      children: [
-                        Container(
-                          height: 180,
-                          width: 380,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(30),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 70,
-                                  width: 380,
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 11),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: screenSize.height * 0.22,
+                            width: screenSize.width * 0.94,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: screenSize.height * 0.07,
+                                  width: screenSize.width * 0.94,
                                   decoration: BoxDecoration(
                                     color: motorStatus
                                         ? Colors.green
@@ -447,7 +480,7 @@ class _DashState extends State<Dash> {
                                     ),
                                   ),
                                   child: Padding(
-                                    padding: const EdgeInsets.all(20),
+                                    padding: const EdgeInsets.only(left: 20),
                                     child: Row(
                                       children: [
                                         Text(
@@ -455,64 +488,76 @@ class _DashState extends State<Dash> {
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 20,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.05,
                                           ),
                                         ),
                                         SizedBox(
-                                          width: 120,
+                                          width: screenSize.width * 0.3,
                                         ),
                                         Text(
                                           motorStatus ? 'on'.tr : 'off'.tr,
                                           style: TextStyle(
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 20,
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.05,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                flex: 2,
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child:
-                                            Image.asset("assets/motor.jpeg")),
-                                    SizedBox(
-                                      width: 15,
-                                      // height: 50,
-                                    ),
-                                    Text(
-                                      'last_on'.tr,
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 18,
+                                Expanded(
+                                  flex: 2,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child:
+                                              Image.asset("assets/motor.jpeg")),
+                                      SizedBox(
+                                        width: screenSize.width * 0.01,
+                                        // height: 50,
                                       ),
-                                    ),
-                                    Text(
-                                      ' $motorStatusOnTime',
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                      Text(
+                                        'last_on'.tr,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            ],
+                                      Text(
+                                        ' $motorStatusOnTime',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 25,
-                  ),
-                ],
+                    SizedBox(
+                      height: 25,
+                    ),
+                  ],
+                ),
               ),
             );
           }

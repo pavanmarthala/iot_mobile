@@ -113,7 +113,10 @@ class _UsersState extends State<Users> {
           iconTheme: IconThemeData(color: Colors.black),
           title: Text(
             "manage_users".tr,
-            style: TextStyle(color: Colors.black, fontSize: 25),
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: MediaQuery.of(context).size.width * 0.05,
+            ),
           ),
           actions: [
             Padding(
@@ -179,7 +182,7 @@ class _UsersState extends State<Users> {
                       ),
                     ),
                     Container(
-                      height: 650,
+                      height: 560,
                       child: ListView(
                         children: filteredDeviceList.map((device) {
                           return Padding(
@@ -198,8 +201,10 @@ class _UsersState extends State<Users> {
                                         top: 10, left: 20),
                                     child: Text(
                                       device["name"] ?? "user",
-                                      style: const TextStyle(
-                                        fontSize: 20,
+                                      style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.05,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
@@ -209,19 +214,24 @@ class _UsersState extends State<Users> {
                                         const EdgeInsets.only(top: 5, left: 20),
                                     child: Text(
                                       device["mobile"] ?? "",
-                                      style: const TextStyle(
-                                        fontSize: 20,
+                                      style: TextStyle(
+                                        fontSize:
+                                            MediaQuery.of(context).size.width *
+                                                0.05,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 15, bottom: 10, top: 5),
+                                    padding: const EdgeInsets.only(bottom: 10),
                                     child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
-                                        ElevatedButton(
-                                          onPressed: () {
+                                        GestureDetector(
+                                          onTap: () {
                                             Navigator.of(context).push(
                                               MaterialPageRoute(
                                                 builder: (context) =>
@@ -233,78 +243,114 @@ class _UsersState extends State<Users> {
                                               ),
                                             );
                                           },
-                                          child: Text(
-                                            'view'.tr,
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          style: ElevatedButton.styleFrom(
-                                            foregroundColor: Colors.black,
-                                            backgroundColor:
-                                                const Color.fromARGB(
-                                                    234, 42, 228, 138),
-                                            fixedSize: const Size(100, 45),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(17),
+                                          child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.3,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.05,
+                                            decoration: BoxDecoration(
+                                                color: Colors.green,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 23, top: 8),
+                                              child: Text(
+                                                'view'.tr,
+                                                style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .width *
+                                                          0.05,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                         Padding(
                                           padding:
-                                              const EdgeInsets.only(left: 20),
-                                          child: ElevatedButton(
-                                            onPressed: () {},
-                                            child: Text(
-                                              'delete'.tr,
-                                              style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  const Color.fromARGB(
-                                                      234, 239, 9, 9),
-                                              onPrimary: Colors.black,
-                                              fixedSize: const Size(100, 45),
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.circular(17),
+                                              const EdgeInsets.only(left: 10),
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.3,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 17, top: 8),
+                                                child: Text(
+                                                  'delete'.tr,
+                                                  style: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
                                         ),
                                         Padding(
                                             padding:
-                                                const EdgeInsets.only(left: 20),
-                                            child: ElevatedButton(
-                                              onPressed: () {},
-                                              child: Text(
-                                                device["active"] == "true"
-                                                    ? 'deactivate'.tr
-                                                    : 'activate'.tr,
-                                                style: TextStyle(
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor:
-                                                    device["active"] == "true"
+                                                const EdgeInsets.only(left: 10),
+                                            child: GestureDetector(
+                                              onTap: () {},
+                                              child: Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.3,
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.05,
+                                                decoration: BoxDecoration(
+                                                    color: device["active"] ==
+                                                            "true"
                                                         ? const Color.fromARGB(
                                                             234, 42, 228, 138)
                                                         : const Color.fromARGB(
                                                             234, 239, 9, 9),
-
-                                                // Green
-                                                onPrimary: Colors.black,
-                                                fixedSize: const Size(120, 50),
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(17),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    device["active"] == "true"
+                                                        ? 'deactivate'.tr
+                                                        : 'activate'.tr,
+                                                    style: TextStyle(
+                                                      fontSize:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.05,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
                                                 ),
                                               ),
                                             )),
@@ -327,123 +373,171 @@ class _UsersState extends State<Users> {
         bottomNavigationBar: SafeArea(
           child: Container(
             padding: const EdgeInsets.only(left: 15, top: 5, bottom: 5),
+            margin: EdgeInsets.all(10),
             decoration: const BoxDecoration(
-                // color: Colors.white,
+                color: Colors.white,
                 borderRadius: BorderRadius.all(Radius.circular(24))),
-            child: SizedBox(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      width: 85,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-
-                        borderRadius:
-                            BorderRadius.circular(10.0), // Rounded border
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const Adminlandingpage(),
-                            ),
-                          );
-
-                          // Go back to Home Screen
-                        },
-                        child: Text(
-                          'home'.tr,
-                          style: TextStyle(color: Colors.white),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const Adminlandingpage(),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Container(
-                        width: 85,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-
-                          borderRadius:
-                              BorderRadius.circular(10.0), // Rounded border
+                      );
+                    },
+                    icon: Icon(Icons.home)),
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const Adduser(),
                         ),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const Adduser(),
-                              ),
-                            );
-
-                            // Go back to Home Screen
-                          },
-                          child: Text(
-                            'add_user'.tr,
-                            style: TextStyle(color: Colors.white),
-                          ),
+                      );
+                    },
+                    icon: Icon(Icons.person_add)),
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => AddDevice(),
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Container(
-                        width: 90,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-
-                          borderRadius:
-                              BorderRadius.circular(10.0), // Rounded border
+                      );
+                      //
+                    },
+                    icon: Icon(Icons.devices)),
+                IconButton(
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => Mapdevice(),
                         ),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => AddDevice(),
-                              ),
-                            );
+                      );
+                    },
+                    icon: Icon(Icons.device_hub_outlined)),
+                // Container(
+                //   width: 85,
+                //   decoration: BoxDecoration(
+                //     color: Colors.green,
 
-                            // Go back to Home Screen
-                          },
-                          child: Text(
-                            'add_device'.tr,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: Container(
-                        width: 90,
-                        decoration: BoxDecoration(
-                          color: Colors.green,
+                //     borderRadius:
+                //         BorderRadius.circular(10.0), // Rounded border
+                //   ),
+                //   child: TextButton(
+                //     onPressed: () {
+                //       Navigator.of(context).push(
+                //         MaterialPageRoute(
+                //           builder: (context) => const Adminlandingpage(),
+                //         ),
+                //       );
 
-                          borderRadius:
-                              BorderRadius.circular(10.0), // Rounded border
-                        ),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => const Mapdevice(),
-                              ),
-                            );
+                //       // Go back to Home Screen
+                //     },
+                //     child: Text(
+                //       'home'.tr,
+                //       style: TextStyle(
+                //         color: Colors.white,
+                //         fontSize: MediaQuery.of(context).size.width * 0.04,
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 8),
+                //   child: Container(
+                //     width: 85,
+                //     decoration: BoxDecoration(
+                //       color: Colors.green,
 
-                            // Go back to Home Screen
-                          },
-                          child: Text(
-                            'map_device'.tr,
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                //       borderRadius:
+                //           BorderRadius.circular(10.0), // Rounded border
+                //     ),
+                //     child: TextButton(
+                //       onPressed: () {
+                //         Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => const Adduser(),
+                //           ),
+                //         );
+
+                //         // Go back to Home Screen
+                //       },
+                //       child: Text(
+                //         'add_user'.tr,
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //           fontSize:
+                //               MediaQuery.of(context).size.width * 0.04,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 8),
+                //   child: Container(
+                //     width: 100,
+                //     decoration: BoxDecoration(
+                //       color: Colors.green,
+
+                //       borderRadius:
+                //           BorderRadius.circular(10.0), // Rounded border
+                //     ),
+                //     child: TextButton(
+                //       onPressed: () {
+                //         Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => AddDevice(),
+                //           ),
+                //         );
+
+                //         // Go back to Home Screen
+                //       },
+                //       child: Text(
+                //         'add_device'.tr,
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //           fontSize:
+                //               MediaQuery.of(context).size.width * 0.04,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.only(left: 8),
+                //   child: Container(
+                //     width: 100,
+                //     decoration: BoxDecoration(
+                //       color: Colors.green,
+
+                //       borderRadius:
+                //           BorderRadius.circular(10.0), // Rounded border
+                //     ),
+                //     child: TextButton(
+                //       onPressed: () {
+                //         Navigator.of(context).push(
+                //           MaterialPageRoute(
+                //             builder: (context) => const Mapdevice(),
+                //           ),
+                //         );
+
+                //         // Go back to Home Screen
+                //       },
+                //       child: Text(
+                //         'map_device'.tr,
+                //         style: TextStyle(
+                //           color: Colors.white,
+                //           fontSize:
+                //               MediaQuery.of(context).size.width * 0.04,
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+              ],
             ),
           ),
         ));

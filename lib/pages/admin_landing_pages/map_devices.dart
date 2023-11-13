@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, use_build_context_synchronously, unnecessary_null_comparison, prefer_adjacent_string_concatenation
 
 import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -53,7 +55,7 @@ class _MapDevicesState extends State<MapDevices> {
                 user.mobile.toLowerCase().contains(query.toLowerCase()))
             .toList();
       } else {
-        // searchedUsers.clear();
+        searchedUsers.clear();
       }
       // searchedDevices.clear();
     });
@@ -68,7 +70,7 @@ class _MapDevicesState extends State<MapDevices> {
                 device.deviceId.toLowerCase().contains(query.toLowerCase()))
             .toList();
       } else {
-        // searchedDevices.clear();
+        searchedDevices.clear();
       }
       // searchedUsers.clear();
     });
@@ -158,6 +160,56 @@ class _MapDevicesState extends State<MapDevices> {
     }
   }
 
+  Future<void> sendNotification(String userId) async {
+    var deviceNames = selectedDeviceNames.join(', ');
+    try {
+      // Retrieve the token from Firestore based on the user ID
+      DocumentSnapshot<Map<String, dynamic>> userSnapshot =
+          await FirebaseFirestore.instance
+              .collection('UserTokens')
+              .doc(userId)
+              .get();
+
+      if (userSnapshot.exists) {
+        String? deviceToken = userSnapshot.data()?['token'];
+
+        if (deviceToken != null) {
+          var data = {
+            'to': deviceToken,
+            'notification': {
+              'title': 'New Device Update',
+              'body': 'Device: $deviceNames ' + 'Added to your Account',
+            },
+            'android': {
+              'notification': {
+                'notification_count': 23,
+              },
+            },
+            'data': {'type': 'message', 'id': 'pavan'}
+          };
+
+          await http.post(
+            Uri.parse('https://fcm.googleapis.com/fcm/send'),
+            body: jsonEncode(data),
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization':
+                  'key=AAAALbfocX4:APA91bFVgtoqpq0gwRcp1016R45Pts1pQFFGWJzXozyEslix8VE1m1ZtyBCH7ueldVPeHvXqKTsGz9iTqHKE5hhsTZf9fUMeuA-3EAYl3Bqh9bW806x5AUN2B_9l1LrLWTrK5aUoVGia'
+            },
+          );
+
+          print('Notification sent successfully');
+        } else {
+          print('Device token not found for user: $userId');
+        }
+      } else {
+        print('User not found in Firestore for ID: $userId');
+      }
+    } catch (e) {
+      print('Error sending notification: $e');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -242,14 +294,24 @@ class _MapDevicesState extends State<MapDevices> {
 
   @override
   Widget build(BuildContext context) {
+    // Set to your desired value
+
+    // if (customHeight < MediaQuery.of(context).size.width * 0.3) {
+    //   customHeight = MediaQuery.of(context).size.width * 0.3;
+    // }
     return Scaffold(
+      backgroundColor: const Color(0xffcbcbcb),
+
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         backgroundColor: Colors.green,
         title: Text(
           "map_user_to_device".tr,
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 22),
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: MediaQuery.of(context).size.width * 0.05,
+          ),
         ),
         actions: [
           Padding(
@@ -293,20 +355,20 @@ class _MapDevicesState extends State<MapDevices> {
                   Row(
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.only(left: 10, top: 10),
                         child: Text(
                           'user'.tr,
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
                           ),
                         ),
                       ),
                       Container(
                         height: 32,
-                        margin: const EdgeInsets.symmetric(horizontal: 20),
-                        width: 230,
+                        margin: const EdgeInsets.only(left: 20),
+                        width: MediaQuery.of(context).size.width * 0.6,
                         child: TextField(
                           onChanged: searchUsers,
                           decoration: InputDecoration(
@@ -402,14 +464,14 @@ class _MapDevicesState extends State<MapDevices> {
                           style: TextStyle(
                             color: Colors.black,
                             fontWeight: FontWeight.bold,
-                            fontSize: 20,
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
                           ),
                         ),
                       ),
                       Container(
                         height: 32,
-                        margin: const EdgeInsets.only(left: 10, top: 10),
-                        width: 230,
+                        margin: const EdgeInsets.only(left: 10),
+                        width: MediaQuery.of(context).size.width * 0.6,
                         child: TextField(
                           onChanged: searchDevices,
                           decoration: InputDecoration(
@@ -506,59 +568,65 @@ class _MapDevicesState extends State<MapDevices> {
               child: AnimatedButton(
                   onTap: () {
                     mapDevices();
-                    firebaseApi.getDeviceToken().then((value) async {
-                      var deviceNames = selectedDeviceNames.join(', ');
-                      var data = {
-                        'to': value.toString(),
-                        'notification': {
-                          'title': 'New Device Update',
-                          'body':
-                              'Device: $deviceNames ' + 'Added to your Account',
-                        },
-                        'android': {
-                          'notification': {
-                            'notification_count': 23,
-                          },
-                        },
-                        'data': {'type': 'message', 'id': 'pavan'}
-                      };
-
-                      await http.post(
-                          Uri.parse('https://fcm.googleapis.com/fcm/send'),
-                          body: jsonEncode(data),
-                          headers: {
-                            'Content-Type': 'application/json; charset=UTF-8',
-                            'Authorization':
-                                'key=AAAALbfocX4:APA91bFVgtoqpq0gwRcp1016R45Pts1pQFFGWJzXozyEslix8VE1m1ZtyBCH7ueldVPeHvXqKTsGz9iTqHKE5hhsTZf9fUMeuA-3EAYl3Bqh9bW806x5AUN2B_9l1LrLWTrK5aUoVGia'
-                          }
-                          //     ).then((value) {
-                          //   if (kDebugMode) {
-                          //     print(value.body.toString());
-                          //   }
-                          // }).onError((error, stackTrace) {
-                          //   if (kDebugMode) {
-                          //     print(error);
-                          //   }
-                          // }
-                          );
+                    // sendNotification();
+                    // Iterate over selected users and send notifications
+                    selectedUserMobiles.forEach((userId) {
+                      sendNotification(userId);
                     });
 
-                    // print("animated button pressed");
+                    // firebaseApi.getDeviceToken().then((value) async {
+                    //   var deviceNames = selectedDeviceNames.join(', ');
+                    //   var data = {
+                    //     'to': value.toString(),
+                    //     'notification': {
+                    //       'title': 'New Device Update',
+                    //       'body':
+                    //           'Device: $deviceNames ' + 'Added to your Account',
+                    //     },
+                    //     'android': {
+                    //       'notification': {
+                    //         'notification_count': 23,
+                    //       },
+                    //     },
+                    //     'data': {'type': 'message', 'id': 'pavan'}
+                    //   };
+
+                    //   await http.post(
+                    //       Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                    //       body: jsonEncode(data),
+                    //       headers: {
+                    //         'Content-Type': 'application/json; charset=UTF-8',
+                    //         'Authorization':
+                    //             'key=AAAALbfocX4:APA91bFVgtoqpq0gwRcp1016R45Pts1pQFFGWJzXozyEslix8VE1m1ZtyBCH7ueldVPeHvXqKTsGz9iTqHKE5hhsTZf9fUMeuA-3EAYl3Bqh9bW806x5AUN2B_9l1LrLWTrK5aUoVGia'
+                    //       }
+                    //       //     ).then((value) {
+                    //       //   if (kDebugMode) {
+                    //       //     print(value.body.toString());
+                    //       //   }
+                    //       // }).onError((error, stackTrace) {
+                    //       //   if (kDebugMode) {
+                    //       //     print(error);
+                    //       //   }
+                    //       // }
+                    //       );
+                    // });
+
+                    print("animated button pressed");
                   },
                   animationDuration: const Duration(milliseconds: 2000),
                   initialText: "map_user_to_device".tr,
-                  finalText: " Mapped successful",
+                  finalText: "Mapped successful",
                   iconData: Icons.check,
-                  iconSize: 32.0,
+                  iconSize: MediaQuery.of(context).size.width * 0.08,
                   buttonStyle: buttonstyle(
                     primaryColor: Colors.green.shade600,
                     secondaryColor: Colors.white,
                     initialTextStyle: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
                       color: Colors.white,
                     ),
                     finalTextStyle: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: MediaQuery.of(context).size.width * 0.04,
                       color: Colors.green.shade600,
                     ),
                     elevation: 20.0,
@@ -568,110 +636,177 @@ class _MapDevicesState extends State<MapDevices> {
           ],
         ),
       ),
+
+      // extendBody: true,
+      // bottomNavigationBar: FloatingNavbar(
+      //   onTap: (int val) {
+      //     //returns tab id which is user tapped
+      //   },
+      //   currentIndex: 0,
+      //   items: [
+      //     FloatingNavbarItem(icon: Icons.home, title: 'Home'),
+      //     FloatingNavbarItem(icon: Icons.explore, title: 'Explore'),
+      //     FloatingNavbarItem(icon: Icons.chat_bubble_outline, title: 'Chats'),
+      //     FloatingNavbarItem(icon: Icons.settings, title: 'Settings'),
+      //   ],
+      // ),
       bottomNavigationBar: SafeArea(
         child: Container(
+          height: 60,
           padding: const EdgeInsets.all(12),
+          margin: EdgeInsets.all(10),
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(24)),
+            color: Colors.white,
           ),
-          child: SizedBox(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    width: 85,
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: TextButton(
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const Adminlandingpage(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Home',
-                        style: TextStyle(color: Colors.white),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const Adminlandingpage(),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Container(
-                      width: 85,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(10.0),
+                    );
+                  },
+                  icon: Icon(Icons.home)),
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const Adduser(),
                       ),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => const Adduser(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'ADD User',
-                          style: TextStyle(color: Colors.white),
-                        ),
+                    );
+                  },
+                  icon: Icon(Icons.person_add)),
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => AddDevice(),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Container(
-                      width: 90,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(10.0),
+                    );
+                    //
+                  },
+                  icon: Icon(Icons.devices)),
+              IconButton(
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Mapdevice(),
                       ),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => AddDevice(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Add Device',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Container(
-                      width: 90,
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: TextButton(
-                        onPressed: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => Mapdevice(),
-                            ),
-                          );
-                        },
-                        child: const Text(
-                          'Map Device',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                    );
+                  },
+                  icon: Icon(Icons.device_hub_outlined)),
+              // Container(
+              //   // width: 85,
+              //   // height: MediaQuery.of(context).size.height * 1.5,
+
+              //   decoration: BoxDecoration(
+              //     color: Colors.green,
+              //     borderRadius: BorderRadius.circular(10.0),
+              //   ),
+              //   child: TextButton(
+              //     onPressed: () {
+              //       Navigator.of(context).push(
+              //         MaterialPageRoute(
+              //           builder: (context) => const Adminlandingpage(),
+              //         ),
+              //       );
+              //     },
+              //     child: Text(
+              //       'Home',
+              //       style: TextStyle(
+              //         color: Colors.white,
+              //         fontSize: MediaQuery.of(context).size.width * 0.04,
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(
+              //     left: 8,
+              //   ),
+              //   child: Container(
+              //     // width: 85,
+              //     decoration: BoxDecoration(
+              //       color: Colors.green,
+              //       borderRadius: BorderRadius.circular(10.0),
+              //     ),
+              //     child: TextButton(
+              //       onPressed: () {
+              //         Navigator.of(context).push(
+              //           MaterialPageRoute(
+              //             builder: (context) => const Adduser(),
+              //           ),
+              //         );
+              //       },
+              //       child: Text(
+              //         'Add User',
+              //         style: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: MediaQuery.of(context).size.width * 0.03,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 8),
+              //   child: Container(
+              //     // width: 100,
+              //     decoration: BoxDecoration(
+              //       color: Colors.green,
+              //       borderRadius: BorderRadius.circular(10.0),
+              //     ),
+              //     child: TextButton(
+              //       onPressed: () {
+              //         Navigator.of(context).push(
+              //           MaterialPageRoute(
+              //             builder: (context) => AddDevice(),
+              //           ),
+              //         );
+              //       },
+              //       child: Text(
+              //         'Add Device',
+              //         style: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: MediaQuery.of(context).size.width * 0.04,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+              // Padding(
+              //   padding: const EdgeInsets.only(left: 8),
+              //   child: Container(
+              //     // width: MediaQuery.of(context).size.width * 0.2,
+              //     // width: 100,
+
+              //     decoration: BoxDecoration(
+              //       color: Colors.green,
+              //       borderRadius: BorderRadius.circular(10.0),
+              //     ),
+              //     child: TextButton(
+              //       onPressed: () {
+              //         Navigator.of(context).push(
+              //           MaterialPageRoute(
+              //             builder: (context) => Mapdevice(),
+              //           ),
+              //         );
+              //       },
+              //       child: Text(
+              //         'Map Device',
+              //         style: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: MediaQuery.of(context).size.width * 0.04,
+              //         ),
+              //       ),
+              //     ),
+              //   ),
+              // ),
+            ],
           ),
         ),
       ),

@@ -57,7 +57,9 @@ class _MotorState extends State<Motor> {
                 ),
                 Text(
                   'refresh_logs'.tr,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500),
                 ),
                 SizedBox(width: 5),
                 isRefreshing
@@ -78,24 +80,26 @@ class _MotorState extends State<Motor> {
             height: 10,
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 30),
+            padding: const EdgeInsets.only(left: 20),
             child: Row(
               children: [
                 Container(
                   height: 50,
-                  width: 90, // Adjust the height as needed for the first row
+                  width: MediaQuery.of(context).size.width *
+                      0.2, // Adjust the height as needed for the first row
                   color: Color.fromARGB(
                       181, 51, 42, 55), // Background color for the first row
                   child: Center(
                       child: Text("on".tr,
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 20,
+                            fontSize: MediaQuery.of(context).size.width * 0.05,
                           ))),
                 ),
                 Container(
                   height: 50,
-                  width: 135, // Adjust the height as needed for the first row
+                  width: MediaQuery.of(context).size.width *
+                      0.3, // Adjust the height as needed for the first row
                   // Adjust the height as needed for the first row
                   color: Color.fromARGB(181, 51, 42, 55),
                   child: Center(
@@ -104,14 +108,15 @@ class _MotorState extends State<Motor> {
                     child: Text("off".tr,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                         )),
                   )),
                 ),
                 //  SizedBox(width: 10,),
                 Container(
                   height: 50,
-                  width: 135, // Adjust the height as needed for the first row
+                  width: MediaQuery.of(context).size.width *
+                      0.4, // Adjust the height as needed for the first row
                   // Adjust the height as needed for the first row
                   color: Color.fromARGB(181, 51, 42, 55),
                   child: Center(
@@ -120,7 +125,7 @@ class _MotorState extends State<Motor> {
                     child: Text("duration".tr,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: MediaQuery.of(context).size.width * 0.05,
                         )),
                   )),
                 ),
@@ -167,15 +172,19 @@ class _MotorState extends State<Motor> {
             child: Row(
               children: [
                 SizedBox(
-                  width: 100,
+                  width: MediaQuery.of(context).size.width * 0.1,
                 ),
                 Text(
                   'total_duration'.tr,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500),
                 ),
                 Text(
                   ': ${motorLogs?['totalTime']}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500),
                 ),
               ],
             ),

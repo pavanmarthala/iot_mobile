@@ -256,40 +256,40 @@ class _AdduserrState extends State<Adduser>
                       print('API request failed with error: $error');
                       // You can handle the error here
                     });
-                    firebaseApi.getDeviceToken().then((value) async {
-                      var data = {
-                        'to': value.toString(),
-                        'notification': {
-                          'title': 'pavan',
-                          'body': '',
-                        },
-                        'android': {
-                          'notification': {
-                            'notification_count': 23,
-                          },
-                        },
-                        'data': {'type': 'message', 'id': 'pavan'}
-                      };
+                    // firebaseApi.getDeviceToken().then((value) async {
+                    //   var data = {
+                    //     'to': value.toString(),
+                    //     'notification': {
+                    //       'title': 'pavan',
+                    //       'body': '',
+                    //     },
+                    //     'android': {
+                    //       'notification': {
+                    //         'notification_count': 23,
+                    //       },
+                    //     },
+                    //     'data': {'type': 'message', 'id': 'pavan'}
+                    //   };
 
-                      await http.post(
-                          Uri.parse('https://fcm.googleapis.com/fcm/send'),
-                          body: jsonEncode(data),
-                          headers: {
-                            'Content-Type': 'application/json; charset=UTF-8',
-                            'Authorization':
-                                'key=AAAALbfocX4:APA91bFVgtoqpq0gwRcp1016R45Pts1pQFFGWJzXozyEslix8VE1m1ZtyBCH7ueldVPeHvXqKTsGz9iTqHKE5hhsTZf9fUMeuA-3EAYl3Bqh9bW806x5AUN2B_9l1LrLWTrK5aUoVGia'
-                          }
-                          //     ).then((value) {
-                          //   if (kDebugMode) {
-                          //     print(value.body.toString());
-                          //   }
-                          // }).onError((error, stackTrace) {
-                          //   if (kDebugMode) {
-                          //     print(error);
-                          //   }
-                          // }
-                          );
-                    });
+                    //   await http.post(
+                    //       Uri.parse('https://fcm.googleapis.com/fcm/send'),
+                    //       body: jsonEncode(data),
+                    //       headers: {
+                    //         'Content-Type': 'application/json; charset=UTF-8',
+                    //         'Authorization':
+                    //             'key=AAAALbfocX4:APA91bFVgtoqpq0gwRcp1016R45Pts1pQFFGWJzXozyEslix8VE1m1ZtyBCH7ueldVPeHvXqKTsGz9iTqHKE5hhsTZf9fUMeuA-3EAYl3Bqh9bW806x5AUN2B_9l1LrLWTrK5aUoVGia'
+                    //       }
+                    //       //     ).then((value) {
+                    //       //   if (kDebugMode) {
+                    //       //     print(value.body.toString());
+                    //       //   }
+                    //       // }).onError((error, stackTrace) {
+                    //       //   if (kDebugMode) {
+                    //       //     print(error);
+                    //       //   }
+                    //       // }
+                    //       );
+                    // });
                   },
                   animationDuration: const Duration(milliseconds: 2000),
                   initialText: 'add_user'.tr,
@@ -300,11 +300,11 @@ class _AdduserrState extends State<Adduser>
                     primaryColor: Colors.green.shade600,
                     secondaryColor: Colors.white,
                     initialTextStyle: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
                       color: Colors.white,
                     ),
                     finalTextStyle: TextStyle(
-                      fontSize: 22.0,
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
                       color: Colors.green.shade600,
                     ),
                     elevation: 20.0,
@@ -320,7 +320,10 @@ class _AdduserrState extends State<Adduser>
         title: Text(
           "add_user".tr,
           style: TextStyle(
-              fontWeight: FontWeight.bold, color: Colors.black, fontSize: 25),
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+            fontSize: MediaQuery.of(context).size.width * 0.06,
+          ),
         ),
         actions: [
           Padding(
@@ -357,10 +360,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'mobile_number'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('mobile_number'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _mobileNocontroller,
                 decoration: InputDecoration(
@@ -372,10 +375,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'first_number'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('first_number'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _firstnameController,
                 decoration: InputDecoration(
@@ -387,10 +390,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'last_name'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('last_name'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _lastnameController,
                 decoration: InputDecoration(
@@ -402,10 +405,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'email_id'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('email_id'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -417,18 +420,18 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'Subscription_validity'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('Subscription_validity'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               SubscriptionValidityTextField(),
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'pin'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('pin'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _pinController,
                 decoration: InputDecoration(
@@ -440,10 +443,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'language'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('language'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _languagecontroller,
                 decoration: InputDecoration(
@@ -455,10 +458,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'role'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('role'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _rolecontroller,
                 decoration: InputDecoration(
@@ -470,10 +473,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'address1'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('address1'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _address1controller,
                 decoration: InputDecoration(
@@ -485,10 +488,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'address2'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('address2'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _address2controller,
                 decoration: InputDecoration(
@@ -500,10 +503,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'address3'.tr,
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
+              Text('address3'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _address3controller,
                 decoration: InputDecoration(
@@ -515,10 +518,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'state'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('state'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 onTap: () async {
                   final result = await Navigator.push<StateSelection>(
@@ -544,10 +547,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'district'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('district'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 onTap: () async {
                   final selectedDistrict =
@@ -571,10 +574,10 @@ class _AdduserrState extends State<Adduser>
                   hintText: 'enter_district'.tr,
                 ),
               ),
-              Text(
-                'zone'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('zone'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 onTap: () async {
                   final selectedZone = await Navigator.of(context).push<String>(
@@ -600,10 +603,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'city'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('city'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _citycontroller,
                 decoration: InputDecoration(
@@ -615,10 +618,10 @@ class _AdduserrState extends State<Adduser>
               SizedBox(
                 height: 20,
               ),
-              Text(
-                'land_mark'.tr,
-                style: Theme.of(context).textTheme.headline6,
-              ),
+              Text('land_mark'.tr,
+                  style: TextStyle(
+                      fontSize: MediaQuery.of(context).size.width * 0.05,
+                      fontWeight: FontWeight.w500)),
               TextField(
                 controller: _landmarkcontroller,
                 decoration: InputDecoration(

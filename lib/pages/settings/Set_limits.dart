@@ -248,18 +248,18 @@ class _LimitsState extends State<Limits> {
                 },
                 animationDuration: const Duration(milliseconds: 2000),
                 initialText: 'save_device_list'.tr,
-                finalText: "Device Limits Saved",
+                finalText: "device_limits_saved".tr,
                 iconData: Icons.check,
                 iconSize: 32.0,
                 buttonStyle: buttonstyle(
                   primaryColor: Colors.green.shade600,
                   secondaryColor: Colors.white,
                   initialTextStyle: TextStyle(
-                    fontSize: 22.0,
+                    fontSize: MediaQuery.of(context).size.width * 0.05,
                     color: Colors.white,
                   ),
                   finalTextStyle: TextStyle(
-                    fontSize: 22.0,
+                    fontSize: MediaQuery.of(context).size.width * 0.04,
                     color: Colors.green.shade600,
                   ),
                   elevation: 20.0,
