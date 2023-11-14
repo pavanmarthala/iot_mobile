@@ -24,17 +24,16 @@ class Landingpage extends StatefulWidget {
   State<Landingpage> createState() => _LandingpageState();
 }
 
-class _LandingpageState extends State<Landingpage> with WidgetsBindingObserver {
+class _LandingpageState extends State<Landingpage> {
   bool isSwitched = false;
   FirebaseApi firebaseApi = FirebaseApi();
   bool isDeviceSwitched = false;
+  final GlobalKey<DeviceListState> deviceListKey = GlobalKey<DeviceListState>();
 
   Future<List<Map<String, dynamic>>>? devices;
   late bool isAdminOrSuperAdmin;
   GlobalKey<RefreshIndicatorState> refreshKey =
       GlobalKey<RefreshIndicatorState>();
-  @override
-  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -51,23 +50,20 @@ class _LandingpageState extends State<Landingpage> with WidgetsBindingObserver {
         print(value);
       }
     });
-    refreshData();
-    WidgetsBinding.instance?.addObserver(this);
+    // Refresh the data when entering the page
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      refreshKey.currentState?.show();
+    });
   }
 
   @override
-  void dispose() {
-    WidgetsBinding.instance?.removeObserver(this);
-    // ... existing dispose code ...
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      // The app is in the foreground. Trigger the refresh here.
-      refreshData();
-    }
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+      DeviceList(
+        deviceList: [],
+      );
+    });
   }
 
   Map<String, dynamic> decodeJwt(String token) {
@@ -144,250 +140,92 @@ class _LandingpageState extends State<Landingpage> with WidgetsBindingObserver {
   SwitchonState switchonState = SwitchonState();
   @override
   Widget build(BuildContext context) {
-    final switchonState = context.read<SwitchonState>();
-
-    return WillPopScope(
-      onWillPop: () async {
-        refreshData(); // Trigger refresh when user presses the system back button
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
-          title: Text(
-            "map_device".tr,
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
-              fontSize: MediaQuery.of(context).size.width * 0.05,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        title: Text(
+          "map_device".tr,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontSize: MediaQuery.of(context).size.width * 0.05,
           ),
-          actions: [
-            FutureBuilder<bool>(
-              future: checkUserRole(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.data == true) {
-                    return Padding(
-                      padding: EdgeInsets.only(right: 20),
-                      child: GestureDetector(
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) => Adminlandingpage(),
-                              ),
-                            );
-                          },
-                          child: Icon(Icons.home)),
-                    );
-                  }
-                }
-                return Container(); // Return an empty container if not admin or superadmin
-              },
-            ),
-            Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => Langscreen(),
-                    ),
-                  );
-                },
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.white,
-                  child: SvgPicture.asset(
-                    'assets/language-icon.svg',
-                  ),
-                ),
-              ),
-            )
-          ],
         ),
-        body: RefreshIndicator(
-          key: refreshKey,
-          onRefresh: () async {
-            await refreshData();
-          },
-          child: FutureBuilder<List<Map<String, dynamic>>>(
-            future: devices,
+        actions: [
+          FutureBuilder<bool>(
+            future: checkUserRole(),
             builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else {
-                final deviceList = snapshot.data;
-
-                if (deviceList == null || deviceList.isEmpty) {
-                  return Center(child: Text('No devices found.'));
-                }
-
-                return SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(
-                    children: deviceList.map((device) {
-                      return GestureDetector(
-                        onTap: () async {
-                          Navigator.pushNamed(
-                            context,
-                            '/homepage',
-                            arguments: device["deviceId"],
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.data == true) {
+                  return Padding(
+                    padding: EdgeInsets.only(right: 20),
+                    child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => Adminlandingpage(),
+                            ),
                           );
                         },
-                        child: Container(
-                          width: MediaQuery.of(context).size.width * 99,
-                          height: 120,
-                          margin: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 191, 188, 188),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.03,
-                                    ),
-                                    Text(
-                                      'device_id:'.tr,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      device["deviceId"] ?? "",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.03,
-                                    ),
-                                    Text(
-                                      'name'.tr,
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      device["name"] ?? "",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 6,
-                                ),
-                                Row(
-                                  children: [
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.01,
-                                    ),
-                                    Container(
-                                      height: 45,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      decoration: BoxDecoration(
-                                          color: device["powerStatusn"]
-                                              ? Colors.green
-                                              : const Color.fromARGB(
-                                                  255, 253, 18, 1),
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.asset("assets/power.png"),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.01,
-                                    ),
-                                    Container(
-                                      height: 45,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      decoration: BoxDecoration(
-                                          color: device["motorbox"]
-                                              ? Colors.green
-                                              : const Color.fromARGB(
-                                                  255, 253, 18, 1),
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Image.asset("assets/motor.jpeg"),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.01,
-                                    ),
-                                    Container(
-                                      height: 45,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.3,
-                                      decoration: BoxDecoration(
-                                          color: device["isDeviceSwitched"]
-                                              ? const Color.fromARGB(
-                                                  255, 245, 247, 245)
-                                              : Color.fromARGB(
-                                                  255, 255, 254, 253),
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                      child: Switch(
-                                          activeTrackColor: Colors.green,
-                                          activeColor: Colors.white,
-                                          inactiveTrackColor: Colors.red,
-                                          inactiveThumbColor: Colors.white,
-                                          value: device["isDeviceSwitched"],
-                                          onChanged: (value) async {
-                                            try {
-                                              await switchonState
-                                                  .updateDevicetatus(
-                                                      device["deviceId"],
-                                                      value);
-
-                                              setState(() {
-                                                isDeviceSwitched = value;
-                                              });
-                                            } catch (e) {
-                                              print('Error: $e');
-                                            }
-                                          }),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                );
+                        child: Icon(Icons.home)),
+                  );
+                }
               }
+              return Container(); // Return an empty container if not admin or superadmin
             },
           ),
-        ),
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Langscreen(),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.white,
+                child: SvgPicture.asset(
+                  'assets/language-icon.svg',
+                ),
+              ),
+            ),
+          )
+        ],
+      ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: devices,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            final deviceList = snapshot.data;
+
+            if (deviceList == null || deviceList.isEmpty) {
+              return Center(child: Text('No devices found.'));
+            }
+            return RefreshIndicator(
+              key: refreshKey,
+              onRefresh: () async {
+                await refreshData();
+                setState(() {
+                  // Update the devices list
+                  devices = devices;
+                });
+              },
+              child: DeviceList(
+                key: deviceListKey,
+                deviceList: deviceList,
+              ),
+            );
+          }
+        },
       ),
     );
   }
@@ -396,6 +234,169 @@ class _LandingpageState extends State<Landingpage> with WidgetsBindingObserver {
     setState(() {
       devices = fetchDevices();
     });
+  }
+}
+
+class DeviceList extends StatefulWidget {
+  final List<Map<String, dynamic>> deviceList;
+
+  const DeviceList({Key? key, required this.deviceList}) : super(key: key);
+
+  @override
+  State<DeviceList> createState() => DeviceListState();
+}
+
+class DeviceListState extends State<DeviceList> {
+  void refreshList() {
+    setState(() {
+      // Trigger a rebuild of the widget with the new data
+      // refreshData()
+    });
+  }
+
+  bool isSwitched = false;
+  FirebaseApi firebaseApi = FirebaseApi();
+  bool isDeviceSwitched = false;
+  @override
+  Widget build(BuildContext context) {
+    final switchonState = context.read<SwitchonState>();
+
+    return Container(
+        height: MediaQuery.of(context).size.height,
+        child: ListView.builder(
+            itemCount: widget.deviceList.length,
+            itemBuilder: (context, index) {
+              final device = widget.deviceList[index];
+              return GestureDetector(
+                onTap: () async {
+                  Navigator.pushNamed(
+                    context,
+                    '/homepage',
+                    arguments: device["deviceId"],
+                  );
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 99,
+                  height: 120,
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color.fromARGB(255, 191, 188, 188),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.03,
+                            ),
+                            Text(
+                              'device_id:'.tr,
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              device["deviceId"] ?? "",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.03,
+                            ),
+                            Text(
+                              'name'.tr,
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              device["name"] ?? "",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 6,
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.01,
+                            ),
+                            Container(
+                              height: 45,
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              decoration: BoxDecoration(
+                                  color: device["powerStatusn"]
+                                      ? Colors.green
+                                      : const Color.fromARGB(255, 253, 18, 1),
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset("assets/power.png"),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.01,
+                            ),
+                            Container(
+                              height: 45,
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              decoration: BoxDecoration(
+                                  color: device["motorbox"]
+                                      ? Colors.green
+                                      : const Color.fromARGB(255, 253, 18, 1),
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset("assets/motor.jpeg"),
+                              ),
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.01,
+                            ),
+                            Container(
+                              height: 45,
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              decoration: BoxDecoration(
+                                  color: device["isDeviceSwitched"]
+                                      ? const Color.fromARGB(255, 245, 247, 245)
+                                      : Color.fromARGB(255, 255, 254, 253),
+                                  borderRadius: BorderRadius.circular(30)),
+                              child: Switch(
+                                  activeTrackColor: Colors.green,
+                                  activeColor: Colors.white,
+                                  inactiveTrackColor: Colors.red,
+                                  inactiveThumbColor: Colors.white,
+                                  value: device["isDeviceSwitched"],
+                                  onChanged: (value) async {
+                                    try {
+                                      await switchonState.updateDevicetatus(
+                                          device["deviceId"], value);
+
+                                      setState(() {
+                                        isDeviceSwitched = value;
+                                      });
+                                    } catch (e) {
+                                      print('Error: $e');
+                                    }
+                                  }),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }));
   }
 }
 

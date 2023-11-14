@@ -435,13 +435,13 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       child: Container(
         width: 380,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.black, // Border color
-            width: 1.0, // Border width
-            style: BorderStyle.solid, // Border style
-          ),
-        ),
+            borderRadius: BorderRadius.circular(10), color: Colors.white
+            // border: Border.all(
+            //   color: Colors.black, // Border color
+            //   width: 1.0, // Border width
+            //   style: BorderStyle.solid, // Border style
+            // ),
+            ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(

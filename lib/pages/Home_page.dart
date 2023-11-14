@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
+import 'package:iot_mobile_app/pages/landing_page.dart';
 // import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/settings/settings.dart';
 import 'package:iot_mobile_app/pages/tabs/Logs.dart';
@@ -89,16 +90,33 @@ class _HomepageState extends State<Homepage> {
                   color: Colors.black),
             ),
             leading: IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/user_landing');
-              },
-              icon: Icon(Icons.arrow_back_ios),
+              onPressed: _handleMenuButtonPressed,
+              icon: ValueListenableBuilder<AdvancedDrawerValue>(
+                valueListenable: _advancedDrawerController,
+                builder: (_, value, __) {
+                  return AnimatedSwitcher(
+                    duration: Duration(milliseconds: 250),
+                    child: Icon(
+                      value.visible ? Icons.clear : Icons.menu,
+                      key: ValueKey<bool>(value.visible),
+                    ),
+                  );
+                },
+              ),
+              //   onPressed: () {
+              //     // Navigator.pushNamed(context, '/user_landing');
+
+              //     Navigator.of(context).push(
+              //       MaterialPageRoute(
+              //         builder: (context) => Landingpage(id: ''),
+              //       ),
+              //     );
+              //   },
+              //   icon: Icon(Icons.arrow_back_ios),
             ),
             actions: [
               Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 1.0,
-                ),
+                padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 10),
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(
@@ -119,24 +137,24 @@ class _HomepageState extends State<Homepage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                child: IconButton(
-                  onPressed: _handleMenuButtonPressed,
-                  icon: ValueListenableBuilder<AdvancedDrawerValue>(
-                    valueListenable: _advancedDrawerController,
-                    builder: (_, value, __) {
-                      return AnimatedSwitcher(
-                        duration: Duration(milliseconds: 250),
-                        child: Icon(
-                          value.visible ? Icons.clear : Icons.menu,
-                          key: ValueKey<bool>(value.visible),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.symmetric(horizontal: 10),
+              //   child: IconButton(
+              //     onPressed: _handleMenuButtonPressed,
+              //     icon: ValueListenableBuilder<AdvancedDrawerValue>(
+              //       valueListenable: _advancedDrawerController,
+              //       builder: (_, value, __) {
+              //         return AnimatedSwitcher(
+              //           duration: Duration(milliseconds: 250),
+              //           child: Icon(
+              //             value.visible ? Icons.clear : Icons.menu,
+              //             key: ValueKey<bool>(value.visible),
+              //           ),
+              //         );
+              //       },
+              //     ),
+              //   ),
+              // ),
               // Padding(
               //   padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 20.0),
               //   child: CircleAvatar(
