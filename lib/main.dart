@@ -12,9 +12,7 @@ import 'package:iot_mobile_app/pages/Home_page.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/landing_page.dart';
 import 'package:iot_mobile_app/pages/settings/settings.dart';
-import 'package:iot_mobile_app/pages/user_landing.dart';
-import 'package:iot_mobile_app/providers/firebase_message.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Auth/splash.dart';
 import 'utils/dep.dart' as dep;
 import 'package:iot_mobile_app/Controller/lang_controller.dart';
@@ -22,6 +20,7 @@ import 'package:iot_mobile_app/pages/tabs/dash.dart';
 import 'package:iot_mobile_app/utils/app_constants.dart';
 import 'package:iot_mobile_app/utils/messages.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/widgets.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +44,7 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider<SwitchState>(create: (context) => SwitchState()),
+        ChangeNotifierProvider<SwitchonState>(create: (_) => SwitchonState()),
       ],
       child: MyApp(languages: _languages),
     ),
@@ -58,13 +58,18 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({required this.languages});
+  MyApp({required this.languages});
   final Map<String, Map<String, String>> languages;
+  final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
   @override
+  @override
   Widget build(BuildContext context) {
+    // final routeObserver = RouteObserver();
+
     return GetBuilder<LangController>(builder: (LangController) {
       return GetMaterialApp(
+        navigatorObservers: [routeObserver],
         routes: {
           '/splash': (cotext) => SplashScreen(),
           '/user_landing': (context) => Landingpage(
