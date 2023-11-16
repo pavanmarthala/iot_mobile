@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_styled_toast/flutter_styled_toast.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 import 'package:iot_mobile_app/providers/firebase_message.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -159,6 +161,30 @@ class _SettingsState extends State<Settings> {
     }
   }
 
+  Map<String, dynamic> decodeJwt(String token) {
+    try {
+      return JwtDecoder.decode(token);
+    } catch (e) {
+      print('Error decoding JWT: $e');
+      return {};
+    }
+  }
+
+  Future<bool> checkUserRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken != null) {
+      Map<String, dynamic> decodedToken = decodeJwt(jwtToken);
+      List<dynamic> authorities = decodedToken['authorities'];
+
+      return authorities.contains('admin') ||
+          authorities.contains('superAdmin');
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Map<String, dynamic>>(
@@ -261,75 +287,155 @@ class _SettingsState extends State<Settings> {
                         ),
                     child: Row(
                       children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(horizontal: 7),
-                          height: 70,
-                          width: MediaQuery.of(context).size.width * 0.95,
-                          decoration: BoxDecoration(
-                              color: Color.fromARGB(255, 255, 255, 255),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Row(
-                            children: [
-                              Text(
-                                "  " + 'sub'.tr,
-                                style: TextStyle(
-                                  fontSize:
-                                      MediaQuery.of(context).size.width * 0.05,
-                                ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.02,
-                              ),
-                              Text(
-                                  ': ${userInfoData?["subscriptionValidity"] ?? "Unknown"}',
-                                  style: TextStyle(
-                                    // fontWeight: FontWeight.w500,
-                                    fontSize:
-                                        MediaQuery.of(context).size.width *
-                                            0.05,
-                                  ))
-                            ],
-                          ),
+                        FutureBuilder<bool>(
+                          future: checkUserRole(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.data == true) {
+                                return Container();
+                              }
+                            }
+                            return Row(
+                              children: [
+                                Container(
+                                    margin: EdgeInsets.symmetric(horizontal: 7),
+                                    height: 70,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.95,
+                                    decoration: BoxDecoration(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255)
+                                                .withOpacity(0.4),
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Row(
+                                      children: <Widget>[
+                                        Text(
+                                          "  " + 'sub'.tr,
+                                          style: TextStyle(
+                                            fontSize: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                        ),
+                                        Text(
+                                            ' ${userInfoData?["subscriptionValidity"] ?? "Unknown"}',
+                                            style: TextStyle(
+                                              // fontWeight: FontWeight.w500,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.04,
+                                            )),
+                                      ],
+                                    )),
+                              ],
+                            );
+                            // Return an empty container if not admin or superadmin
+                          },
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 20,
+                  FutureBuilder<bool>(
+                    future: checkUserRole(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.data == true) {
+                          return Container();
+                        }
+                      }
+                      return
+                          //  Row(
+                          //   children: [
+                          //     SizedBox(
+                          //       height: 20,
+                          //     ),
+                          Padding(
+                        padding: const EdgeInsets.only(top: 20.0, bottom: 10),
+                        child: Divider(
+                          height: 2,
+                          color: const Color.fromARGB(255, 163, 56, 56),
+                        ),
+                      );
+                      //     SizedBox(
+                      //       height: 10,
+                      //     ),
+                      //   ],
+                      // );
+                      // Return an empty container if not admin or superadmin
+                    },
                   ),
-                  Divider(
-                    height: 2,
-                    color: Colors.grey,
+                  FutureBuilder<bool>(
+                    future: checkUserRole(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.data == true) {
+                          return Container();
+                        }
+                      }
+                      return ListTile(
+                        title: Text('renew_sub'.tr,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400, fontSize: 20)),
+                        trailing: const Icon(
+                          Icons.refresh_outlined,
+                          color: Colors.black,
+                        ),
+                        onTap: () {},
+                      );
+
+                      // Return an empty container if not admin or superadmin
+                    },
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ListTile(
-                    title: Text('renew_sub'.tr,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 20)),
-                    trailing: const Icon(
-                      Icons.refresh_outlined,
-                      color: Colors.black,
-                    ),
-                    onTap: () {},
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    height: 1,
-                    color: Colors.grey,
-                  ),
-                  SizedBox(
-                    height: 10,
+                  FutureBuilder<bool>(
+                    future: checkUserRole(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.data == true) {
+                          return Container();
+                        }
+                      }
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 1,
+                          color: Colors.grey,
+                        ),
+                      );
+
+                      // Row(
+                      //   children: [
+                      //     SizedBox(
+                      //       height: 10,
+                      //     ),
+
+                      //     SizedBox(
+                      //       height: 10,
+                      //     ),
+                      //   ],
+                      // );
+                      // Return an empty container if not admin or superadmin
+                    },
                   ),
                   if (userInfoData?["selectedDevice"] == null)
                     ListTile(
                       title: Text("set_limits".tr,
                           style: TextStyle(
                               fontWeight: FontWeight.w400, fontSize: 20)),
-                      trailing: const Icon(Icons.code, color: Colors.black),
+                      trailing: Image.asset(
+                        'assets/filter.png',
+                        scale: 23,
+                      ),
+                      //  const Icon(Icons.code, color: Colors.black),
                       onTap: () {
                         final selectedDevice =
                             userInfoData?["selectedDevice"] ?? "";

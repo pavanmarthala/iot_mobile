@@ -204,16 +204,16 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Container(
-                height: 200,
+                // height: 200,
                 width: 380,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.black, // Border color
-                    width: 1.0, // Border width
-                    style: BorderStyle
-                        .solid, // Border style (you can use dotted or dashed too)
-                  ),
+                  // border: Border.all(
+                  //   color: Colors.black, // Border color
+                  //   width: 1.0, // Border width
+                  //   style: BorderStyle
+                  //       .solid, // Border style (you can use dotted or dashed too)
+                  // ),
                 ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
@@ -227,67 +227,79 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(5.0),
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
                         child: Wrap(
                           children: <Widget>[
                             for (int i = 0; i < deviceIds.length; i++)
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
-                                    width: 160,
-                                    height: 30,
+                                    width: 380,
+                                    height: 40,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: Colors.black, // Border color
-                                        width: 1.0, // Border width
-                                        style: BorderStyle
-                                            .solid, // Border style (you can use dotted or dashed too)
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Colors.teal.withOpacity(0.2),
+                                          Colors.lightGreen,
+                                        ],
                                       ),
+                                      borderRadius: BorderRadius.circular(10),
+                                      // border: Border.all(
+                                      //   color: Colors.black, // Border color
+                                      //   width: 1.0, // Border width
+                                      //   style: BorderStyle
+                                      //       .solid, // Border style (you can use dotted or dashed too)
+                                      // ),
                                     ),
                                     child: Center(child: Text(deviceIds[i]))),
                               ),
 
                             // Display the editing deviceIds
                             if (isEditing)
-                              Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  children: <Widget>[
-                                    for (int i = 0;
-                                        i < editingdeviceIds.length;
-                                        i++)
-                                      Row(
-                                        children: <Widget>[
-                                          Expanded(
-                                            child: TextField(
-                                              controller: TextEditingController(
-                                                  text: editingdeviceIds[i]),
-                                              onChanged: (value) {
-                                                // Update the editingdeviceIds list
-                                                editingdeviceIds[i] = value;
+                              Center(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    children: <Widget>[
+                                      for (int i = 0;
+                                          i < editingdeviceIds.length;
+                                          i++)
+                                        Row(
+                                          children: <Widget>[
+                                            Expanded(
+                                              child: TextField(
+                                                controller:
+                                                    TextEditingController(
+                                                        text: editingdeviceIds[
+                                                            i]),
+                                                onChanged: (value) {
+                                                  // Update the editingdeviceIds list
+                                                  editingdeviceIds[i] = value;
+                                                },
+                                              ),
+                                            ),
+                                            IconButton(
+                                              icon: Icon(Icons.delete),
+                                              onPressed: () {
+                                                setState(() {
+                                                  editingdeviceIds.removeAt(i);
+                                                });
                                               },
                                             ),
-                                          ),
-                                          IconButton(
-                                            icon: Icon(Icons.delete),
-                                            onPressed: () {
-                                              setState(() {
-                                                editingdeviceIds.removeAt(i);
-                                              });
-                                            },
-                                          ),
-                                        ],
+                                          ],
+                                        ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          setState(() {
+                                            editingdeviceIds.add("");
+                                          });
+                                        },
+                                        child: Text("add".tr),
                                       ),
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          editingdeviceIds.add("");
-                                        });
-                                      },
-                                      child: Text("add".tr),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                           ],
@@ -300,89 +312,39 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             ),
             _buildUserDetail("zone".tr, zoneController),
             _SubscriptionDetail("sub".tr, subscriptionValidController),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 10, top: 10, right: 10, bottom: 20),
-              child: Container(
-                  height: 400,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.black, // Border color
-                      width: 1.0, // Border width
-                      style: BorderStyle
-                          .solid, // Border style (you can use dotted or dashed too)
-                    ),
-                  ),
-                  // color: Colors.white,
-                  child: ListView(
-                    children: [
-                      Center(
-                          child: Text(
-                        'user_deatils'.tr,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      )),
-                      _UserDetail("name".tr, nameController, false),
-                      _UserDetail(
-                          "first_number".tr, firstnameController, false),
-                      _UserDetail("last_name".tr, lastnameController, false),
-                      Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Container(
-                            // height: 1112,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Colors.black, // Border color
-                                width: 1.0, // Border width
-                                style: BorderStyle
-                                    .solid, // Border style (you can use dotted or dashed too)
-                              ),
-                            ),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: Column(
-                                children: [
-                                  Center(
-                                      child: Text(
-                                    'address'.tr,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.bold),
-                                  )),
-                                  _buildUserDetail(
-                                    "name".tr,
-                                    nameController,
-                                  ),
-                                  _buildUserDetail(
-                                    "first_number".tr,
-                                    firstnameController,
-                                  ),
-                                  _buildUserDetail(
-                                    "last_name".tr,
-                                    lastnameController,
-                                  ),
-                                  _buildUserDetail(
-                                      "address1".tr, address1Controller),
-                                  _buildUserDetail(
-                                      "address2".tr, address2Controller),
-                                  _buildUserDetail(
-                                      "address3".tr, address3Controller),
-                                  _buildUserDetail(
-                                      "land_mark".tr, landmarkController),
-                                  _buildUserDetail("city".tr, cityController),
-                                  _buildUserDetail(
-                                      "district".tr, districtController),
-                                  _buildUserDetail("state".tr, stateController),
-                                  _buildUserDetail(
-                                      "pincode".tr, pincodeController),
-                                ],
-                              ),
-                            )),
-                      )
-                    ],
-                  )),
+            Text(
+              'user_deatils'.tr,
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            _UserDetail("name".tr, nameController, false),
+            _UserDetail("first_number".tr, firstnameController, false),
+            _UserDetail("last_name".tr, lastnameController, false),
+            Text(
+              'address'.tr,
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+            ),
+            _buildUserDetail(
+              "name".tr,
+              nameController,
+            ),
+            _buildUserDetail(
+              "first_number".tr,
+              firstnameController,
+            ),
+            _buildUserDetail(
+              "last_name".tr,
+              lastnameController,
+            ),
+            _buildUserDetail("address1".tr, address1Controller),
+            _buildUserDetail("address2".tr, address2Controller),
+            _buildUserDetail("address3".tr, address3Controller),
+            _buildUserDetail("land_mark".tr, landmarkController),
+            _buildUserDetail("city".tr, cityController),
+            _buildUserDetail("district".tr, districtController),
+            _buildUserDetail("state".tr, stateController),
+            _buildUserDetail("pincode".tr, pincodeController),
+            SizedBox(
+              height: 10,
             )
           ],
         ),
@@ -397,12 +359,20 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         width: 380,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.black, // Border color
-            width: 1.0, // Border width
-            style: BorderStyle
-                .solid, // Border style (you can use dotted or dashed too)
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.teal.withOpacity(0.2),
+              Colors.lightGreen,
+            ],
           ),
+          // border: Border.all(
+          //   color: Colors.black, // Border color
+          //   width: 1.0, // Border width
+          //   style: BorderStyle
+          //       .solid, // Border style (you can use dotted or dashed too)
+          // ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -435,13 +405,21 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       child: Container(
         width: 380,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: Colors.white
-            // border: Border.all(
-            //   color: Colors.black, // Border color
-            //   width: 1.0, // Border width
-            //   style: BorderStyle.solid, // Border style
-            // ),
-            ),
+          borderRadius: BorderRadius.circular(10),
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.teal.withOpacity(0.2),
+              Colors.lightGreen,
+            ],
+          ),
+          // border: Border.all(
+          //   color: Colors.black, // Border color
+          //   width: 1.0, // Border width
+          //   style: BorderStyle.solid, // Border style
+          // ),
+        ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -475,12 +453,20 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       child: Container(
         width: 380,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.black, // Border color
-            width: 1.0, // Border width
-            style: BorderStyle.solid, // Border style
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.teal.withOpacity(0.2),
+              Colors.lightGreen,
+            ],
           ),
+          borderRadius: BorderRadius.circular(10),
+          // border: Border.all(
+          //   color: Colors.black, // Border color
+          //   width: 1.0, // Border width
+          //   style: BorderStyle.solid, // Border style
+          // ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),

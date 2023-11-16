@@ -69,7 +69,7 @@ class MyApp extends StatelessWidget {
 
     return GetBuilder<LangController>(builder: (LangController) {
       return GetMaterialApp(
-        navigatorObservers: [routeObserver],
+        navigatorObservers: [LandingpageNavigatorObserver()],
         routes: {
           '/splash': (cotext) => SplashScreen(),
           '/user_landing': (context) => Landingpage(

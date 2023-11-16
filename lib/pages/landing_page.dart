@@ -7,17 +7,18 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
-import 'package:iot_mobile_app/pages/tabs/dash.dart';
 import 'package:iot_mobile_app/providers/firebase_message.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
 
 class Landingpage extends StatefulWidget {
   final String id;
+  static final GlobalKey<_LandingpageState> landingpageKey =
+      GlobalKey<_LandingpageState>();
   const Landingpage({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -29,12 +30,13 @@ class _LandingpageState extends State<Landingpage> {
   FirebaseApi firebaseApi = FirebaseApi();
   bool isDeviceSwitched = false;
   final GlobalKey<DeviceListState> deviceListKey = GlobalKey<DeviceListState>();
-
+  late StreamController<bool> _refreshController;
+  late Stream<bool> _refreshStream;
   Future<List<Map<String, dynamic>>>? devices;
   late bool isAdminOrSuperAdmin;
   GlobalKey<RefreshIndicatorState> refreshKey =
       GlobalKey<RefreshIndicatorState>();
-
+  late Timer _timer;
   @override
   void initState() {
     super.initState();
@@ -50,19 +52,38 @@ class _LandingpageState extends State<Landingpage> {
         print(value);
       }
     });
-    // Refresh the data when entering the page
-    WidgetsBinding.instance?.addPostFrameCallback((_) {
-      refreshKey.currentState?.show();
+    _refreshController = StreamController<bool>.broadcast();
+    _refreshStream = _refreshController.stream;
+
+    // Refresh the data periodically
+    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+      refreshData();
+      setState(() {
+        // Update the devices list
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel(); // Cancel the timer to avoid memory leaks
+    _refreshController.close(); // Close the stream controller
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    // Trigger refresh when returning from the homepage
+    refreshData();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    setState(() {
-      DeviceList(
-        deviceList: [],
-      );
+
+    // Add the following line to refresh data when returning to this page
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await refreshData();
     });
   }
 
@@ -197,35 +218,50 @@ class _LandingpageState extends State<Landingpage> {
           )
         ],
       ),
-      body: FutureBuilder<List<Map<String, dynamic>>>(
-        future: devices,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else {
-            final deviceList = snapshot.data;
-
-            if (deviceList == null || deviceList.isEmpty) {
-              return Center(child: Text('No devices found.'));
-            }
-            return RefreshIndicator(
-              key: refreshKey,
-              onRefresh: () async {
-                await refreshData();
-                setState(() {
-                  // Update the devices list
-                  devices = devices;
-                });
-              },
-              child: DeviceList(
-                key: deviceListKey,
-                deviceList: deviceList,
-              ),
-            );
-          }
+      body: WillPopScope(
+        onWillPop: () async {
+          // When the back button is pressed, trigger the refresh
+          await refreshData();
+          return true; // Allow the page to be popped
         },
+        child: StreamBuilder<bool>(
+            stream: _refreshStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data == true) {
+                refreshData();
+                _refreshController.add(false); // Reset the value
+              }
+              return FutureBuilder<List<Map<String, dynamic>>>(
+                future: devices,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  } else {
+                    final deviceList = snapshot.data;
+
+                    if (deviceList == null || deviceList.isEmpty) {
+                      return Center(child: Text('No devices found.'));
+                    }
+                    return RefreshIndicator(
+                      key: refreshKey,
+                      onRefresh: () async {
+                        await refreshData();
+                        setState(() {
+                          // Update the devices list
+                          devices = devices;
+                        });
+                      },
+                      child: DeviceList(
+                        key: deviceListKey,
+                        deviceList: deviceList,
+                      ),
+                    );
+                  }
+                },
+              );
+            }),
       ),
     );
   }
@@ -274,6 +310,9 @@ class DeviceListState extends State<DeviceList> {
                     '/homepage',
                     arguments: device["deviceId"],
                   );
+
+                  // Trigger refresh when returning from the homepage
+                  Landingpage.landingpageKey.currentState?.refreshData();
                 },
                 child: Container(
                   width: MediaQuery.of(context).size.width * 99,
@@ -444,5 +483,22 @@ class SwitchonState extends ChangeNotifier {
       print('Error updating device status: $e');
       throw Exception('Failed to update device status');
     }
+  }
+}
+
+class LandingpageNavigatorObserver extends NavigatorObserver {
+  @override
+  void didPop(Route route, Route? previousRoute) {
+    super.didPop(route, previousRoute);
+
+    if (previousRoute?.settings.name == '/landingpage') {
+      _notifyLandingpageRefresh();
+    }
+  }
+
+  void _notifyLandingpageRefresh() {
+    final landingpageState =
+        _LandingpageState(); // Replace with the actual state class name
+    landingpageState.refreshData();
   }
 }
