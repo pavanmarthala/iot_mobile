@@ -56,7 +56,7 @@ class _LandingpageState extends State<Landingpage> {
     _refreshStream = _refreshController.stream;
 
     // Refresh the data periodically
-    _timer = Timer.periodic(Duration(seconds: 30), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
       refreshData();
       setState(() {
         // Update the devices list
@@ -418,10 +418,13 @@ class DeviceListState extends State<DeviceList> {
                                   onChanged: (value) async {
                                     try {
                                       await switchonState.updateDevicetatus(
-                                          device["deviceId"], value);
+                                          device["deviceId"] ?? "", value);
 
                                       setState(() {
-                                        isDeviceSwitched = value;
+                                        // Update the device status
+                                        widget.deviceList[index]
+                                            ["isDeviceSwitched"] = value;
+                                        // isDeviceSwitched = value;
                                       });
                                     } catch (e) {
                                       print('Error: $e');
@@ -444,7 +447,7 @@ class SwitchonState extends ChangeNotifier {
 
   bool get isSwitched => _isSwitched;
 
-  Future<void> updateDevicetatus(String deviceId, bool isSwitched) async {
+  Future<bool> updateDevicetatus(String deviceId, bool isSwitched) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? jwtToken = prefs.getString('jwt_token');
 
@@ -453,16 +456,13 @@ class SwitchonState extends ChangeNotifier {
       // return null;
     }
 
-    String url = isSwitched
-        ? '/motor/offCommand/$deviceId'
-        : '/motor/onCommand/$deviceId';
+    String url = '/motor/${isSwitched ? 'onCommand' : 'offCommand'}/$deviceId';
 
     try {
       final response = await http.get(
         Uri.https('console-api.theja.in', url),
         headers: {
-          "Authorization": "Bearer $jwtToken",
-          "Content-Type": "application/json",
+          "Authorization": "$jwtToken",
         },
       );
 
@@ -471,10 +471,11 @@ class SwitchonState extends ChangeNotifier {
       print('Request Body: ${response.request?.isBlank}');
 
       if (response.statusCode == 200) {
-        _isSwitched = json.decode(response.body);
+        isSwitched = json.decode(response.body);
+        notifyListeners();
         print('Switch status: $_isSwitched');
 
-        notifyListeners();
+        return isSwitched;
       } else {
         print('API Response (Error): ${response.body}');
         throw Exception('Failed to update device status');

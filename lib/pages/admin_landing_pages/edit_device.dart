@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors
 
 import 'dart:convert';
 import 'package:get/get.dart';
@@ -269,7 +269,7 @@ class _EditDeviceState extends State<EditDevice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffcbcbcb),
+      // backgroundColor: const Color(0xffcbcbcb),
       appBar: AppBar(
         title: Text('device_details'.tr),
         actions: [
@@ -360,16 +360,16 @@ class _EditDeviceState extends State<EditDevice> {
             Padding(
               padding: const EdgeInsets.all(10),
               child: Container(
-                height: 150,
+                // height: 150,
                 width: 380,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.black, // Border color
-                    width: 1.0, // Border width
-                    style: BorderStyle
-                        .solid, // Border style (you can use dotted or dashed too)
-                  ),
+                  // border: Border.all(
+                  //   color: Colors.black, // Border color
+                  //   width: 1.0, // Border width
+                  //   style: BorderStyle
+                  //       .solid, // Border style (you can use dotted or dashed too)
+                  // ),
                 ),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
@@ -388,16 +388,24 @@ class _EditDeviceState extends State<EditDevice> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Container(
-                                    width: 160,
-                                    height: 30,
+                                    width: 380,
+                                    height: 40,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                        color: Colors.black, // Border color
-                                        width: 1.0, // Border width
-                                        style: BorderStyle
-                                            .solid, // Border style (you can use dotted or dashed too)
+                                      gradient: LinearGradient(
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                        colors: [
+                                          Colors.teal.withOpacity(0.2),
+                                          Colors.lightGreen,
+                                        ],
                                       ),
+                                      borderRadius: BorderRadius.circular(10),
+                                      // border: Border.all(
+                                      //   color: Colors.black, // Border color
+                                      //   width: 1.0, // Border width
+                                      //   style: BorderStyle
+                                      //       .solid, // Border style (you can use dotted or dashed too)
+                                      // ),
                                     ),
                                     child: Center(child: Text(accountIds[i]))),
                               ),
@@ -478,75 +486,29 @@ class _EditDeviceState extends State<EditDevice> {
             _UserDetail("modem_info".tr, modemInfoController, false),
             _UserDetail("ccid".tr, CCIDController, false),
             _UserDetail("IMEI".tr, IMEIController, false),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 10, top: 10, right: 10, bottom: 20),
-              child: Container(
-                height: 407,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.black, // Border color
-                    width: 1.0, // Border width
-                    style: BorderStyle.solid, // Border style
-                  ),
-                ),
-                child: ListView(
-                  children: [
-                    Center(
-                      child: Text(
-                        'meta1'.tr,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    _UserDetail("device_id".tr, device_idController, false),
-                    _UserDetail("imsi".tr, IMSIController, false),
-                    _UserDetail("oprator".tr, OperatorController, false),
-                    _UserDetail("IP".tr, IpController, false),
-                    _UserDetail(
-                        "signal_quality".tr, signal_qualityController, false),
-                    _UserDetail("loaction".tr, locationController, false),
-                    _UserDetail("mobile_number".tr, mob_numController, false),
-                    _UserDetail("minimum_voltage".tr, minVolController, false),
-                    _UserDetail("maximum_voltage".tr, maxVolController, false),
-                    _UserDetail("minimum_current".tr, minCurController, false),
-                    _UserDetail("maximum_current".tr, maxCurController, false),
-                  ],
-                ),
-              ),
+            Text(
+              'meta1'.tr,
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 10, top: 10, right: 10, bottom: 20),
-              child: Container(
-                height: 300,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.black, // Border color
-                    width: 1.0, // Border width
-                    style: BorderStyle.solid, // Border style
-                  ),
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Column(children: [
-                    Center(
-                      child: Text(
-                        'meta'.tr,
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    _UserDetail("device_id".tr, device_idController, false),
-                    _UserDetail("modem_info".tr, modemInfoController, false),
-                    _UserDetail("ccid".tr, CCIDController, false),
-                    _UserDetail("IMEI".tr, IMEIController, false),
-                  ]),
-                ),
-              ),
+            _UserDetail("device_id".tr, device_idController, false),
+            _UserDetail("imsi".tr, IMSIController, false),
+            _UserDetail("oprator".tr, OperatorController, false),
+            _UserDetail("IP".tr, IpController, false),
+            _UserDetail("signal_quality".tr, signal_qualityController, false),
+            _UserDetail("loaction".tr, locationController, false),
+            _UserDetail("mobile_number".tr, mob_numController, false),
+            _UserDetail("minimum_voltage".tr, minVolController, false),
+            _UserDetail("maximum_voltage".tr, maxVolController, false),
+            _UserDetail("minimum_current".tr, minCurController, false),
+            _UserDetail("maximum_current".tr, maxCurController, false),
+            Text(
+              'meta'.tr,
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
             ),
+            _UserDetail("device_id".tr, device_idController, false),
+            _UserDetail("modem_info".tr, modemInfoController, false),
+            _UserDetail("ccid".tr, CCIDController, false),
+            _UserDetail("IMEI".tr, IMEIController, false),
           ],
         ),
       ),
@@ -561,11 +523,20 @@ class _EditDeviceState extends State<EditDevice> {
         width: 380,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.black, // Border color
-            width: 1.0, // Border width
-            style: BorderStyle.solid, // Border style
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.teal.withOpacity(0.2),
+              Colors.lightGreen,
+            ],
           ),
+          // border: Border.all(
+          //   color: Colors.black, // Border color
+          //   width: 1.0, // Border width
+          //   style: BorderStyle
+          //       .solid, // Border style (you can use dotted or dashed too)
+          // ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -599,11 +570,20 @@ class _EditDeviceState extends State<EditDevice> {
         width: 380,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: Colors.black, // Border color
-            width: 1.0, // Border width
-            style: BorderStyle.solid, // Border style
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Colors.teal.withOpacity(0.2),
+              Colors.lightGreen,
+            ],
           ),
+          // border: Border.all(
+          //   color: Colors.black, // Border color
+          //   width: 1.0, // Border width
+          //   style: BorderStyle
+          //       .solid, // Border style (you can use dotted or dashed too)
+          // ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),

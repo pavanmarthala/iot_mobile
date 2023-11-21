@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/Add_user.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/add_device.dart';
-import 'package:iot_mobile_app/pages/admin_landing_pages/edit.dart';
+import 'package:iot_mobile_app/pages/admin_landing_pages/edit_user.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/admin_landing_pages/map_device.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
@@ -108,141 +108,174 @@ class _UsersState extends State<Users> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xffcbcbcb),
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          title: Text(
-            "manage_users".tr,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: MediaQuery.of(context).size.width * 0.05,
-            ),
+      backgroundColor: const Color(0xffcbcbcb),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          "manage_users".tr,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: MediaQuery.of(context).size.width * 0.05,
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 30),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const Langscreen(),
-                    ),
-                  );
-                },
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.green,
-                  child: SvgPicture.asset('assets/language-icon.svg'),
-                ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 30),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Langscreen(),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.green,
+                child: SvgPicture.asset('assets/language-icon.svg'),
               ),
             ),
-          ],
-        ),
-        body: FutureBuilder<List<Map<String, String>>>(
-          future: devices,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else {
-              return SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                // controller: searchController,
-                                onChanged: (value) {
-                                  filterDevices(value);
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 0),
-                                  // hintText: 'Search for users',
-                                  hintText: 'search_for_users'.tr,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: BorderSide(),
-                                  ),
-                                  fillColor:
-                                      const Color.fromARGB(255, 248, 245, 245),
-                                  filled: true,
-                                  suffixIcon: const Icon(Icons.search),
+          ),
+        ],
+      ),
+      body: FutureBuilder<List<Map<String, String>>>(
+        future: devices,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              // controller: searchController,
+                              onChanged: (value) {
+                                filterDevices(value);
+                              },
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 0),
+                                // hintText: 'Search for users',
+                                hintText: 'search_for_users'.tr,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                  borderSide: BorderSide(),
                                 ),
+                                fillColor:
+                                    const Color.fromARGB(255, 248, 245, 245),
+                                filled: true,
+                                suffixIcon: const Icon(Icons.search),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                    Container(
-                      height: 560,
-                      child: ListView(
-                        children: filteredDeviceList.map((device) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                top: 10, left: 5, right: 5),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(13),
-                                color: Colors.white,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 10, left: 20),
-                                    child: Text(
-                                      device["name"] ?? "user",
-                                      style: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.05,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                  ),
+                  Container(
+                    height: 560,
+                    child: ListView(
+                      children: filteredDeviceList.map((device) {
+                        return Padding(
+                          padding:
+                              const EdgeInsets.only(top: 10, left: 5, right: 5),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(13),
+                              color: Colors.white,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 10, left: 20),
+                                  child: Text(
+                                    device["name"] ?? "user",
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.05,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Padding(
-                                    padding:
-                                        const EdgeInsets.only(top: 5, left: 20),
-                                    child: Text(
-                                      device["mobile"] ?? "",
-                                      style: TextStyle(
-                                        fontSize:
-                                            MediaQuery.of(context).size.width *
-                                                0.05,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                ),
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(top: 5, left: 20),
+                                  child: Text(
+                                    device["mobile"] ?? "",
+                                    style: TextStyle(
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.05,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(bottom: 10),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).push(
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    UserDetailsScreen(
-                                                  mobileId:
-                                                      device["mobile"] ?? "",
-                                                  deviceIdId: '',
-                                                ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UserDetailsScreen(
+                                                mobileId:
+                                                    device["mobile"] ?? "",
+                                                deviceIdId: '',
                                               ),
-                                            );
-                                          },
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.3,
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                              0.05,
+                                          decoration: BoxDecoration(
+                                              color: Colors.green,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                left: 23, top: 8),
+                                            child: Text(
+                                              'view'.tr,
+                                              style: TextStyle(
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.05,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10),
+                                        child: GestureDetector(
+                                          onTap: () {},
                                           child: Container(
                                             width: MediaQuery.of(context)
                                                     .size
@@ -253,14 +286,14 @@ class _UsersState extends State<Users> {
                                                     .height *
                                                 0.05,
                                             decoration: BoxDecoration(
-                                                color: Colors.green,
+                                                color: Colors.red,
                                                 borderRadius:
                                                     BorderRadius.circular(10)),
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  left: 23, top: 8),
+                                                  left: 17, top: 8),
                                               child: Text(
-                                                'view'.tr,
+                                                'delete'.tr,
                                                 style: TextStyle(
                                                   fontSize:
                                                       MediaQuery.of(context)
@@ -273,7 +306,8 @@ class _UsersState extends State<Users> {
                                             ),
                                           ),
                                         ),
-                                        Padding(
+                                      ),
+                                      Padding(
                                           padding:
                                               const EdgeInsets.only(left: 10),
                                           child: GestureDetector(
@@ -288,15 +322,22 @@ class _UsersState extends State<Users> {
                                                       .height *
                                                   0.05,
                                               decoration: BoxDecoration(
-                                                  color: Colors.red,
+                                                  color: device["active"] ==
+                                                          "true"
+                                                      ? const Color.fromARGB(
+                                                          234, 42, 228, 138)
+                                                      : const Color.fromARGB(
+                                                          234, 239, 9, 9),
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           10)),
                                               child: Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 17, top: 8),
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
                                                 child: Text(
-                                                  'delete'.tr,
+                                                  device["active"] == "true"
+                                                      ? 'deactivate'.tr
+                                                      : 'activate'.tr,
                                                   style: TextStyle(
                                                     fontSize:
                                                         MediaQuery.of(context)
@@ -308,238 +349,85 @@ class _UsersState extends State<Users> {
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        ),
-                                        Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 10),
-                                            child: GestureDetector(
-                                              onTap: () {},
-                                              child: Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.3,
-                                                height: MediaQuery.of(context)
-                                                        .size
-                                                        .height *
-                                                    0.05,
-                                                decoration: BoxDecoration(
-                                                    color: device["active"] ==
-                                                            "true"
-                                                        ? const Color.fromARGB(
-                                                            234, 42, 228, 138)
-                                                        : const Color.fromARGB(
-                                                            234, 239, 9, 9),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10)),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(
-                                                    device["active"] == "true"
-                                                        ? 'deactivate'.tr
-                                                        : 'activate'.tr,
-                                                    style: TextStyle(
-                                                      fontSize:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.05,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            )),
-                                      ],
-                                    ),
+                                          )),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          );
-                        }).toList(),
-                      ),
+                          ),
+                        );
+                      }).toList(),
                     ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
-        bottomNavigationBar: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.only(left: 15, top: 5, bottom: 5),
-            margin: EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(24))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const Adminlandingpage(),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.home)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const Adduser(),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.person_add)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => AddDevice(),
-                        ),
-                      );
-                      //
-                    },
-                    icon: Icon(Icons.devices)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Mapdevice(),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.device_hub_outlined)),
-                // Container(
-                //   width: 85,
-                //   decoration: BoxDecoration(
-                //     color: Colors.green,
-
-                //     borderRadius:
-                //         BorderRadius.circular(10.0), // Rounded border
-                //   ),
-                //   child: TextButton(
-                //     onPressed: () {
-                //       Navigator.of(context).push(
-                //         MaterialPageRoute(
-                //           builder: (context) => const Adminlandingpage(),
-                //         ),
-                //       );
-
-                //       // Go back to Home Screen
-                //     },
-                //     child: Text(
-                //       'home'.tr,
-                //       style: TextStyle(
-                //         color: Colors.white,
-                //         fontSize: MediaQuery.of(context).size.width * 0.04,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8),
-                //   child: Container(
-                //     width: 85,
-                //     decoration: BoxDecoration(
-                //       color: Colors.green,
-
-                //       borderRadius:
-                //           BorderRadius.circular(10.0), // Rounded border
-                //     ),
-                //     child: TextButton(
-                //       onPressed: () {
-                //         Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (context) => const Adduser(),
-                //           ),
-                //         );
-
-                //         // Go back to Home Screen
-                //       },
-                //       child: Text(
-                //         'add_user'.tr,
-                //         style: TextStyle(
-                //           color: Colors.white,
-                //           fontSize:
-                //               MediaQuery.of(context).size.width * 0.04,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8),
-                //   child: Container(
-                //     width: 100,
-                //     decoration: BoxDecoration(
-                //       color: Colors.green,
-
-                //       borderRadius:
-                //           BorderRadius.circular(10.0), // Rounded border
-                //     ),
-                //     child: TextButton(
-                //       onPressed: () {
-                //         Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (context) => AddDevice(),
-                //           ),
-                //         );
-
-                //         // Go back to Home Screen
-                //       },
-                //       child: Text(
-                //         'add_device'.tr,
-                //         style: TextStyle(
-                //           color: Colors.white,
-                //           fontSize:
-                //               MediaQuery.of(context).size.width * 0.04,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.only(left: 8),
-                //   child: Container(
-                //     width: 100,
-                //     decoration: BoxDecoration(
-                //       color: Colors.green,
-
-                //       borderRadius:
-                //           BorderRadius.circular(10.0), // Rounded border
-                //     ),
-                //     child: TextButton(
-                //       onPressed: () {
-                //         Navigator.of(context).push(
-                //           MaterialPageRoute(
-                //             builder: (context) => const Mapdevice(),
-                //           ),
-                //         );
-
-                //         // Go back to Home Screen
-                //       },
-                //       child: Text(
-                //         'map_device'.tr,
-                //         style: TextStyle(
-                //           color: Colors.white,
-                //           fontSize:
-                //               MediaQuery.of(context).size.width * 0.04,
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-              ],
-            ),
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.085,
+          // padding: const EdgeInsets.all(12),
+          margin: EdgeInsets.all(10),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(24)),
+            color: Colors.white,
           ),
-        ));
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildBottomNavItem(Icons.home, 'Home', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Adminlandingpage(),
+                  ),
+                );
+              }),
+              _buildBottomNavItem(Icons.person_add, 'Add User', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Adduser(),
+                  ),
+                );
+              }),
+              _buildBottomNavItem(Icons.devices, 'Add Device', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => AddDevice(),
+                  ),
+                );
+              }),
+              _buildBottomNavItem(Icons.device_hub_outlined, 'Map Device', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Mapdevice(),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Helper function to create a column with an icon and label
+  Widget _buildBottomNavItem(
+      IconData icon, String label, VoidCallback onPressed) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        IconButton(
+          onPressed: onPressed,
+          icon: Icon(icon),
+        ),
+        Text(
+          label,
+          style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.027),
+        ),
+      ],
+    );
   }
 }

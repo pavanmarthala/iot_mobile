@@ -629,7 +629,7 @@ class _MapDevicesState extends State<MapDevices> {
                       fontSize: MediaQuery.of(context).size.width * 0.04,
                       color: Colors.green.shade600,
                     ),
-                    elevation: 20.0,
+                    elevation: 0.0,
                     borderRadius: 10.0,
                   )),
             ),
@@ -652,8 +652,8 @@ class _MapDevicesState extends State<MapDevices> {
       // ),
       bottomNavigationBar: SafeArea(
         child: Container(
-          height: 60,
-          padding: const EdgeInsets.all(12),
+          height: MediaQuery.of(context).size.height * 0.085,
+          // padding: const EdgeInsets.all(12),
           margin: EdgeInsets.all(10),
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(24)),
@@ -662,154 +662,56 @@ class _MapDevicesState extends State<MapDevices> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const Adminlandingpage(),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.home)),
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const Adduser(),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.person_add)),
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => AddDevice(),
-                      ),
-                    );
-                    //
-                  },
-                  icon: Icon(Icons.devices)),
-              IconButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => Mapdevice(),
-                      ),
-                    );
-                  },
-                  icon: Icon(Icons.device_hub_outlined)),
-              // Container(
-              //   // width: 85,
-              //   // height: MediaQuery.of(context).size.height * 1.5,
-
-              //   decoration: BoxDecoration(
-              //     color: Colors.green,
-              //     borderRadius: BorderRadius.circular(10.0),
-              //   ),
-              //   child: TextButton(
-              //     onPressed: () {
-              //       Navigator.of(context).push(
-              //         MaterialPageRoute(
-              //           builder: (context) => const Adminlandingpage(),
-              //         ),
-              //       );
-              //     },
-              //     child: Text(
-              //       'Home',
-              //       style: TextStyle(
-              //         color: Colors.white,
-              //         fontSize: MediaQuery.of(context).size.width * 0.04,
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(
-              //     left: 8,
-              //   ),
-              //   child: Container(
-              //     // width: 85,
-              //     decoration: BoxDecoration(
-              //       color: Colors.green,
-              //       borderRadius: BorderRadius.circular(10.0),
-              //     ),
-              //     child: TextButton(
-              //       onPressed: () {
-              //         Navigator.of(context).push(
-              //           MaterialPageRoute(
-              //             builder: (context) => const Adduser(),
-              //           ),
-              //         );
-              //       },
-              //       child: Text(
-              //         'Add User',
-              //         style: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: MediaQuery.of(context).size.width * 0.03,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 8),
-              //   child: Container(
-              //     // width: 100,
-              //     decoration: BoxDecoration(
-              //       color: Colors.green,
-              //       borderRadius: BorderRadius.circular(10.0),
-              //     ),
-              //     child: TextButton(
-              //       onPressed: () {
-              //         Navigator.of(context).push(
-              //           MaterialPageRoute(
-              //             builder: (context) => AddDevice(),
-              //           ),
-              //         );
-              //       },
-              //       child: Text(
-              //         'Add Device',
-              //         style: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: MediaQuery.of(context).size.width * 0.04,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 8),
-              //   child: Container(
-              //     // width: MediaQuery.of(context).size.width * 0.2,
-              //     // width: 100,
-
-              //     decoration: BoxDecoration(
-              //       color: Colors.green,
-              //       borderRadius: BorderRadius.circular(10.0),
-              //     ),
-              //     child: TextButton(
-              //       onPressed: () {
-              //         Navigator.of(context).push(
-              //           MaterialPageRoute(
-              //             builder: (context) => Mapdevice(),
-              //           ),
-              //         );
-              //       },
-              //       child: Text(
-              //         'Map Device',
-              //         style: TextStyle(
-              //           color: Colors.white,
-              //           fontSize: MediaQuery.of(context).size.width * 0.04,
-              //         ),
-              //       ),
-              //     ),
-              //   ),
-              // ),
+              _buildBottomNavItem(Icons.home, 'Home', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Adminlandingpage(),
+                  ),
+                );
+              }),
+              _buildBottomNavItem(Icons.person_add, 'Add User', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Adduser(),
+                  ),
+                );
+              }),
+              _buildBottomNavItem(Icons.devices, 'Add Device', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => AddDevice(),
+                  ),
+                );
+              }),
+              _buildBottomNavItem(Icons.device_hub_outlined, 'Map Device', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Mapdevice(),
+                  ),
+                );
+              }),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  // Helper function to create a column with an icon and label
+  Widget _buildBottomNavItem(
+      IconData icon, String label, VoidCallback onPressed) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        IconButton(
+          onPressed: onPressed,
+          icon: Icon(icon),
+        ),
+        Text(
+          label,
+          style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.027),
+        ),
+      ],
     );
   }
 }

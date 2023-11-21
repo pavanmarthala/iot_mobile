@@ -3,16 +3,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:get/get.dart';
-import 'package:iot_mobile_app/pages/landing_page.dart';
-// import 'package:iot_mobile_app/pages/landing_page.dart';
+import 'package:iot_mobile_app/pages/admin_landing_pages/landing.dart';
 import 'package:iot_mobile_app/pages/settings/settings.dart';
 import 'package:iot_mobile_app/pages/tabs/Logs.dart';
 import 'package:iot_mobile_app/pages/tabs/dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:iot_mobile_app/providers/DeviceController.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:molten_navigationbar_flutter/molten_navigationbar_flutter.dart';
 import 'package:iot_mobile_app/providers/firebase_message.dart';
-import 'package:flutter_snake_navigationbar/flutter_snake_navigationbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'Drawer/Drawer.dart';
 import 'lang_page.dart';
@@ -22,9 +21,7 @@ import 'lang_page.dart';
 class Homepage extends StatefulWidget {
   final String deviceId;
 
-  Homepage(
-    this.deviceId,
-  );
+  Homepage(this.deviceId, {super.key});
 
   @override
   State<Homepage> createState() => _HomepageState();
@@ -58,6 +55,30 @@ class _HomepageState extends State<Homepage> {
   int currentIndex = 0;
   PageController pageController = PageController(initialPage: 0);
   final _advancedDrawerController = AdvancedDrawerController();
+
+  Map<String, dynamic> decodeJwt(String token) {
+    try {
+      return JwtDecoder.decode(token);
+    } catch (e) {
+      print('Error decoding JWT: $e');
+      return {};
+    }
+  }
+
+  Future<bool> checkUserRole() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? jwtToken = prefs.getString('jwt_token');
+
+    if (jwtToken != null) {
+      Map<String, dynamic> decodedToken = decodeJwt(jwtToken);
+      List<dynamic> authorities = decodedToken['authorities'];
+
+      return authorities.contains('admin') ||
+          authorities.contains('superAdmin');
+    }
+
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +151,28 @@ class _HomepageState extends State<Homepage> {
                 //   icon: Icon(Icons.arrow_back_ios),
               ),
               actions: [
+                FutureBuilder<bool>(
+                  future: checkUserRole(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.data == true) {
+                        return Padding(
+                          padding: EdgeInsets.only(right: 10),
+                          child: GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => Adminlandingpage(),
+                                  ),
+                                );
+                              },
+                              child: Icon(Icons.home_outlined)),
+                        );
+                      }
+                    }
+                    return Container(); // Return an empty container if not admin or superadmin
+                  },
+                ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 10),
                   child: GestureDetector(
@@ -146,65 +189,13 @@ class _HomepageState extends State<Homepage> {
                       // backgroundImage: AssetImage('assets/language-icon.png'),
                       child: SvgPicture.asset(
                         'assets/language-icon.svg',
-                        // width: 100.0, // Adjust the width as needed
-                        // height: 100.0, // Adjust the height as needed
                       ),
                     ),
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 10),
-                //   child: IconButton(
-                //     onPressed: _handleMenuButtonPressed,
-                //     icon: ValueListenableBuilder<AdvancedDrawerValue>(
-                //       valueListenable: _advancedDrawerController,
-                //       builder: (_, value, __) {
-                //         return AnimatedSwitcher(
-                //           duration: Duration(milliseconds: 250),
-                //           child: Icon(
-                //             value.visible ? Icons.clear : Icons.menu,
-                //             key: ValueKey<bool>(value.visible),
-                //           ),
-                //         );
-                //       },
-                //     ),
-                //   ),
-                // ),
-                // Padding(
-                //   padding: EdgeInsets.symmetric(vertical: 1.0, horizontal: 20.0),
-                //   child: CircleAvatar(
-                //     radius: 16,
-                //     backgroundColor: Colors.green,
-                //     child: IconButton(
-                //         onPressed: () {
-                //           Navigator.of(context).push(
-                //             MaterialPageRoute(
-                //               builder: (context) => Settings(),
-                //             ),
-                //           );
-                //         },
-                //         icon: Icon(
-                //           Icons.settings,
-                //           size: 30,
-                //           color: Colors.black,
-                //         )),
-                //   ),
-                // ),
               ],
             ),
             body: screens[index],
-            //  Stack(
-            //   children: [
-            //     Offstage(
-            //       offstage: currentIndex != 0,
-            //       child: Dash(widget.deviceId),
-            //     ),
-            //     Offstage(
-            //       offstage: currentIndex != 1,
-            //       child: Logs(),
-            //     ),
-            //   ],
-            // ),
             bottomNavigationBar: MoltenBottomNavigationBar(
               // margin: EdgeInsets.all(10),
               // borderRaduis: BorderRadius.circular(15),
@@ -241,37 +232,7 @@ class _HomepageState extends State<Homepage> {
                   selectedColor: Colors.white,
                 ),
               ],
-            )
-            // SnakeNavigationBar.color(
-            //   behaviour: SnakeBarBehaviour.floating,
-            //   snakeShape: SnakeShape.circle,
-            //   shape:
-            //       RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-            //   padding: EdgeInsets.only(left: 15, right: 15, bottom: 15),
-            //   snakeViewColor: Colors.black,
-            //   selectedItemColor: Colors.white,
-            //   unselectedItemColor: Colors.black,
-            //   showSelectedLabels: true,
-            //   showUnselectedLabels: true,
-            //   currentIndex: index,
-            //   onTap: (index) => setState(() => this.index = index),
-            //   items: [
-            //     BottomNavigationBarItem(
-            //       icon: Icon(Icons.signal_cellular_alt_outlined),
-            //       label: 'status'.tr,
-            //     ),
-            //     BottomNavigationBarItem(
-            //       icon: Icon(Icons.format_list_bulleted),
-            //       label: 'logs'.tr,
-            //     ),
-            //     BottomNavigationBarItem(
-            //       icon: Icon(Icons.settings),
-            //       label: 'settings'.tr,
-            //     ),
-            //   ],
-            // ),
-
-            ),
+            )),
         drawer: SafeArea(child: MyDrawer()),
       ),
     );

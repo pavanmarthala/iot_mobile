@@ -587,9 +587,12 @@ class SwitchState extends ChangeNotifier {
     final response = await http.get(
       Uri.https('console-api.theja.in', url), // Use the correct endpoint
       headers: {
-        "Authorization": "Bearer $jwtToken",
+        "Authorization": "$jwtToken",
       },
     );
+    print('Request URL: ${response.request?.url}');
+    print('Request Headers: ${response.request?.headers}');
+    print('Request Body: ${response.request?.isBlank}');
 
     if (response.statusCode == 200) {
       isSwitched = json.decode(response.body);

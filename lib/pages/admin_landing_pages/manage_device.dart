@@ -106,150 +106,185 @@ class _ManagedeviceState extends State<Managedevice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xffcbcbcb),
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          title: Text(
-            "manage_devices".tr,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: MediaQuery.of(context).size.width * 0.05,
-            ),
+      backgroundColor: const Color(0xffcbcbcb),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          "manage_devices".tr,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: MediaQuery.of(context).size.width * 0.05,
           ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 30),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => const Langscreen(),
-                    ),
-                  );
-                },
-                child: CircleAvatar(
-                  radius: 18,
-                  backgroundColor: Colors.green,
-                  child: SvgPicture.asset('assets/language-icon.svg'),
-                ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 30),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Langscreen(),
+                  ),
+                );
+              },
+              child: CircleAvatar(
+                radius: 18,
+                backgroundColor: Colors.green,
+                child: SvgPicture.asset('assets/language-icon.svg'),
               ),
             ),
-          ],
-        ),
-        body: FutureBuilder<List<Map<String, String>>>(
-          future: devices,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            } else {
-              return SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                // controller: searchController,
-                                onChanged: (value) {
-                                  filterDevices(value);
-                                },
-                                decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 0),
-                                  // hintText: 'Search for users',
-                                  hintText: 'search_for_device'.tr,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    borderSide: BorderSide(),
-                                  ),
-                                  fillColor:
-                                      const Color.fromARGB(255, 248, 245, 245),
-                                  filled: true,
-                                  suffixIcon: const Icon(Icons.search),
+          ),
+        ],
+      ),
+      body: FutureBuilder<List<Map<String, String>>>(
+        future: devices,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            return SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Column(
+                children: [
+                  Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              // controller: searchController,
+                              onChanged: (value) {
+                                filterDevices(value);
+                              },
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 0),
+                                // hintText: 'Search for users',
+                                hintText: 'search_for_device'.tr,
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(30),
+                                  borderSide: BorderSide(),
                                 ),
+                                fillColor:
+                                    const Color.fromARGB(255, 248, 245, 245),
+                                filled: true,
+                                suffixIcon: const Icon(Icons.search),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                    Column(
-                      children: [
-                        Container(
-                          height: 560,
-                          // height: MediaQuery.of(context).size.width * 0.9,
-                          // color: Colors.black,
-                          child: ListView(
-                            children: filteredDeviceList.map((device) {
-                              return Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 10, left: 5, right: 5),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(13),
-                                    color: Colors.white,
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 10, left: 20),
-                                        child: Text(
-                                          device["name"] ?? "",
-                                          style: TextStyle(
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.05,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        height: 560,
+                        // height: MediaQuery.of(context).size.width * 0.9,
+                        // color: Colors.black,
+                        child: ListView(
+                          children: filteredDeviceList.map((device) {
+                            return Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 10, left: 5, right: 5),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(13),
+                                  color: Colors.white,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 10, left: 20),
+                                      child: Text(
+                                        device["name"] ?? "",
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 5, left: 20),
-                                        child: Text(
-                                          device["deviceId"] ?? "",
-                                          style: TextStyle(
-                                            fontSize: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.05,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 5, left: 20),
+                                      child: Text(
+                                        device["deviceId"] ?? "",
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.05,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(bottom: 10),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        EditDevice(
-                                                      deviceId:
-                                                          device["deviceId"] ??
-                                                              "",
-                                                      // deviceId: '',
-                                                    ),
+                                    ),
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.of(context).push(
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      EditDevice(
+                                                    deviceId:
+                                                        device["deviceId"] ??
+                                                            "",
+                                                    // deviceId: '',
                                                   ),
-                                                );
-                                              },
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.3,
+                                              height: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.05,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.green,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 23, top: 8),
+                                                child: Text(
+                                                  'view'.tr,
+                                                  style: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.05,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: GestureDetector(
+                                              onTap: () {},
                                               child: Container(
                                                 width: MediaQuery.of(context)
                                                         .size
@@ -260,16 +295,16 @@ class _ManagedeviceState extends State<Managedevice> {
                                                         .height *
                                                     0.05,
                                                 decoration: BoxDecoration(
-                                                    color: Colors.green,
+                                                    color: Colors.red,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             10)),
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          left: 23, top: 8),
+                                                          left: 17, top: 8),
                                                   child: Text(
-                                                    'view'.tr,
+                                                    'delete'.tr,
                                                     style: TextStyle(
                                                       fontSize:
                                                           MediaQuery.of(context)
@@ -283,7 +318,8 @@ class _ManagedeviceState extends State<Managedevice> {
                                                 ),
                                               ),
                                             ),
-                                            Padding(
+                                          ),
+                                          Padding(
                                               padding: const EdgeInsets.only(
                                                   left: 10),
                                               child: GestureDetector(
@@ -298,16 +334,25 @@ class _ManagedeviceState extends State<Managedevice> {
                                                           .height *
                                                       0.05,
                                                   decoration: BoxDecoration(
-                                                      color: Colors.red,
+                                                      color: device["active"] ==
+                                                              "true"
+                                                          ? const Color
+                                                              .fromARGB(
+                                                              234, 42, 228, 138)
+                                                          : const Color
+                                                              .fromARGB(
+                                                              234, 239, 9, 9),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               10)),
                                                   child: Padding(
                                                     padding:
-                                                        const EdgeInsets.only(
-                                                            left: 17, top: 8),
+                                                        const EdgeInsets.all(
+                                                            8.0),
                                                     child: Text(
-                                                      'delete'.tr,
+                                                      device["active"] == "true"
+                                                          ? 'deactivate'.tr
+                                                          : 'activate'.tr,
                                                       style: TextStyle(
                                                         fontSize: MediaQuery.of(
                                                                     context)
@@ -320,184 +365,87 @@ class _ManagedeviceState extends State<Managedevice> {
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                            Padding(
-                                                padding: const EdgeInsets.only(
-                                                    left: 10),
-                                                child: GestureDetector(
-                                                  onTap: () {},
-                                                  child: Container(
-                                                    width:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .width *
-                                                            0.3,
-                                                    height:
-                                                        MediaQuery.of(context)
-                                                                .size
-                                                                .height *
-                                                            0.05,
-                                                    decoration: BoxDecoration(
-                                                        color:
-                                                            device["active"] ==
-                                                                    "true"
-                                                                ? const Color
-                                                                    .fromARGB(
-                                                                    234,
-                                                                    42,
-                                                                    228,
-                                                                    138)
-                                                                : const Color
-                                                                    .fromARGB(
-                                                                    234,
-                                                                    239,
-                                                                    9,
-                                                                    9),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
-                                                    child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        device["active"] ==
-                                                                "true"
-                                                            ? 'deactivate'.tr
-                                                            : 'activate'.tr,
-                                                        style: TextStyle(
-                                                          fontSize: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.05,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                )),
-                                          ],
-                                        ),
+                                              )),
+                                        ],
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            }).toList(),
-                          ),
+                              ),
+                            );
+                          }).toList(),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            }
-          },
-        ),
-        bottomNavigationBar: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.only(left: 15, top: 5, bottom: 5),
-            margin: EdgeInsets.all(10),
-            decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(24))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const Adminlandingpage(),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.home)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const Adduser(),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.person_add)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => AddDevice(),
-                        ),
-                      );
-                      //
-                    },
-                    icon: Icon(Icons.devices)),
-                IconButton(
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => Mapdevice(),
-                        ),
-                      );
-                    },
-                    icon: Icon(Icons.device_hub_outlined)),
-              ],
-            ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            );
+          }
+        },
+      ),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.085,
+          // padding: const EdgeInsets.all(12),
+          margin: EdgeInsets.all(10),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(24)),
+            color: Colors.white,
           ),
-        ));
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildBottomNavItem(Icons.home, 'Home', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Adminlandingpage(),
+                  ),
+                );
+              }),
+              _buildBottomNavItem(Icons.person_add, 'Add User', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const Adduser(),
+                  ),
+                );
+              }),
+              _buildBottomNavItem(Icons.devices, 'Add Device', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => AddDevice(),
+                  ),
+                );
+              }),
+              _buildBottomNavItem(Icons.device_hub_outlined, 'Map Device', () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => Mapdevice(),
+                  ),
+                );
+              }),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Helper function to create a column with an icon and label
+  Widget _buildBottomNavItem(
+      IconData icon, String label, VoidCallback onPressed) {
+    return Column(
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        IconButton(
+          onPressed: onPressed,
+          icon: Icon(icon),
+        ),
+        Text(
+          label,
+          style: TextStyle(fontSize: MediaQuery.of(context).size.width * 0.027),
+        ),
+      ],
+    );
   }
 }
-//  SafeArea(
-//           child: Container(
-//             padding: const EdgeInsets.only(left: 15, top: 5, bottom: 5),
-//             margin: EdgeInsets.all(10),
-//             decoration: const BoxDecoration(
-//                 color: Colors.white,
-//                 borderRadius: BorderRadius.all(Radius.circular(24))),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//               children: [
-//                 IconButton(
-//                     onPressed: () {
-//                       Navigator.of(context).push(
-//                         MaterialPageRoute(
-//                           builder: (context) => const Adminlandingpage(),
-//                         ),
-//                       );
-//                     },
-//                     icon: Icon(Icons.home)),
-//                 IconButton(
-//                     onPressed: () {
-//                       Navigator.of(context).push(
-//                         MaterialPageRoute(
-//                           builder: (context) => const Adduser(),
-//                         ),
-//                       );
-//                     },
-//                     icon: Icon(Icons.person_add)),
-//                 IconButton(
-//                     onPressed: () {
-//                       Navigator.of(context).push(
-//                         MaterialPageRoute(
-//                           builder: (context) => AddDevice(),
-//                         ),
-//                       );
-//                       //
-//                     },
-//                     icon: Icon(Icons.devices)),
-//                 IconButton(
-//                     onPressed: () {
-//                       Navigator.of(context).push(
-//                         MaterialPageRoute(
-//                           builder: (context) => Mapdevice(),
-//                         ),
-//                       );
-//                     },
-//                     icon: Icon(Icons.device_hub_outlined)),
-//               ],
-//             ),
-//           ),
-//         )
