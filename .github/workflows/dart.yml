@@ -1,0 +1,45 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Dart
+
+on:
+  push:
+    branches: [ "releases" ]
+  pull_request:
+    branches: [ "releases" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.13.9'
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      #- name: Analyze project source
+       # run: flutter analyze
+
+     # - name: Run tests
+      #  run: flutter test
+
+      - name: Build APK
+        run: flutter build apk --debug --split-per-abi
+
+      - name: Upload APK artifact
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "build/app/outputs/apk/debug/*.apk"
+          token: ${{ secrets.TOKEN }}
+          tag: v1.0${{ github.run_number }}
+         # name: app-release
+         # path: build/app/outputs/flutter-apk/app-release.apk
