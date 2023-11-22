@@ -37,7 +37,7 @@ class _DashState extends State<Dash> {
                   style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(width: 160),
-                     Container(
+                     SizedBox(
                       height: 30,
                       width: 30,
                        child: GestureDetector(
@@ -306,7 +306,7 @@ class _DashState extends State<Dash> {
                               ),
                             ),
                             Text(
-                              '${DateFormat('jms').format(time)}',
+                              DateFormat('jms').format(time),
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,

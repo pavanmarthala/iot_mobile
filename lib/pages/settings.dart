@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 
 import '../Auth/singin.dart';
-import 'Set_limits.dart';
+import 'set_limits.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});

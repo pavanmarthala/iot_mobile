@@ -9,7 +9,7 @@ class Langget extends StatelessWidget {
   final int index;
 
 
-  Langget({required this.langController, required this.languageModel, required this.index});
+  const Langget({super.key, required this.langController, required this.languageModel, required this.index});
 
   @override
   Widget build(BuildContext context) {

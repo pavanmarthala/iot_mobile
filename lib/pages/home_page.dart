@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/pages/settings.dart';
-import 'package:iot_mobile_app/pages/tabs/Logs.dart';
+import 'package:iot_mobile_app/pages/tabs/logs.dart';
 import 'package:iot_mobile_app/pages/tabs/dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
