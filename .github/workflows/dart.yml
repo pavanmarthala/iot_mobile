@@ -38,7 +38,7 @@ jobs:
       - name: Upload APK artifact
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/debug/*.apk"
+          artifacts: "build/app/outputs/apk/release /*.apk"
           token: ${{ secrets.TOKEN }}
           tag: v1.0${{ github.run_number }}
          # name: app-release
