@@ -41,7 +41,7 @@ Change the working directory:
 Install dependencies:
 
 	flutter pub get
-3. **Usage**
+3. **Usage **
 
 Run the Flutter application:
 
