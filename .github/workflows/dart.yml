@@ -38,8 +38,8 @@ jobs:
       - name: Upload APK artifact
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/app/outputs/apk/release /*.apk"
+          artifacts: "build/app/outputs/flutter-apk/*"
           token: ${{ secrets.TOKEN }}
           tag: v1.0${{ github.run_number }}
          # name: app-release
-         # path: build/app/outputs/flutter-apk/app-release.apk
+         # path: build/app/outputs/flutter-apk/app-release.apkC:\flutter_projects\eco\build\app\outputs\flutter-apk
