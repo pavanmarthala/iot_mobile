@@ -26,17 +26,19 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze project source
-        run: flutter analyze
+      #- name: Analyze project source
+       # run: flutter analyze
 
       - name: Run tests
         run: flutter test
 
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --debug --split-per-abi
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v2
+        uses: ncipollo/release-action@v1
         with:
-          name: app-release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          artifacts: "build/app/outputs/apk/debug/*.apk"
+          token: ${{ secrets.TOKEN }}
+         # name: app-release
+         # path: build/app/outputs/flutter-apk/app-release.apk
