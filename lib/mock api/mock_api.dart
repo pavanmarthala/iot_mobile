@@ -1,7 +1,7 @@
 class MockApi {
   static Future<Map<String, dynamic>> getStatusData(bool isSwitched) async {
     // Simulate a delay to mimic a network request
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     // bool isSwitched = true;
     
     // Mock the response data

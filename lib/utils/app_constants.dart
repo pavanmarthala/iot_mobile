@@ -1,4 +1,5 @@
-import 'package:get/get.dart';
+
+// ignore_for_file: non_constant_identifier_names
 
 import '../models/language.dart';
 

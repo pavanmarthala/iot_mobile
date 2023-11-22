@@ -3,14 +3,11 @@
 // ignore_for_file: non_constant_identifier_names, prefer_const_constructors, deprecated_member_use, sized_box_for_whitespace, camel_case_types
 
 import 'dart:convert';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:http/http.dart'  as http;
 import 'package:iot_mobile_app/models/add_user_model.dart';
-import 'package:iot_mobile_app/pages/Home_page.dart';
-
 
 class Adduser extends StatefulWidget {
   const Adduser({super.key});
@@ -75,7 +72,9 @@ Future<AdduserModel?> add (
     }, 
   );
   var data =response.body;
-  print(data);
+  if (kDebugMode) {
+    print(data);
+  }
   if(response.statusCode == 200){
     String responseString = response.body;
     adduserModelFromJson(responseString);
@@ -83,6 +82,7 @@ Future<AdduserModel?> add (
   else {
     return null;
   }
+  return null;
 }
 
 class _dataState extends State<Adduser> {
@@ -112,7 +112,6 @@ class _dataState extends State<Adduser> {
   @override
   Widget build(BuildContext context) {
 
-   AdduserModel? _addusermodel;
     return Scaffold(
       bottomNavigationBar:Container(
         width: double.infinity,
@@ -143,7 +142,6 @@ class _dataState extends State<Adduser> {
                  addressLine2, addressLine3, city, district, landMark, state, firstName, lastName, zone);
              if (data != null) {
               setState(() {
-                _addusermodel = data;
               });
             }
 

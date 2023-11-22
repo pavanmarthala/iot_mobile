@@ -18,7 +18,7 @@ class _LimitsState extends State<Mapdevice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       bottomNavigationBar:Container(
+       bottomNavigationBar:SizedBox(
   width: double.infinity,
   // padding: EdgeInsets.all(16.0),
   child: ElevatedButton(
@@ -26,7 +26,7 @@ class _LimitsState extends State<Mapdevice> {
     
     },
     style: ElevatedButton.styleFrom(
-      primary: Colors.green,
+      backgroundColor: Colors.green,
       padding: EdgeInsets.symmetric(vertical: 20),
     ),
     child: Text('map_user_to_device'.tr, style: TextStyle(fontSize: 20)),
@@ -49,7 +49,7 @@ class _LimitsState extends State<Mapdevice> {
              SizedBox(height: 20,),
               Text(
                 'user_id'.tr,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               TextField(
                 controller: _userController,
@@ -61,7 +61,7 @@ class _LimitsState extends State<Mapdevice> {
 
               Text(
                 'device_id'.tr,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               TextField(
                 controller: _deviceController,

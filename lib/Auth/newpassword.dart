@@ -1,14 +1,18 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:iot_mobile_app/Auth/singin.dart';
 import 'package:iot_mobile_app/pages/lang_page.dart';
 
-import '../pages/Home_page.dart';
+import '../pages/home_page.dart';
 
 // Existing ForgotPasswordPage code...
 
 class NewPasswordPage extends StatefulWidget {
+  const NewPasswordPage({super.key});
+
   @override
   _NewPasswordPageState createState() => _NewPasswordPageState();
 }
@@ -30,7 +34,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
             onPressed: () {
               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => Homepage(),
+                                  builder: (context) => const Homepage(),
                                 ),
                               );
               // Navigate back to the sign-in page or any other page as needed.
@@ -46,20 +50,20 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 165, 227, 106),
+        backgroundColor: const Color.fromARGB(255, 165, 227, 106),
 
-        iconTheme: IconThemeData(color: Colors.black),
-         title:  Text('new_pass'.tr, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.black),),
+        iconTheme: const IconThemeData(color: Colors.black),
+         title:  Text('new_pass'.tr, style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.black),),
          actions: [
           Padding(
-            padding: EdgeInsets.only(right: 30),
+            padding: const EdgeInsets.only(right: 30),
             child: GestureDetector(
               onTap: (){
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>Langscreen(),),);
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) =>const Langscreen(),),);
               },
               child: CircleAvatar(
                 radius: 18,
-        backgroundColor: Color.fromARGB(255, 165, 227, 106),
+        backgroundColor: const Color.fromARGB(255, 165, 227, 106),
 
                 // backgroundImage: AssetImage('assets/language-icon.png'), 
                 child: SvgPicture.asset(
@@ -96,7 +100,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                     borderRadius: BorderRadius.circular(10.0),
                   ),
                   child: Container(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
                     ),
@@ -105,11 +109,11 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       children: [
                         Text(
                           'new_pass'.tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 20,
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         TextFormField(
                           controller: newPasswordController,
                           obscureText: true,
@@ -118,7 +122,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                             labelText: "enter_new_pass".tr,
                           ),
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         TextFormField(
                           controller: confirmNewPasswordController,
                           obscureText: true,
@@ -127,38 +131,38 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                             labelText: "confirm_pass".tr,
                           ),
                         ),
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         Center(
                           child: ElevatedButton(
                             onPressed: _updatePassword,
-                            child: Text("update_pass".tr),
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.green,
-                              fixedSize: Size(650, 50),
+                              backgroundColor: Colors.green,
+                              fixedSize: const Size(650, 50),
                             ),
+                            child: Text("update_pass".tr),
                           ),
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Row(
                           children: [
                             Text(
                               'go_to_signin'.tr,
-                              style: TextStyle(color: Colors.grey),
+                              style: const TextStyle(color: Colors.grey),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 5,
                             ),
                             TextButton(
                               onPressed: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => SingIN(),
+                                    builder: (context) => const SingIN(),
                                   ),
                                 );
                               },
                               child: Text(
                                 "click".tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,

@@ -1,6 +1,7 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:iot_mobile_app/Auth/singin.dart';
-import 'package:iot_mobile_app/pages/Home_page.dart';
 
 
 
@@ -35,9 +36,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   _nagivatetohome() async {
 
-    await Future.delayed(Duration(seconds:4), () {
+    await Future.delayed(const Duration(seconds:4), () {
 
-      Navigator.push(context, MaterialPageRoute(builder: (context) => SingIN()));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => const SingIN()));
 
     });
 

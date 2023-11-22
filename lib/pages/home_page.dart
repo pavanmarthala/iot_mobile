@@ -7,7 +7,7 @@ import 'package:iot_mobile_app/pages/tabs/Logs.dart';
 import 'package:iot_mobile_app/pages/tabs/dash.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'Drawer/Drawer.dart';
+import 'Drawer/drawer.dart';
 import 'lang_page.dart';
 
 // import 'package:iot_console/pages/tabs/status.dart';

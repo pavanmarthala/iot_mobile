@@ -21,7 +21,7 @@ class _LimitsState extends State<Limits> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar:Container(
+      bottomNavigationBar:SizedBox(
   width: double.infinity,
   // padding: EdgeInsets.all(16.0),
   child: ElevatedButton(
@@ -30,7 +30,7 @@ class _LimitsState extends State<Limits> {
     
     },
     style: ElevatedButton.styleFrom(
-      primary: Colors.green,
+      backgroundColor: Colors.green,
       padding: EdgeInsets.symmetric(vertical: 20),
     ),
     child: Text('save_device_list'.tr, style: TextStyle(fontSize: 20)),
@@ -71,7 +71,7 @@ class _LimitsState extends State<Limits> {
             children: [
               Text(
                 'device'.tr,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               DropdownButton<String>(
                 value: 'Device 1',
@@ -92,7 +92,7 @@ class _LimitsState extends State<Limits> {
              SizedBox(height: 20,),
               Text(
                 'minimum_voltage'.tr,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               TextField(
                 controller: _minimumVoltageController,
@@ -104,7 +104,7 @@ class _LimitsState extends State<Limits> {
 
               Text(
                 'maximum_voltage'.tr,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               TextField(
                 controller: _maximumVoltageController,
@@ -116,7 +116,7 @@ class _LimitsState extends State<Limits> {
 
               Text(
                 'minimum_current'.tr,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               TextField(
                 controller: _minimumCurrentController,
@@ -128,7 +128,7 @@ class _LimitsState extends State<Limits> {
 
               Text(
                 'maximum_current'.tr,
-                style: Theme.of(context).textTheme.headline6,
+                style: Theme.of(context).textTheme.titleLarge,
               ),
               TextField(
                 controller: _maximumCurrentController,

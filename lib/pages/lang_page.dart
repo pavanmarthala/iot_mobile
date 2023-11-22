@@ -12,8 +12,8 @@ class Langscreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        title:  Text('select_language'.tr, style: TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.black),),
+        iconTheme: const IconThemeData(color: Colors.black),
+        title:  Text('select_language'.tr, style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 25,color: Colors.black),),
       ),
       body: SafeArea(
 
@@ -41,17 +41,17 @@ class Langscreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 30),
                             Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10),
-                              child: Text('select_language'.tr,style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text('select_language'.tr,style: const TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),
                             ),
                             const SizedBox(height: 10),
                             GridView.builder(
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 childAspectRatio: 2.5,
                               ),
                               itemCount: 4,
-                              physics: NeverScrollableScrollPhysics(),
+                              physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) =>
                                   // Container(width: 300,
@@ -66,7 +66,7 @@ class Langscreen extends StatelessWidget {
 
                               )
                             ),
-                            SizedBox(height: 10),
+                            const SizedBox(height: 10),
 
                           ],
                         ),

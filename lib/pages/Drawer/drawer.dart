@@ -1,11 +1,12 @@
-// ignore_for_file: prefer_const_constructors, sort_child_properties_last, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers
+// ignore_for_file: prefer_const_constructors, sort_child_properties_last, prefer_const_literals_to_create_immutables, no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart'  as http;
 
 import 'package:flutter/material.dart';
-import '../Home_page.dart';
+import '../home_page.dart';
 import 'Add_user.dart';
 import 'map_device.dart';
 
@@ -34,7 +35,7 @@ class _MyDrawerState extends State<MyDrawer> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 60, bottom: 30, left: 30, right: 30),
-            child: Container(
+            child: SizedBox(
               child: Image.asset("assets/logo.png"),
             ),
           ),
@@ -53,8 +54,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 ],
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.white.withOpacity(0.9),
-                onPrimary: Colors.black,
+                foregroundColor: Colors.black, backgroundColor: Colors.white.withOpacity(0.9),
                 fixedSize: Size(250, 60),
                 side: BorderSide(
                   color: Colors.green,
@@ -82,7 +82,7 @@ class _MyDrawerState extends State<MyDrawer> {
                 ],
               ),
               style: ElevatedButton.styleFrom(
-                primary: Colors.white,
+                backgroundColor: Colors.white,
                 fixedSize: Size(250, 60),
                 side: BorderSide(
                   color: Colors.green,
@@ -97,7 +97,7 @@ class _MyDrawerState extends State<MyDrawer> {
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Container(
+            child: SizedBox(
             height: 400,
             width: 250,
             // color: Colors.blue,
@@ -123,7 +123,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   ],
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(223, 240, 200, 200),
+                  backgroundColor: Color.fromARGB(223, 240, 200, 200),
                   fixedSize: Size(770, 60),
                   side: BorderSide(
                     color: Color.fromARGB(255, 218, 117, 110),
@@ -161,7 +161,7 @@ class _MyDrawerState extends State<MyDrawer> {
                     ],
                   ),
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
+                    backgroundColor: Colors.green,
                     fixedSize: Size(100, 60),
                     side: BorderSide(
                       color: Colors.green,
@@ -200,7 +200,7 @@ class _MyDrawerState extends State<MyDrawer> {
         return Builder(
           builder: (context) {
             return Scaffold(
-              bottomNavigationBar: Container(
+              bottomNavigationBar: SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed:()async{
@@ -229,19 +229,23 @@ class _MyDrawerState extends State<MyDrawer> {
 
               if (response.statusCode == 200) {
                 // Successful response, you can handle it as per your requirement.
-                print("Device added successfully");
+                if (kDebugMode) {
+                  print("Device added successfully");
+                }
 
               } else {
                 // Error response, display an error message or handle it as needed.
-                print("Failed to add device. Status Code: ${response.statusCode}");
+                if (kDebugMode) {
+                  print("Failed to add device. Status Code: ${response.statusCode}");
+
                 print("Response Body: ${response.body}");
-              }
+              }  }
                     Navigator.of(context).pop();
 
               // Close the dialog after handling the response.
                   },
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
+                    backgroundColor: Colors.green,
                     padding: EdgeInsets.symmetric(vertical: 20),
                   ),
                   child: Text('add_device'.tr, style: TextStyle(fontSize: 20)),
@@ -268,7 +272,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       SizedBox(height: 20,),
                       Text(
                         'device_id'.tr,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       TextField(
                         controller: _deviceController,
@@ -279,7 +283,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       SizedBox(height: 20,),
                       Text(
                         'device_name'.tr,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       TextField(
                         controller: _devicenameController,
@@ -290,7 +294,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       SizedBox(height: 20,),
                       Text(
                         'pin'.tr,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       TextField(
                         controller: _pinController,
@@ -301,7 +305,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       SizedBox(height: 20,),
                       Text(
                         'sim',
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       TextField(
                         controller: _simController,
@@ -312,7 +316,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       SizedBox(height: 20,),
                       Text(
                         'topic'.tr,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       TextField(
                         controller: _topiccontroller,
@@ -323,7 +327,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       SizedBox(height: 20,),
                       Text(
                         'zone'.tr,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       TextField(
                         controller: _zonecontroller,
@@ -334,7 +338,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       SizedBox(height: 20,),
                       Text(
                         'device_serial-no'.tr,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       TextField(
                         controller: _serialNocontroller,
@@ -345,7 +349,7 @@ class _MyDrawerState extends State<MyDrawer> {
                       SizedBox(height: 20,),
                       Text(
                         'mobile_number'.tr,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context).textTheme.titleLarge,
                       ),
                       TextField(
                         controller: _mobileNocontroller,
