@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Motor extends StatefulWidget {
+  const Motor({super.key});
+
 
   @override
   State<Motor> createState() => _PowerState();
@@ -44,7 +46,7 @@ class _PowerState extends State<Motor> {
             SizedBox(width: 5),
                   isRefreshing
                    ? CircularProgressIndicator()
-                  : Container(
+                  : SizedBox(
                       height: 25,
                       width: 25,
                       child: GestureDetector(

@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class Load extends StatefulWidget {
+  const Load({super.key});
+
   
 
   @override
@@ -43,7 +45,7 @@ class _LoadState extends State<Load> {
                  SizedBox(width: 5),
                   isRefreshing
                    ? CircularProgressIndicator()
-                  : Container(
+                  : SizedBox(
                       height: 25,
                       width: 25,
                       child: GestureDetector(

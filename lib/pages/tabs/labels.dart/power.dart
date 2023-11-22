@@ -9,6 +9,8 @@ import 'dart:convert';
 import '../../../models/json.dart';
 
 class Power extends StatefulWidget {
+  const Power({super.key});
+
   
   @override
   State<Power> createState() => _PowerState();
@@ -87,7 +89,7 @@ late Future<List<Photo>> futurePhotos;
                    SizedBox(width:5),
                     isRefreshing
                      ? CircularProgressIndicator()
-                    : Container(
+                    : SizedBox(
                       height: 25,
                       width: 25,
                       child: GestureDetector(
